@@ -4,19 +4,23 @@ import 'package:http/http.dart' as http;
 import 'package:qr_flutter/model/api_response.dart';
 
 class UserService {
-  static const API = "";
+  static const API =
+      "http://192.168.18.9:8080/OperatingRoom/ws/operatingRoomServices";
   static const headers = {'Content-Type': 'application/json'};
 
-  Future<APIResponse<Usuario>> loginUsuario(
-      String correo, String contrasena) async {
-    print('------------------------------------- llamo servicio diego');
-    return await http
-        .post(API + '/logeo/',
-            headers: headers,
-            body: jsonEncode({'parametro1': correo, 'parametro2': contrasena}))
-        .then((data) {
-      print('respuesta----------------------------' + data.body);
-    }).catchError((_) =>
-            APIResponse<bool>(error: true, mensajeError: 'No se pudo loguear'));
+  Future<bool> loginUsuario(String correo, String contrasena) async {
+    //print(correo + ' ' + contrasena);
+    final body = {"user": correo, "password": contrasena};
+    var body2 = jsonEncode(body);
+    dynamic respuesta =
+        await http.post(API + "/login", headers: headers, body: body2);
+    final decodedata = json.decode(respuesta.body);
+
+    if (decodedata) {
+      print(decodedata.toString());
+      return true;
+    } else {
+      return false;
+    }
   }
 }

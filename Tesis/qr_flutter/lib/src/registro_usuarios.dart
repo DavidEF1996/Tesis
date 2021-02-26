@@ -231,6 +231,7 @@ class insertar extends State<insertar_usuarios> {
       print("Nombre " + apellidoMaterno.text.toString());
       print("prueba leon");
       keyForm.currentState.reset();
+      print('leon');
     }
   }
 }

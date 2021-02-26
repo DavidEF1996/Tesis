@@ -230,6 +230,7 @@ class insertar extends State<insertar_usuarios> {
     if (keyForm.currentState.validate()) {
       print("Nombre " + apellidoMaterno.text.toString());
       print("prueba David");
+      print("prueba 2");
       keyForm.currentState.reset();
     }
   }

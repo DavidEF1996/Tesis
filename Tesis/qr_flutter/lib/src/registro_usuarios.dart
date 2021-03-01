@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:qr_flutter/src/homebotones.dart';
 import 'package:qr_flutter/src/registro_cirujias.dart';
 import 'package:qr_flutter/src/validacionesRegistro.dart';
 
@@ -10,16 +11,11 @@ class insertar_usuarios extends StatefulWidget {
 class insertar extends State<insertar_usuarios> {
   GlobalKey<FormState> keyForm = new GlobalKey();
   TextEditingController cedula = new TextEditingController();
-  TextEditingController primerNombre = new TextEditingController();
-  TextEditingController segundoNombre = new TextEditingController();
-  TextEditingController apellidoPaterno = new TextEditingController();
-  TextEditingController apellidoMaterno = new TextEditingController();
+  TextEditingController nombres = new TextEditingController();
+  TextEditingController apellidos = new TextEditingController();
   TextEditingController fechaNacimiento = new TextEditingController(); //----
   TextEditingController idDoctor = new TextEditingController();
   TextEditingController especialidad = new TextEditingController();
-  TextEditingController user = new TextEditingController();
-  TextEditingController password = new TextEditingController();
-  TextEditingController repassword = new TextEditingController();
 
   Validaciones val = Validaciones();
 
@@ -57,28 +53,36 @@ class insertar extends State<insertar_usuarios> {
             Icons.person_add_alt,
             TextFormField(
               controller: cedula,
+              keyboardType: TextInputType.number,
               decoration: new InputDecoration(
                 labelText: 'Cédula',
               ),
-              // validator: validateName,
+              validator: (value) {
+                bool recibir = val.validarCedula(value);
+                if (recibir == true) {
+                  return null;
+                } else {
+                  return "Cédula no válida";
+                }
+              },
             )),
         formItemsDesign(
             Icons.sort_outlined,
             TextFormField(
-              controller: primerNombre,
+              controller: nombres,
               decoration: new InputDecoration(
                 labelText: 'Nombres',
               ),
-              // validator: val.validateName,
+              validator: val.validateName,
             )),
         formItemsDesign(
             Icons.sort_outlined,
             TextFormField(
-              controller: apellidoPaterno,
+              controller: apellidos,
               decoration: new InputDecoration(
                 labelText: 'Apellidos',
               ),
-              // validator: validateName,
+              validator: val.validateName,
             )),
         formItemsDesign(
             Icons.date_range_outlined,
@@ -130,9 +134,16 @@ class insertar extends State<insertar_usuarios> {
               decoration: new InputDecoration(
                 labelText: 'ID Doctor',
               ),
-              // validator: validateName,
             )),
         formItemsDesign(
+            Icons.medical_services_rounded,
+            TextFormField(
+              controller: especialidad,
+              decoration: new InputDecoration(
+                labelText: 'Especialidad',
+              ),
+            )),
+        /* formItemsDesign(
             Icons.person_pin,
             TextFormField(
               controller: user,
@@ -160,7 +171,7 @@ class insertar extends State<insertar_usuarios> {
               validator: (value) {
                 return val.validatePassword(value, password.text);
               },
-            )),
+            )),*/
         GestureDetector(
             onTap: () {
               save();
@@ -228,10 +239,23 @@ class insertar extends State<insertar_usuarios> {
 
   save() {
     if (keyForm.currentState.validate()) {
-      print("Nombre " + apellidoMaterno.text.toString());
-      print("prueba David");
-      print("prueba 2");
+      print("Cédula: " + cedula.text);
+      print("Nombres:  " + nombres.text.toString());
+      print("Apellidos: " + apellidos.text);
+      String fecha = currentDate.year.toString() +
+          "/" +
+          currentDate.month.toString() +
+          "/" +
+          currentDate.day.toString();
+      print("Fecha de nacimiento: " + fecha);
+      print("Id Doctor: " + idDoctor.text);
+      print("Especialidad: " + especialidad.text);
+
       keyForm.currentState.reset();
+      final route = MaterialPageRoute(builder: (context) {
+        return insertar_usuarios();
+      });
+      Navigator.push(context, route);
     }
   }
 }

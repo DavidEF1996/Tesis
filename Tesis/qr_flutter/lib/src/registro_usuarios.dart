@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:qr_flutter/src/homebotones.dart';
 import 'package:qr_flutter/src/registro_cirujias.dart';
 import 'package:qr_flutter/src/validacionesRegistro.dart';
+import 'package:flutter/cupertino.dart';
 
 class insertar_usuarios extends StatefulWidget {
   @override
@@ -13,7 +14,6 @@ class insertar extends State<insertar_usuarios> {
   TextEditingController cedula = new TextEditingController();
   TextEditingController nombres = new TextEditingController();
   TextEditingController apellidos = new TextEditingController();
-  TextEditingController fechaNacimiento = new TextEditingController(); //----
   TextEditingController idDoctor = new TextEditingController();
   TextEditingController especialidad = new TextEditingController();
 
@@ -134,6 +134,7 @@ class insertar extends State<insertar_usuarios> {
               decoration: new InputDecoration(
                 labelText: 'ID Doctor',
               ),
+              validator: val.validarCamposVacios,
             )),
         formItemsDesign(
             Icons.medical_services_rounded,
@@ -142,36 +143,8 @@ class insertar extends State<insertar_usuarios> {
               decoration: new InputDecoration(
                 labelText: 'Especialidad',
               ),
+              validator: val.validarCamposVacios,
             )),
-        /* formItemsDesign(
-            Icons.person_pin,
-            TextFormField(
-              controller: user,
-              decoration: new InputDecoration(
-                labelText: 'Nombre de Usuario',
-              ),
-              // validator: validateName,
-            )),
-        formItemsDesign(
-            Icons.mode_sharp,
-            TextFormField(
-              controller: password,
-              decoration: new InputDecoration(
-                labelText: 'Contraseña',
-              ),
-              //validator: validateName,
-            )),
-        formItemsDesign(
-            Icons.mode_sharp,
-            TextFormField(
-              controller: repassword,
-              decoration: new InputDecoration(
-                labelText: 'Repetir contraseña',
-              ),
-              validator: (value) {
-                return val.validatePassword(value, password.text);
-              },
-            )),*/
         GestureDetector(
             onTap: () {
               save();
@@ -239,23 +212,12 @@ class insertar extends State<insertar_usuarios> {
 
   save() {
     if (keyForm.currentState.validate()) {
-      print("Cédula: " + cedula.text);
-      print("Nombres:  " + nombres.text.toString());
-      print("Apellidos: " + apellidos.text);
-      String fecha = currentDate.year.toString() +
-          "/" +
-          currentDate.month.toString() +
-          "/" +
-          currentDate.day.toString();
-      print("Fecha de nacimiento: " + fecha);
-      print("Id Doctor: " + idDoctor.text);
-      print("Especialidad: " + especialidad.text);
-
-      keyForm.currentState.reset();
-      final route = MaterialPageRoute(builder: (context) {
-        return insertar_usuarios();
-      });
-      Navigator.push(context, route);
+      if (age > 0) {
+        val.menuConfirmacionDatos(context, cedula, nombres, apellidos, idDoctor,
+            especialidad, currentDate);
+      } else {
+        val.handleClickMe(context, 'Falta llenar algunos campos');
+      }
     }
   }
 }

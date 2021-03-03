@@ -11,10 +11,8 @@ String doctorToJson(Doctor data) => json.encode(data.toJson());
 class Doctor {
   Doctor({
     this.cedula,
-    this.primerNombre,
-    this.segundoNombre,
-    this.apellidoPaterno,
-    this.apellidoMaterno,
+    this.nombres,
+    this.apellidos,
     this.fechaNacimiento,
     this.idDoctor,
     this.especialidad,
@@ -23,10 +21,8 @@ class Doctor {
   });
 
   String cedula;
-  String primerNombre;
-  String segundoNombre;
-  String apellidoPaterno;
-  String apellidoMaterno;
+  String nombres;
+  String apellidos;
   DateTime fechaNacimiento;
   String idDoctor;
   String especialidad;
@@ -35,10 +31,8 @@ class Doctor {
 
   factory Doctor.fromJson(Map<String, dynamic> json) => Doctor(
         cedula: json["cedula"],
-        primerNombre: json["primerNombre"],
-        segundoNombre: json["segundoNombre"],
-        apellidoPaterno: json["apellidoPaterno"],
-        apellidoMaterno: json["apellidoMaterno"],
+        nombres: json["nombres"],
+        apellidos: json["apellidos"],
         fechaNacimiento: DateTime.parse(json["fechaNacimiento"]),
         idDoctor: json["idDoctor"],
         especialidad: json["especialidad"],
@@ -48,10 +42,8 @@ class Doctor {
 
   Map<String, dynamic> toJson() => {
         "cedula": cedula,
-        "primerNombre": primerNombre,
-        "segundoNombre": segundoNombre,
-        "apellidoPaterno": apellidoPaterno,
-        "apellidoMaterno": apellidoMaterno,
+        "nombres": nombres,
+        "apellidos": apellidos,
         "fechaNacimiento":
             "${fechaNacimiento.year.toString().padLeft(4, '0')}-${fechaNacimiento.month.toString().padLeft(2, '0')}-${fechaNacimiento.day.toString().padLeft(2, '0')}",
         "idDoctor": idDoctor,

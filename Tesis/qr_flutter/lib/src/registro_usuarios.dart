@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/src/registro_cirujias.dart';
 import 'package:qr_flutter/src/validacionesRegistro.dart';
+import 'package:qr_flutter/model/doctor.dart';
 
 class insertar_usuarios extends StatefulWidget {
   @override
@@ -8,6 +9,8 @@ class insertar_usuarios extends StatefulWidget {
 }
 
 class insertar extends State<insertar_usuarios> {
+  Doctor doctor = new Doctor();
+
   GlobalKey<FormState> keyForm = new GlobalKey();
   TextEditingController cedula = new TextEditingController();
   TextEditingController primerNombre = new TextEditingController();
@@ -227,6 +230,7 @@ class insertar extends State<insertar_usuarios> {
   }
 
   save() {
+    doctor.cedula = cedula.text;
     if (keyForm.currentState.validate()) {
       print("Nombre " + apellidoMaterno.text.toString());
       print("prueba leon");

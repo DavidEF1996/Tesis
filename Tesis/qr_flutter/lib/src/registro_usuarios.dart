@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/src/homebotones.dart';
 import 'package:qr_flutter/src/registro_cirujias.dart';
-import 'package:qr_flutter/src/validacionesRegistro.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:qr_flutter/validations/popupRegistroUsuarios.dart';
+import 'package:qr_flutter/validations/validacionesRegistro.dart';
 
 class insertar_usuarios extends StatefulWidget {
   @override
@@ -18,6 +19,7 @@ class insertar extends State<insertar_usuarios> {
   TextEditingController especialidad = new TextEditingController();
 
   Validaciones val = Validaciones();
+  popupRegistroUsuario popRegUsuario = popupRegistroUsuario();
 
   @override
   Widget build(BuildContext context) {
@@ -113,7 +115,7 @@ class insertar extends State<insertar_usuarios> {
                                 children: [
                                   Text("Años: " + age.toString()),
                                   Text("   "),
-                                  Text("Meses:" + meses.toString()),
+                                  Text("Meses:" + months.toString()),
                                 ],
                               )
                             ],
@@ -145,32 +147,68 @@ class insertar extends State<insertar_usuarios> {
               ),
               validator: val.validarCamposVacios,
             )),
-        GestureDetector(
-            onTap: () {
-              save();
-            },
-            child: Container(
-              margin: new EdgeInsets.all(30.0),
-              alignment: Alignment.center,
-              decoration: ShapeDecoration(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30.0)),
-                gradient: LinearGradient(colors: [
-                  Color(0xFF0EDED2),
-                  Color(0xFF03A0FE),
-                ], begin: Alignment.topLeft, end: Alignment.bottomRight),
+        Container(
+          child: Column(
+            children: [
+              Row(
+                children: [],
               ),
-              child: Text("Guardar",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500)),
-              padding: EdgeInsets.only(top: 16, bottom: 16),
-            ))
+              GestureDetector(
+                  onTap: () {
+                    save();
+                  },
+                  child: Container(
+                    margin: new EdgeInsets.all(5.0),
+                    alignment: Alignment.center,
+                    decoration: ShapeDecoration(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30.0)),
+                      gradient: LinearGradient(colors: [
+                        Color(0xFF0EDED2),
+                        Color(0xFF03A0FE),
+                      ], begin: Alignment.topLeft, end: Alignment.bottomRight),
+                    ),
+                    child: Text("Guardar",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500)),
+                    padding: EdgeInsets.only(top: 16, bottom: 16),
+                  )),
+              GestureDetector(
+                  onTap: () {
+                    final route = MaterialPageRoute(builder: (context) {
+                      return Botones();
+                    });
+                    Navigator.push(context, route);
+                  },
+                  child: Container(
+                    margin: new EdgeInsets.all(5.0),
+                    alignment: Alignment.center,
+                    decoration: ShapeDecoration(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30.0)),
+                      gradient: LinearGradient(colors: [
+                        Color(0xFF0EDED2),
+                        Color(0xFF03A0FE),
+                      ], begin: Alignment.topLeft, end: Alignment.bottomRight),
+                    ),
+                    child: Text("Cancelar",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500)),
+                    padding: EdgeInsets.only(top: 16, bottom: 16),
+                  ))
+            ],
+          ),
+        )
       ],
     );
   }
 
+  int age = 0;
+  int months = 0;
   DateTime currentDate = DateTime.now();
 
   Future<String> selectDate(BuildContext context) async {
@@ -184,13 +222,12 @@ class insertar extends State<insertar_usuarios> {
       setState(() {
         currentDate = pickedDate;
         print('llegue');
+        //val.calcularEdadGeneral(currentDate, age, months);
         print(calcularEdad(currentDate));
       });
     return currentDate.toString();
   }
 
-  int age = 0;
-  int meses = 0;
   calcularEdad(DateTime value) {
     DateTime currentDate = DateTime.now();
     print("actual" + currentDate.year.toString());
@@ -199,7 +236,7 @@ class insertar extends State<insertar_usuarios> {
     int month2 = value.month;
 
     if (month2 > month1) {
-      meses = 12 - (month2 - month1);
+      months = 12 - (month2 - month1);
       age--;
     } else if (month1 == month2) {
       int day1 = currentDate.day;
@@ -213,10 +250,10 @@ class insertar extends State<insertar_usuarios> {
   save() {
     if (keyForm.currentState.validate()) {
       if (age > 0) {
-        val.menuConfirmacionDatos(context, cedula, nombres, apellidos, idDoctor,
-            especialidad, currentDate);
+        popRegUsuario.menuConfirmacionDatos(context, cedula, nombres, apellidos,
+            idDoctor, especialidad, currentDate);
       } else {
-        val.handleClickMe(context, 'Falta llenar algunos campos');
+        popRegUsuario.handleClickMe(context, 'Falta llenar algunos campos');
       }
     }
   }

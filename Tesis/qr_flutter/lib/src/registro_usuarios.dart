@@ -210,7 +210,6 @@ class insertar extends State<insertar_usuarios> {
   int age = 0;
   int months = 0;
   DateTime currentDate = DateTime.now();
-
   Future<String> selectDate(BuildContext context) async {
     final DateTime pickedDate = await showDatePicker(
         context: context,

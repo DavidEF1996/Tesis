@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/model/usuario.dart';
+import 'package:qr_flutter/preferences/preferences.dart';
 import 'package:qr_flutter/services/user_services.dart';
 import 'package:qr_flutter/src/homebotones.dart';
 import 'package:qr_flutter/src/registro_cirujias.dart';
@@ -122,16 +123,22 @@ class _State extends State<LoginPage> {
     final String contrasena = passwordController.text;
 
     final result = await httpServicio.loginUsuario(usuario, contrasena);
-    print("el resultado es:  " + result.toString());
-    if (result) {
+    print(result);
+    if (result == null) {
+      mostrarAlerta(context, "Error de usuario");
+    } else {
+      print(result['idDoctor']);
+      final _preferences = new Preferences();
+      _preferences.id = result['idDoctor'];
       //print(passwordController.text);
       final route = MaterialPageRoute(builder: (context) {
         return Botones();
       });
       Navigator.push(context, route);
-    } else {
-      mostrarAlerta(context, "Error de usuario");
     }
+
+    //
+
     //print("object");
     //Usuario1 usu = result.data;
     //print(usu.user);

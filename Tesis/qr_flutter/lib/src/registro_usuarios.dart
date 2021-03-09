@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:qr_flutter/preferences/preferences.dart';
 import 'package:qr_flutter/src/homebotones.dart';
-import 'package:qr_flutter/src/registro_cirujias.dart';
+
 import 'package:flutter/cupertino.dart';
-import 'package:qr_flutter/validations/popupRegistroUsuarios.dart';
+import 'package:qr_flutter/src/login.dart';
 import 'package:qr_flutter/validations/validacionesRegistro.dart';
+
+import 'package:qr_flutter/validations/popupRegistroUsuarios.dart';
+
+import 'package:qr_flutter/model/doctor.dart';
 
 class insertar_usuarios extends StatefulWidget {
   @override
@@ -87,7 +92,7 @@ class insertar extends State<insertar_usuarios> {
               validator: val.validateName,
             )),
         formItemsDesign(
-            Icons.date_range_outlined,
+            Icons.drive_file_rename_outline,
             Column(children: <Widget>[
               new ListTile(
                 title: const Text('Fecha de nacimiento'),
@@ -106,21 +111,8 @@ class insertar extends State<insertar_usuarios> {
                         IconButton(
                           onPressed: () => selectDate(context),
                           icon: Icon(Icons.date_range),
+                          iconSize: 30,
                         ),
-                        Container(
-                          alignment: Alignment.bottomLeft,
-                          child: Column(
-                            children: [
-                              Row(
-                                children: [
-                                  Text("Años: " + age.toString()),
-                                  Text("   "),
-                                  Text("Meses:" + months.toString()),
-                                ],
-                              )
-                            ],
-                          ),
-                        )
                       ],
                     )
                   ],
@@ -145,7 +137,7 @@ class insertar extends State<insertar_usuarios> {
               decoration: new InputDecoration(
                 labelText: 'Especialidad',
               ),
-              validator: val.validarCamposVacios,
+              validator: val.validateName,
             )),
         Container(
           child: Column(
@@ -177,10 +169,12 @@ class insertar extends State<insertar_usuarios> {
                   )),
               GestureDetector(
                   onTap: () {
+                    final _preferences = new Preferences();
+                    _preferences.id = "";
                     final route = MaterialPageRoute(builder: (context) {
-                      return Botones();
+                      return LoginPage();
                     });
-                    Navigator.push(context, route);
+                    Navigator.pushReplacement(context, route);
                   },
                   child: Container(
                     margin: new EdgeInsets.all(5.0),
@@ -214,8 +208,8 @@ class insertar extends State<insertar_usuarios> {
     final DateTime pickedDate = await showDatePicker(
         context: context,
         initialDate: currentDate,
-        firstDate: DateTime(1990),
-        lastDate: DateTime(2050));
+        firstDate: DateTime(1930),
+        lastDate: DateTime(2100));
 
     if (pickedDate != null && pickedDate != currentDate)
       setState(() {
@@ -247,10 +241,16 @@ class insertar extends State<insertar_usuarios> {
   }
 
   save() {
+    Doctor d = Doctor();
+    d.cedula = cedula.text;
+    d.nombres = nombres.text;
+    d.apellidos = apellidos.text;
+    d.fechaNacimiento = currentDate;
+    d.idDoctor = idDoctor.text;
+    d.especialidad = especialidad.text;
     if (keyForm.currentState.validate()) {
       if (age > 0) {
-        popRegUsuario.menuConfirmacionDatos(context, cedula, nombres, apellidos,
-            idDoctor, especialidad, currentDate);
+        popRegUsuario.menuConfirmacionDatos(d, context);
       } else {
         popRegUsuario.handleClickMe(context, 'Falta llenar algunos campos');
       }

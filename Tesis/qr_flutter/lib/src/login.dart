@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/model/usuario.dart';
+import 'package:qr_flutter/preferences/preferences.dart';
 import 'package:qr_flutter/services/user_services.dart';
 import 'package:qr_flutter/src/homebotones.dart';
 import 'package:qr_flutter/src/registro_cirujias.dart';
+import 'package:qr_flutter/utils/utils.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -91,7 +93,9 @@ class _State extends State<LoginPage> {
                       textColor: Colors.white,
                       color: Colors.blue,
                       child: Text('Comenzar'),
-                      onPressed: cargar,
+                      onPressed: () {
+                        cargar(context);
+                      },
                     )),
                 Container(
                     child: Row(
@@ -114,19 +118,29 @@ class _State extends State<LoginPage> {
             )));
   }
 
-  void cargar() {
+  Future cargar(BuildContext context) async {
     final String usuario = nameController.text;
     final String contrasena = passwordController.text;
 
-    //final result = await httpServicio.loginUsuario(usuario, contrasena);
+    final result = await httpServicio.loginUsuario(usuario, contrasena);
+    print(result);
+    if (result == null) {
+      mostrarAlerta(context, "Error de usuario");
+    } else {
+      print(result['idDoctor']);
+      final _preferences = new Preferences();
+      _preferences.id = result['idDoctor'];
+      //print(passwordController.text);
+      final route = MaterialPageRoute(builder: (context) {
+        return Botones();
+      });
+      Navigator.push(context, route);
+    }
 
-    // Usuario usu = result.data;
-    // print(usu.nombre);
-    //print(user.);
-    print(passwordController.text);
-    final route = MaterialPageRoute(builder: (context) {
-      return Botones();
-    });
-    Navigator.push(context, route);
+    //
+
+    //print("object");
+    //Usuario1 usu = result.data;
+    //print(usu.user);
   }
 }

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:qr_flutter/preferences/preferences.dart';
+import 'package:qr_flutter/src/login.dart';
 import 'package:qr_flutter/src/registro_usuarios.dart';
 
 class Botones extends StatelessWidget {
@@ -38,6 +40,20 @@ class Botones extends StatelessWidget {
                 color: Colors.lightBlue,
                 child:
                     Text('Quirofanos', style: TextStyle(color: Colors.white)),
+              ),
+              MaterialButton(
+                minWidth: 200.0,
+                height: 100.0,
+                onPressed: () {
+                  final _preferences = new Preferences();
+                  _preferences.id = "";
+                  final route = MaterialPageRoute(builder: (context) {
+                    return LoginPage();
+                  });
+                  Navigator.pushReplacement(context, route);
+                },
+                color: Colors.lightBlue,
+                child: Text('Salir', style: TextStyle(color: Colors.white)),
               ),
             ],
           ),

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:qr_flutter/src/registro_usuarios.dart';
+import 'package:qr_flutter/src/login.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:qr_flutter/model/doctor.dart';
+import 'package:qr_flutter/dao/doctor_dao.dart';
+import 'dart:convert';
 
 class popupRegistroUsuario {
   Future<void> handleClickMe(BuildContext context, String mensaje) async {
@@ -26,13 +29,10 @@ class popupRegistroUsuario {
   }
 
   Future<void> menuConfirmacionDatos(
-      BuildContext context,
-      TextEditingController cedula,
-      TextEditingController nombres,
-      TextEditingController apellidos,
-      TextEditingController idDoctor,
-      TextEditingController especialidad,
-      DateTime currentDate) async {
+    Doctor d,
+    BuildContext context,
+  ) async {
+    print(d.cedula);
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -48,7 +48,7 @@ class popupRegistroUsuario {
                       'Cédula: ',
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    Text(cedula.text),
+                    Text(d.cedula), //cedula.text),
                   ],
                 ),
                 Row(
@@ -57,7 +57,7 @@ class popupRegistroUsuario {
                       'Nombres: ',
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    Text(nombres.text),
+                    Text(d.nombres), //nombres.text),
                   ],
                 ),
                 Row(
@@ -66,20 +66,19 @@ class popupRegistroUsuario {
                       'Apellidos: ',
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    Text(apellidos.text),
+                    Text(d.apellidos), //apellidos.text),
                   ],
                 ),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
                       'Fecha de Nacimiento: ',
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    Text(currentDate.year.toString() +
-                        "/" +
-                        currentDate.month.toString() +
-                        "/" +
-                        currentDate.day.toString()),
+                    Text(d.fechaNacimiento.toString().substring(0,
+                        4)), ////currentDate.year.toString() + "/" +  currentDate.month.toString() + "/" +   currentDate.day.toString()),
                   ],
                 ),
                 Row(
@@ -88,7 +87,7 @@ class popupRegistroUsuario {
                       'ID del Doctor: ',
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    Text(idDoctor.text),
+                    Text(d.idDoctor), //.text),
                   ],
                 ),
                 Row(
@@ -97,7 +96,7 @@ class popupRegistroUsuario {
                       'Especialidad: ',
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    Text(especialidad.text),
+                    Text(d.especialidad), //.text),
                   ],
                 ),
               ],
@@ -113,10 +112,19 @@ class popupRegistroUsuario {
             ),
             CupertinoDialogAction(
               child: Text('Confirmar'),
-              onPressed: () {
-                Navigator.of(context).pop();
-                enviarDatos(context, cedula, nombres, apellidos, idDoctor,
-                    especialidad, currentDate);
+              onPressed: () async {
+                print("Llego hasta arriba del await");
+                await DoctorDao.crearDoctor(jsonEncode(d.toJson()));
+                print("Usuario desde el popup: " + DoctorDao.d.user);
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (BuildContext context) => LoginPage(
+                              usuario: DoctorDao.d.user,
+                              contrasena: DoctorDao.d.password,
+                            )));
+
+                //enviarDatos(context);
               },
             ),
           ],
@@ -126,50 +134,14 @@ class popupRegistroUsuario {
   }
 
   void enviarDatos(
-      BuildContext context,
-      TextEditingController cedula,
-      TextEditingController nombres,
-      TextEditingController apellidos,
-      TextEditingController idDoctor,
-      TextEditingController especialidad,
-      DateTime currentDate) {
-    print("Datos enviados-----------------------------");
-    print("E. Cédula: " + cedula.text);
-    print("E. Nombres:  " + nombres.text);
-    print("E. Apellidos: " + apellidos.text);
-    print("E. Id Doctor: " + idDoctor.text);
-    print("E. Especialidad: " + especialidad.text);
-    String fecha = currentDate.year.toString() +
-        "/" +
-        currentDate.month.toString() +
-        "/" +
-        currentDate.day.toString();
-    print("E. Fecha de nacimiento: " + fecha);
-    print("------------------------------------------");
+    BuildContext context,
+  ) {
     final route = MaterialPageRoute(builder: (context) {
-      return insertar_usuarios();
+      return LoginPage(
+        usuario: DoctorDao.d.user,
+        contrasena: "contrasena",
+      );
     });
     Navigator.push(context, route);
-  }
-
-  calcularEdadGeneral(DateTime value, int age, int months) {
-    DateTime currentDate = DateTime.now();
-    print("actual" + currentDate.year.toString());
-    age = currentDate.year - value.year;
-    int month1 = currentDate.month;
-    int month2 = value.month;
-
-    if (month2 > month1) {
-      months = 12 - (month2 - month1);
-      age--;
-    } else if (month1 == month2) {
-      int day1 = currentDate.day;
-      int day2 = value.day;
-      if (day2 > day1) {
-        age--;
-      }
-    }
-    print("age: " + age.toString());
-    print("months: " + months.toString());
   }
 }

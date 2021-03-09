@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:qr_flutter/model/usuario.dart';
 import 'package:qr_flutter/preferences/preferences.dart';
 import 'package:qr_flutter/services/user_services.dart';
+import 'package:qr_flutter/src/cambioContrasena.dart';
 import 'package:qr_flutter/src/homebotones.dart';
-import 'package:qr_flutter/src/registro_cirujias.dart';
+import 'package:qr_flutter/src/registro_usuarios.dart';
 import 'package:qr_flutter/utils/utils.dart';
 
 class LoginPage extends StatefulWidget {
+  final String usuario;
+  final String contrasena;
+
+  const LoginPage({Key key, this.usuario = "", this.contrasena = ""})
+      : super(key: key);
+
   @override
   State<StatefulWidget> createState() => new _State();
 }
@@ -36,7 +42,14 @@ Widget landscapeView() {
 class _State extends State<LoginPage> {
   TextEditingController nameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+
   final UserService httpServicio = UserService();
+  @override
+  void initState() {
+    super.initState();
+    nameController.text = (widget.usuario == "") ? "" : widget.usuario;
+    passwordController.text = (widget.usuario == "") ? "" : widget.contrasena;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +77,7 @@ class _State extends State<LoginPage> {
                     controller: nameController,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
-                      labelText: 'Usuario',
+                      labelText: "Usuario",
                     ),
                   ),
                 ),
@@ -75,13 +88,16 @@ class _State extends State<LoginPage> {
                     controller: passwordController,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
-                      labelText: 'Contraseña',
+                      labelText: "Contraseña",
                     ),
                   ),
                 ),
                 FlatButton(
                   onPressed: () {
-                    //forgot password screen
+                    final route = MaterialPageRoute(builder: (context) {
+                      return CambioContrasena();
+                    });
+                    Navigator.push(context, route);
                   },
                   textColor: Colors.blue,
                   child: Text('Olvido su contraseña'),
@@ -108,7 +124,10 @@ class _State extends State<LoginPage> {
                         style: TextStyle(fontSize: 20),
                       ),
                       onPressed: () {
-                        //signup screen
+                        final route = MaterialPageRoute(builder: (context) {
+                          return insertar_usuarios();
+                        });
+                        Navigator.push(context, route);
                       },
                     )
                   ],

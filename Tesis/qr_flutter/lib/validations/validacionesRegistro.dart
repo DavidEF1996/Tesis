@@ -32,7 +32,8 @@ class Validaciones {
   }
 
   String validateName(String value) {
-    String pattern = r"^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$";
+    //String pattern = r"[ 0-9A-Za-zñÑáéíóúÁÉÍÓÚ¡!¿?@#$%()=+-€/.,]{1,50}";
+    String pattern = r'(^[a-zA-Z-ñÑáéíóúÁÉÍÓÚ ]*$)';
     RegExp regExp = new RegExp(pattern);
     if (value.length == 0) {
       return "El campo es necesario";

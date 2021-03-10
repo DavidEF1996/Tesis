@@ -27,6 +27,7 @@ dependencies:
   intl: ^0.16.1
   http: ^0.12.2
   cupertino_icons: ^1.0.0
+  find_dropdown: ^0.1.5+1
 
   shared_preferences:
 

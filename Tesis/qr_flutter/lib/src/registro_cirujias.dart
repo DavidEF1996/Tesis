@@ -6,6 +6,7 @@ import 'package:flutter_time_picker_spinner/flutter_time_picker_spinner.dart';
 import 'package:qr_flutter/src/homebotones.dart';
 import 'package:qr_flutter/validations/usuarioLogueado.dart';
 import 'package:qr_flutter/validations/validacionesRegistro.dart';
+import 'package:find_dropdown/find_dropdown.dart';
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -137,7 +138,7 @@ class RegisterPageState extends State<RegisterPage> {
                 child: Column(
                   children: [
                     Row(
-                      // mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(currentDate.year.toString() +
                             "/" +
@@ -158,6 +159,7 @@ class RegisterPageState extends State<RegisterPage> {
                 child: Column(
                   children: [
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text("Años: " + age.toString()),
                         Text("   "),
@@ -194,7 +196,25 @@ class RegisterPageState extends State<RegisterPage> {
                 ],
               ),
             )),
-        Container(
+        formItemsDesign(
+          Icons.dry_outlined,
+          FindDropdown(
+            items: ["Gripe", "Sida", "Covid 19", "Cáncer", "Diabetes"],
+            label: "Seleccionar Enfermedad",
+            onChanged: (String item) => print(item),
+            selectedItem: "Enfermedad",
+            validate: (String item) {
+              if (item == null)
+                return "Falta seleccionar";
+              else if (item == "Enfermedad")
+                return "Campo no válido";
+              else
+                return null; //return null to "no error"
+            },
+          ),
+        ),
+
+        /*  Container(
           alignment: Alignment.bottomLeft,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -219,7 +239,7 @@ class RegisterPageState extends State<RegisterPage> {
               ),
             ],
           ),
-        ),
+        ),*/
         formItemsDesign(
             Icons.coronavirus,
             TextFormField(
@@ -285,9 +305,10 @@ class RegisterPageState extends State<RegisterPage> {
               child: Column(
                 children: [
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "Necesidad de Sangre: ",
+                        "Necesidad de Sangre:    ",
                         style: TextStyle(fontSize: 14, color: Colors.black),
                       ),
                       necesidadSangre('si', 'SI'),
@@ -295,9 +316,10 @@ class RegisterPageState extends State<RegisterPage> {
                     ],
                   ),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "Exámenes de Sangre: ",
+                        "Exámenes de Sangre:     ",
                         style: TextStyle(fontSize: 14, color: Colors.black),
                       ),
                       examenesSangre('si', 'SI'),
@@ -305,9 +327,10 @@ class RegisterPageState extends State<RegisterPage> {
                     ],
                   ),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "Radiografías de Torax: ",
+                        "Radiografías de Torax:  ",
                         style: TextStyle(fontSize: 14, color: Colors.black),
                       ),
                       radiografiasTorax('si', 'SI'),
@@ -315,9 +338,10 @@ class RegisterPageState extends State<RegisterPage> {
                     ],
                   ),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "ECG: ",
+                        "ECG:                                  ",
                         style: TextStyle(fontSize: 14, color: Colors.black),
                       ),
                       examenEcg('si', 'SI'),
@@ -325,6 +349,7 @@ class RegisterPageState extends State<RegisterPage> {
                     ],
                   ),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
                         "Cuantitativos COVID-19: ",

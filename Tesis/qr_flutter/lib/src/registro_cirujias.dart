@@ -615,13 +615,20 @@ class RegisterPageState extends State<RegisterPage> {
     int month2 = value.month;
 
     if (month2 > month1) {
+      print("mes de nacimiento mayor al actual");
       meses = 12 - (month2 - month1);
       age--;
+    } else if (month2 < month1) {
+      print("mes de nacimiento menor al actual");
+      meses = month1 - month2;
     } else if (month1 == month2) {
       int day1 = currentDate.day;
       int day2 = value.day;
       if (day2 > day1) {
+        meses = 11;
         age--;
+      } else if (day2 <= day1) {
+        meses = 0;
       }
     }
 

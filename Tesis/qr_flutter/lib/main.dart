@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import 'package:qr_flutter/preferences/preferences.dart';
 import 'package:qr_flutter/src/homebotones.dart';
 import 'package:qr_flutter/src/login.dart';
+import 'package:qr_flutter/src/registro_cirujias.dart';
 import 'package:qr_flutter/src/registro_usuarios.dart';
 import 'package:qr_flutter/utils/rutas.dart';
 
@@ -21,7 +22,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(primarySwatch: Colors.blue),
-        home: (_preferences.id == "") ? LoginPage() : Botones(),
+        home: (_preferences.id == "") ? RegisterPage() : Botones(),
         routes: builAppRoutes());
     print("");
   }

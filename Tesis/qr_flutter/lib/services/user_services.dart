@@ -2,9 +2,11 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class UserService {
+  static var nombreUsuariologueado = "";
+  static var apellidoUsuarioLogueado = "";
   static var usuariologueado = "";
   static const API =
-      "http://192.168.100.6:8080/operatingRoomRs/ws/operatingRoomServices";
+      "http://192.168.1.24:8080/operatingRoomRs/ws/operatingRoomServices";
   static const headers = {'Content-Type': 'application/json'};
 
   Future loginUsuario(String correo, String contrasena) async {
@@ -19,9 +21,11 @@ class UserService {
       print('entras');
       //Map<String, dynamic> user = jsonDecode(decodedata);
 
-      usuariologueado = decodedata['nombres'];
-      print(usuariologueado);
-
+      nombreUsuariologueado = decodedata['nombres'];
+      apellidoUsuarioLogueado = decodedata['apellidos'];
+      usuariologueado = nombreUsuariologueado.split(" ")[0] +
+          " " +
+          apellidoUsuarioLogueado.split(" ")[0];
       return decodedata;
     } else {
       return null;

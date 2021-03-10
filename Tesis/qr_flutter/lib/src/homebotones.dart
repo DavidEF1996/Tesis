@@ -11,7 +11,6 @@ class Botones extends StatelessWidget {
   TextStyle estiloTexto = new TextStyle(fontSize: 30);
   @override
   Widget build(BuildContext context) {
-    print("El usuario conectado es: " + UserService.usuariologueado);
     return Scaffold(
       appBar: new AppBar(
         title: Container(

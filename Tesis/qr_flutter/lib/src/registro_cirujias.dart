@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:flutter_time_picker_spinner/flutter_time_picker_spinner.dart';
+import 'package:qr_flutter/src/homebotones.dart';
+import 'package:qr_flutter/validations/usuarioLogueado.dart';
 import 'package:qr_flutter/validations/validacionesRegistro.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -29,6 +31,7 @@ class RegisterPageState extends State<RegisterPage> {
   List<DropdownMenuItem<Enfermedades>> _dropdownMenuItems;
   Enfermedades _selectEnfermedad;
   Validaciones val = Validaciones();
+  UsuarioLogueado usuariologueado = UsuarioLogueado();
 
   @override
   void initState() {
@@ -58,22 +61,37 @@ class RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: new Scaffold(
-        appBar: new AppBar(
-          title: new Text('Registrarse'),
+    //return MaterialApp(
+    //home: new Scaffold(
+    return Scaffold(
+      appBar: new AppBar(
+        title: Container(
+          alignment: Alignment.bottomLeft,
+          child: Row(
+            children: [
+              Text(
+                "Bienvenido    ",
+                style: TextStyle(fontSize: 17),
+              ),
+              usuariologueado.userloguin2(),
+              usuariologueado.userloguin(),
+              Text("  "),
+              usuariologueado.botonSalir(context),
+            ],
+          ),
         ),
-        body: new SingleChildScrollView(
-          child: new Container(
-            margin: new EdgeInsets.all(10.0),
-            child: new Form(
-              key: keyForm,
-              child: formUI(),
-            ),
+      ),
+      body: new SingleChildScrollView(
+        child: new Container(
+          margin: new EdgeInsets.all(10.0),
+          child: new Form(
+            key: keyForm,
+            child: formUI(),
           ),
         ),
       ),
     );
+    // );
   }
 
   formItemsDesign(icon, item) {
@@ -360,7 +378,7 @@ class RegisterPageState extends State<RegisterPage> {
               save();
             },
             child: Container(
-              margin: new EdgeInsets.all(30.0),
+              margin: new EdgeInsets.all(5.0),
               alignment: Alignment.center,
               decoration: ShapeDecoration(
                 shape: RoundedRectangleBorder(
@@ -371,6 +389,31 @@ class RegisterPageState extends State<RegisterPage> {
                 ], begin: Alignment.topLeft, end: Alignment.bottomRight),
               ),
               child: Text("Guardar",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500)),
+              padding: EdgeInsets.only(top: 16, bottom: 16),
+            )),
+        GestureDetector(
+            onTap: () {
+              final route = MaterialPageRoute(builder: (context) {
+                return Botones();
+              });
+              Navigator.pushReplacement(context, route);
+            },
+            child: Container(
+              margin: new EdgeInsets.all(5.0),
+              alignment: Alignment.center,
+              decoration: ShapeDecoration(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30.0)),
+                gradient: LinearGradient(colors: [
+                  Color(0xFF0EDED2),
+                  Color(0xFF03A0FE),
+                ], begin: Alignment.topLeft, end: Alignment.bottomRight),
+              ),
+              child: Text("Cancelar",
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 18,

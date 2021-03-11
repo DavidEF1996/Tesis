@@ -140,6 +140,8 @@ class _State extends State<LoginPage> {
   Future cargar(BuildContext context) async {
     final String usuario = nameController.text;
     final String contrasena = passwordController.text;
+    print(nameController.text);
+    print(passwordController.text);
 
     final result = await httpServicio.loginUsuario(usuario, contrasena);
     print(result);

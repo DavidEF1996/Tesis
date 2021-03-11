@@ -64,6 +64,7 @@ class insertar extends State<insertar_usuarios> {
               decoration: new InputDecoration(
                 labelText: 'Cédula',
               ),
+              maxLength: 10,
               validator: (value) {
                 bool recibir = val.validarCedula(value);
                 if (recibir == true) {

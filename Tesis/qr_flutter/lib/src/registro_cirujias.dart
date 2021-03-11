@@ -7,6 +7,7 @@ import 'package:qr_flutter/src/homebotones.dart';
 import 'package:qr_flutter/validations/usuarioLogueado.dart';
 import 'package:qr_flutter/validations/validacionesRegistro.dart';
 import 'package:find_dropdown/find_dropdown.dart';
+import 'package:numberpicker/numberpicker.dart';
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -27,37 +28,23 @@ class RegisterPageState extends State<RegisterPage> {
   TextEditingController passwordCtrl = new TextEditingController();
   TextEditingController repeatPassCtrl = new TextEditingController();
   TextEditingController enfermedad = new TextEditingController();
+  int _horas = 3;
+  int _minutos = 10;
+  String nombreEnfermedad = "";
 
-  List<Enfermedades> _enfermedades = Enfermedades.getCompanies();
-  List<DropdownMenuItem<Enfermedades>> _dropdownMenuItems;
-  Enfermedades _selectEnfermedad;
+  String tipoCirujia = 'cirujia';
+  String grupoNecesidadSangre = 'necSangre';
+  String grupoExamenesSangre = 'exaSangre';
+  String grupoRadiografiasTorax = 'radTorax';
+  String grupoExaECG = 'exaEcg';
+  String grupoCuantitativosCovid = 'cuantitativos';
+
   Validaciones val = Validaciones();
   UsuarioLogueado usuariologueado = UsuarioLogueado();
 
   @override
   void initState() {
-    _dropdownMenuItems = buildDropdownMenuItems(_enfermedades);
-    _selectEnfermedad = _dropdownMenuItems[0].value;
     super.initState();
-  }
-
-  List<DropdownMenuItem<Enfermedades>> buildDropdownMenuItems(List companies) {
-    List<DropdownMenuItem<Enfermedades>> items = List();
-    for (Enfermedades company in companies) {
-      items.add(
-        DropdownMenuItem(
-          value: company,
-          child: Text(company.name),
-        ),
-      );
-    }
-    return items;
-  }
-
-  onChangeDropdownItem(Enfermedades selectEnfermedad) {
-    setState(() {
-      _selectEnfermedad = selectEnfermedad;
-    });
   }
 
   @override
@@ -102,13 +89,6 @@ class RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  String tipoCirujia = 'cirujia';
-  String grupoNecesidadSangre = 'necSangre';
-  String grupoExamenesSangre = 'exaSangre';
-  String grupoRadiografiasTorax = 'radTorax';
-  String grupoExaECG = 'exaEcg';
-  String grupoCuantitativosCovid = 'cuantitativos';
-
   Widget formUI() {
     return Column(
       children: <Widget>[
@@ -138,7 +118,6 @@ class RegisterPageState extends State<RegisterPage> {
                 child: Column(
                   children: [
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(currentDate.year.toString() +
                             "/" +
@@ -201,9 +180,12 @@ class RegisterPageState extends State<RegisterPage> {
           FindDropdown(
             items: ["Gripe", "Sida", "Covid 19", "Cáncer", "Diabetes"],
             label: "Seleccionar Enfermedad",
-            onChanged: (String item) => print(item),
+            onChanged: (item) {
+              nombreEnfermedad = item;
+              print(item);
+            },
             selectedItem: "Enfermedad",
-            validate: (String item) {
+            validate: (item) {
               if (item == null)
                 return "Falta seleccionar";
               else if (item == "Enfermedad")
@@ -213,33 +195,6 @@ class RegisterPageState extends State<RegisterPage> {
             },
           ),
         ),
-
-        /*  Container(
-          alignment: Alignment.bottomLeft,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Text("Seleccionar Enfermedad"),
-                  DropdownButton(
-                    value: _selectEnfermedad,
-                    items: _dropdownMenuItems,
-                    onChanged: onChangeDropdownItem,
-                  ),
-                  SizedBox(
-                    height: 20.0,
-                  ),
-                ],
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 25),
-                child: Text('Enfermedad: ${_selectEnfermedad.name}'),
-              ),
-            ],
-          ),
-        ),*/
         formItemsDesign(
             Icons.coronavirus,
             TextFormField(
@@ -248,7 +203,7 @@ class RegisterPageState extends State<RegisterPage> {
                 labelText: 'Procedimiento a Realizar: ',
               ),
               //keyboardType: TextInputType.,
-              maxLength: 32,
+              maxLength: 255,
             )),
         formItemsDesign(
           Icons.mode_outlined,
@@ -262,16 +217,16 @@ class RegisterPageState extends State<RegisterPage> {
                 ),
                 Row(
                   children: [
-                    Text(currentDate.year.toString() +
+                    Text(fechaProcedimiento.year.toString() +
                         "/" +
-                        currentDate.month.toString() +
+                        fechaProcedimiento.month.toString() +
                         "/" +
-                        currentDate.day.toString()),
+                        fechaProcedimiento.day.toString()),
                     IconButton(
-                      onPressed: () => selectDate(context),
+                      onPressed: () => selectDateProcess(context),
                       icon: Icon(Icons.date_range),
                     ),
-                    Container(
+                    /*Container(
                       child: Column(
                         children: [
                           TimePickerSpinner(
@@ -292,7 +247,53 @@ class RegisterPageState extends State<RegisterPage> {
                               })
                         ],
                       ),
-                    )
+                    ),*/
+                  ],
+                ),
+                Row(
+                  children: [
+                    Text('Horas:'),
+                    Container(
+                      width: 35,
+                      child: Column(
+                        children: [
+                          NumberPicker(
+                            itemHeight: 25,
+                            value: _horas,
+                            minValue: 0,
+                            maxValue: 60,
+                            textStyle:
+                                TextStyle(fontSize: 15, color: Colors.black),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(0),
+                            ),
+                            onChanged: (value) =>
+                                setState(() => _horas = value),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Text('    Minutos:'),
+                    Container(
+                      width: 35,
+                      child: Column(
+                        children: [
+                          NumberPicker(
+                            itemHeight: 25,
+                            value: _minutos,
+                            minValue: 0,
+                            maxValue: 60,
+                            textStyle:
+                                TextStyle(fontSize: 15, color: Colors.black),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(0),
+                            ),
+                            onChanged: (value) =>
+                                setState(() => _minutos = value),
+                          ),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ],
@@ -387,7 +388,6 @@ class RegisterPageState extends State<RegisterPage> {
               decoration: new InputDecoration(
                 labelText: 'Equipo o Material necesario',
               ),
-              validator: val.validateName,
             )),
         formItemsDesign(
             Icons.mode_outlined,
@@ -602,7 +602,9 @@ class RegisterPageState extends State<RegisterPage> {
   }
 
   DateTime currentDate = DateTime.now();
-  // => 1555837118231
+
+  DateTime fechaProcedimiento = DateTime.now();
+
   int age = 0;
   int meses = 0;
   calcularEdad(DateTime value) {
@@ -650,8 +652,21 @@ class RegisterPageState extends State<RegisterPage> {
       });
   }
 
+  Future<void> selectDateProcess(BuildContext context) async {
+    final DateTime pickedDate = await showDatePicker(
+        context: context,
+        initialDate: fechaProcedimiento,
+        firstDate: DateTime(2021),
+        lastDate: DateTime(2050));
+    if (pickedDate != null && pickedDate != currentDate)
+      setState(() {
+        fechaProcedimiento = pickedDate;
+      });
+  }
+
   save() {
     if (keyForm.currentState.validate()) {
+      print("----------------------------------------------------");
       print("Nombre ${nameCtrl.text}");
       print("Edad del paciente en años: " +
           age.toString() +
@@ -659,9 +674,19 @@ class RegisterPageState extends State<RegisterPage> {
           meses.toString());
 
       print("Tipo de cirujía:" + eleccionRadioButton);
-      print("Enfermedad que tiene: ");
-      print("Procedimiento a realizar: ");
-      print("Fecha y hora de procedimiento:");
+      print("Enfermedad que tiene: " + nombreEnfermedad);
+      print("Procedimiento a realizar: " + procedimientoMedico.text);
+      print("Fecha del procedimiento:" +
+          fechaProcedimiento.year.toString() +
+          "/" +
+          fechaProcedimiento.month.toString() +
+          "/" +
+          fechaProcedimiento.day.toString());
+      print("Tiempo del procedimiento: " +
+          "Horas: " +
+          _horas.toString() +
+          "Minutos: " +
+          _minutos.toString());
 
       print("Necesita sangre:" + eleccionNecesidadDeSangre);
       print("Tiene examenes de sangre:" + eleccionExamenesSangre);
@@ -673,24 +698,8 @@ class RegisterPageState extends State<RegisterPage> {
       print("nombre ayudante: ${ayudante.text}");
       print("equipo necesario: ${equipoMaterial.text}");
       print("observaciones: ${observaciones.text}");
+      print("----------------------------------------------------");
       keyForm.currentState.reset();
     }
-  }
-}
-
-class Enfermedades {
-  int id;
-  String name;
-
-  Enfermedades(this.id, this.name);
-
-  static List<Enfermedades> getCompanies() {
-    return <Enfermedades>[
-      Enfermedades(1, 'Covid'),
-      Enfermedades(2, 'Sida'),
-      Enfermedades(3, 'Cáncer'),
-      Enfermedades(4, 'Diabetes'),
-      Enfermedades(5, 'Gripe'),
-    ];
   }
 }

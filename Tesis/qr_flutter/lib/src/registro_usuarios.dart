@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/src/homebotones.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:qr_flutter/validations/popupRegistrosUsuarios.dart';
+import 'package:qr_flutter/validations/popupRegistroUsuarios.dart';
 import 'package:qr_flutter/validations/validacionesRegistro.dart';
 import 'package:qr_flutter/model/doctor.dart';
 

@@ -6,6 +6,7 @@ class DoctorDao {
   static const int PORT = 8080;
   static const String servicio_crear = "/crear";
   static const String servicio_login = "/login";
+  static const String servicio_change = "/changePass";
   static const String URL =
       'http://$IP:$PORT/operatingRoomRs/ws/operatingRoomServices';
 
@@ -21,7 +22,18 @@ class DoctorDao {
   static Future login(json) async {
     http.Response response = await http.post(URL + servicio_login,
         body: json, headers: headers, encoding: Encoding.getByName("utf-8"));
-    print(response);
+    print(response.body);
     return response;
+  }
+
+  static Future<bool> changePass(json) async {
+    http.Response response = await http.post(URL + servicio_change,
+        body: json, headers: headers, encoding: Encoding.getByName("utf-8"));
+    //print(response.body);
+    if (response.body.contains('true')) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

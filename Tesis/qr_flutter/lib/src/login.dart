@@ -95,7 +95,9 @@ class _State extends State<LoginPage> {
                 FlatButton(
                   onPressed: () {
                     final route = MaterialPageRoute(builder: (context) {
-                      return CambioContrasena();
+                      //return CambioContrasena();
+
+                      //return CambioContrasena();
                     });
                     Navigator.push(context, route);
                   },
@@ -145,17 +147,25 @@ class _State extends State<LoginPage> {
 
     final result = await httpServicio.loginUsuario(usuario, contrasena);
     print(result);
-    if (result == null) {
-      mostrarAlerta(context, "Error de usuario");
+    print((result['acceso']));
+    if (result['acceso']) {
+      if (result['bandera'] == 0) {
+        final route = MaterialPageRoute(builder: (context) {
+          return CambioContrasena(result['idDoctor']);
+        });
+        Navigator.push(context, route);
+      } else {
+        //print(result['idDoctor']);
+
+        final _preferences = new Preferences();
+        _preferences.id = result['idDoctor'];
+        final route = MaterialPageRoute(builder: (context) {
+          return Botones();
+        });
+        Navigator.push(context, route);
+      }
     } else {
-      print(result['idDoctor']);
-      final _preferences = new Preferences();
-      _preferences.id = result['idDoctor'];
-      //print(passwordController.text);
-      final route = MaterialPageRoute(builder: (context) {
-        return Botones();
-      });
-      Navigator.push(context, route);
+      mostrarAlerta(context, "Error de usuario");
     }
 
     //

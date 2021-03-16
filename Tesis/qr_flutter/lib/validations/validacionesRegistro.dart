@@ -1,6 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:qr_flutter/src/registro_usuarios.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:crypto/crypto.dart';
 
 class Validaciones {
   String validateEmail(String value) {
@@ -32,7 +34,8 @@ class Validaciones {
   }
 
   String validateName(String value) {
-    String pattern = r"^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$";
+    //String pattern = r"[ 0-9A-Za-zñÑáéíóúÁÉÍÓÚ¡!¿?@#$%()=+-€/.,]{1,50}";
+    String pattern = r'(^[a-zA-Z-ñÑáéíóúÁÉÍÓÚ ]*$)';
     RegExp regExp = new RegExp(pattern);
     if (value.length == 0) {
       return "El campo es necesario";
@@ -78,5 +81,9 @@ class Validaciones {
 
   Future redireccionar(BuildContext context) async {
     Navigator.of(context).pushNamed('/Botones');
+  }
+
+  String generateMd5(String input) {
+    return md5.convert(utf8.encode(input)).toString();
   }
 }

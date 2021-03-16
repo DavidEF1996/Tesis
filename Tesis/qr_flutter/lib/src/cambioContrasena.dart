@@ -11,6 +11,7 @@ import 'package:qr_flutter/preferences/preferences.dart';
 class CambioContrasena extends StatefulWidget {
   final String id;
   CambioContrasena(this.id);
+
   @override
   State<StatefulWidget> createState() => new _State();
 }

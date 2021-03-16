@@ -1,13 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/preferences/preferences.dart';
+import 'package:qr_flutter/services/user_services.dart';
 import 'package:qr_flutter/src/login.dart';
 import 'package:qr_flutter/src/registro_usuarios.dart';
+import 'package:qr_flutter/validations/usuarioLogueado.dart';
 
 class Botones extends StatelessWidget {
+  UserService user = UserService();
+  UsuarioLogueado usuariologueado = UsuarioLogueado();
   TextStyle estiloTexto = new TextStyle(fontSize: 30);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: new AppBar(
+        title: Container(
+          alignment: Alignment.bottomLeft,
+          child: Row(
+            children: [
+              Text(
+                "Bienvenido    ",
+                style: TextStyle(fontSize: 17),
+              ),
+              usuariologueado.userloguin2(),
+              usuariologueado.userloguin(),
+              Text("  "),
+              usuariologueado.botonSalir(context),
+            ],
+          ),
+        ),
+      ),
       body: Column(children: <Widget>[
         Image(
           image: AssetImage('assets/logoOperation.PNG'),
@@ -28,19 +49,6 @@ class Botones extends StatelessWidget {
                     style: TextStyle(color: Colors.white)),
               ),
               SizedBox(height: 10.0),
-              MaterialButton(
-                minWidth: 200.0,
-                height: 100.0,
-                onPressed: () {
-                  final route = MaterialPageRoute(builder: (context) {
-                    return insertar_usuarios();
-                  });
-                  Navigator.push(context, route);
-                },
-                color: Colors.lightBlue,
-                child:
-                    Text('Quirofanos', style: TextStyle(color: Colors.white)),
-              ),
               MaterialButton(
                 minWidth: 200.0,
                 height: 100.0,

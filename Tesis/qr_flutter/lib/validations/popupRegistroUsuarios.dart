@@ -112,10 +112,19 @@ class popupRegistroUsuario {
             ),
             CupertinoDialogAction(
               child: Text('Confirmar'),
-              onPressed: () {
-                Navigator.of(context).pop();
-                DoctorDao.crearDoctor(jsonEncode(d.toJson()));
-                enviarDatos(context);
+              onPressed: () async {
+                print("Llego hasta arriba del await");
+                await DoctorDao.crearDoctor(jsonEncode(d.toJson()));
+                print("Usuario desde el popup: " + DoctorDao.d.user);
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (BuildContext context) => LoginPage(
+                              usuario: DoctorDao.d.user,
+                              contrasena: DoctorDao.d.password,
+                            )));
+
+                //enviarDatos(context);
               },
             ),
           ],
@@ -128,7 +137,10 @@ class popupRegistroUsuario {
     BuildContext context,
   ) {
     final route = MaterialPageRoute(builder: (context) {
-      return LoginPage();
+      return LoginPage(
+        usuario: DoctorDao.d.user,
+        contrasena: "contrasena",
+      );
     });
     Navigator.push(context, route);
   }

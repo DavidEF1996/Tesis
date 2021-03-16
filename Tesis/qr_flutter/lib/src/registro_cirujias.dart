@@ -3,7 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:flutter_time_picker_spinner/flutter_time_picker_spinner.dart';
+import 'package:qr_flutter/src/homebotones.dart';
+import 'package:qr_flutter/validations/usuarioLogueado.dart';
 import 'package:qr_flutter/validations/validacionesRegistro.dart';
+import 'package:find_dropdown/find_dropdown.dart';
+//import 'package:numberpicker/numberpicker.dart';
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -24,56 +28,58 @@ class RegisterPageState extends State<RegisterPage> {
   TextEditingController passwordCtrl = new TextEditingController();
   TextEditingController repeatPassCtrl = new TextEditingController();
   TextEditingController enfermedad = new TextEditingController();
+  int _horas = 3;
+  int _minutos = 10;
+  String nombreEnfermedad = "";
 
-  List<Enfermedades> _enfermedades = Enfermedades.getCompanies();
-  List<DropdownMenuItem<Enfermedades>> _dropdownMenuItems;
-  Enfermedades _selectEnfermedad;
+  String tipoCirujia = 'cirujia';
+  String grupoNecesidadSangre = 'necSangre';
+  String grupoExamenesSangre = 'exaSangre';
+  String grupoRadiografiasTorax = 'radTorax';
+  String grupoExaECG = 'exaEcg';
+  String grupoCuantitativosCovid = 'cuantitativos';
+
   Validaciones val = Validaciones();
+  UsuarioLogueado usuariologueado = UsuarioLogueado();
 
   @override
   void initState() {
-    _dropdownMenuItems = buildDropdownMenuItems(_enfermedades);
-    _selectEnfermedad = _dropdownMenuItems[0].value;
     super.initState();
-  }
-
-  List<DropdownMenuItem<Enfermedades>> buildDropdownMenuItems(List companies) {
-    List<DropdownMenuItem<Enfermedades>> items = List();
-    for (Enfermedades company in companies) {
-      items.add(
-        DropdownMenuItem(
-          value: company,
-          child: Text(company.name),
-        ),
-      );
-    }
-    return items;
-  }
-
-  onChangeDropdownItem(Enfermedades selectEnfermedad) {
-    setState(() {
-      _selectEnfermedad = selectEnfermedad;
-    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: new Scaffold(
-        appBar: new AppBar(
-          title: new Text('Registrarse'),
+    //return MaterialApp(
+    //home: new Scaffold(
+    return Scaffold(
+      appBar: new AppBar(
+        title: Container(
+          alignment: Alignment.bottomLeft,
+          child: Row(
+            children: [
+              Text(
+                "Bienvenido    ",
+                style: TextStyle(fontSize: 17),
+              ),
+              usuariologueado.userloguin2(),
+              usuariologueado.userloguin(),
+              Text("  "),
+              usuariologueado.botonSalir(context),
+            ],
+          ),
         ),
-        body: new SingleChildScrollView(
-          child: new Container(
-            margin: new EdgeInsets.all(10.0),
-            child: new Form(
-              key: keyForm,
-              child: formUI(),
-            ),
+      ),
+      body: new SingleChildScrollView(
+        child: new Container(
+          margin: new EdgeInsets.all(10.0),
+          child: new Form(
+            key: keyForm,
+            child: formUI(),
           ),
         ),
       ),
     );
+    // );
   }
 
   formItemsDesign(icon, item) {
@@ -82,13 +88,6 @@ class RegisterPageState extends State<RegisterPage> {
       child: Card(child: ListTile(leading: Icon(icon), title: item)),
     );
   }
-
-  String tipoCirujia = 'cirujia';
-  String grupoNecesidadSangre = 'necSangre';
-  String grupoExamenesSangre = 'exaSangre';
-  String grupoRadiografiasTorax = 'radTorax';
-  String grupoExaECG = 'exaEcg';
-  String grupoCuantitativosCovid = 'cuantitativos';
 
   Widget formUI() {
     return Column(
@@ -119,7 +118,6 @@ class RegisterPageState extends State<RegisterPage> {
                 child: Column(
                   children: [
                     Row(
-                      // mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(currentDate.year.toString() +
                             "/" +
@@ -140,6 +138,7 @@ class RegisterPageState extends State<RegisterPage> {
                 child: Column(
                   children: [
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text("Años: " + age.toString()),
                         Text("   "),
@@ -176,30 +175,24 @@ class RegisterPageState extends State<RegisterPage> {
                 ],
               ),
             )),
-        Container(
-          alignment: Alignment.bottomLeft,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Text("Seleccionar Enfermedad"),
-                  DropdownButton(
-                    value: _selectEnfermedad,
-                    items: _dropdownMenuItems,
-                    onChanged: onChangeDropdownItem,
-                  ),
-                  SizedBox(
-                    height: 20.0,
-                  ),
-                ],
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 25),
-                child: Text('Enfermedad: ${_selectEnfermedad.name}'),
-              ),
-            ],
+        formItemsDesign(
+          Icons.dry_outlined,
+          FindDropdown(
+            items: ["Gripe", "Sida", "Covid 19", "Cáncer", "Diabetes"],
+            label: "Seleccionar Enfermedad",
+            onChanged: (item) {
+              nombreEnfermedad = item;
+              print(item);
+            },
+            selectedItem: "Enfermedad",
+            validate: (item) {
+              if (item == null)
+                return "Falta seleccionar";
+              else if (item == "Enfermedad")
+                return "Campo no válido";
+              else
+                return null; //return null to "no error"
+            },
           ),
         ),
         formItemsDesign(
@@ -210,7 +203,7 @@ class RegisterPageState extends State<RegisterPage> {
                 labelText: 'Procedimiento a Realizar: ',
               ),
               //keyboardType: TextInputType.,
-              maxLength: 32,
+              maxLength: 255,
             )),
         formItemsDesign(
           Icons.mode_outlined,
@@ -224,16 +217,16 @@ class RegisterPageState extends State<RegisterPage> {
                 ),
                 Row(
                   children: [
-                    Text(currentDate.year.toString() +
+                    Text(fechaProcedimiento.year.toString() +
                         "/" +
-                        currentDate.month.toString() +
+                        fechaProcedimiento.month.toString() +
                         "/" +
-                        currentDate.day.toString()),
+                        fechaProcedimiento.day.toString()),
                     IconButton(
-                      onPressed: () => selectDate(context),
+                      onPressed: () => selectDateProcess(context),
                       icon: Icon(Icons.date_range),
                     ),
-                    Container(
+                    /*Container(
                       child: Column(
                         children: [
                           TimePickerSpinner(
@@ -254,7 +247,53 @@ class RegisterPageState extends State<RegisterPage> {
                               })
                         ],
                       ),
-                    )
+                    ),*/
+                  ],
+                ),
+                Row(
+                  children: [
+                    Text('Horas:'),
+                    Container(
+                      width: 35,
+                      child: Column(
+                        children: [
+                          /* NumberPicker(
+                            itemHeight: 25,
+                            value: _horas,
+                            minValue: 0,
+                            maxValue: 60,
+                            textStyle:
+                                TextStyle(fontSize: 15, color: Colors.black),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(0),
+                            ),
+                            onChanged: (value) =>
+                                setState(() => _horas = value),
+                          ),*/
+                        ],
+                      ),
+                    ),
+                    Text('    Minutos:'),
+                    Container(
+                      width: 35,
+                      child: Column(
+                        children: [
+                          /*NumberPicker(
+                            itemHeight: 25,
+                            value: _minutos,
+                            minValue: 0,
+                            maxValue: 60,
+                            textStyle:
+                                TextStyle(fontSize: 15, color: Colors.black),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(0),
+                            ),
+                            onChanged: (value) =>
+                                setState(() => _minutos = value),
+                          ),*/
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ],
@@ -267,9 +306,10 @@ class RegisterPageState extends State<RegisterPage> {
               child: Column(
                 children: [
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "Necesidad de Sangre: ",
+                        "Necesidad de Sangre:    ",
                         style: TextStyle(fontSize: 14, color: Colors.black),
                       ),
                       necesidadSangre('si', 'SI'),
@@ -277,9 +317,10 @@ class RegisterPageState extends State<RegisterPage> {
                     ],
                   ),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "Exámenes de Sangre: ",
+                        "Exámenes de Sangre:     ",
                         style: TextStyle(fontSize: 14, color: Colors.black),
                       ),
                       examenesSangre('si', 'SI'),
@@ -287,9 +328,10 @@ class RegisterPageState extends State<RegisterPage> {
                     ],
                   ),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "Radiografías de Torax: ",
+                        "Radiografías de Torax:  ",
                         style: TextStyle(fontSize: 14, color: Colors.black),
                       ),
                       radiografiasTorax('si', 'SI'),
@@ -297,9 +339,10 @@ class RegisterPageState extends State<RegisterPage> {
                     ],
                   ),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "ECG: ",
+                        "ECG:                                  ",
                         style: TextStyle(fontSize: 14, color: Colors.black),
                       ),
                       examenEcg('si', 'SI'),
@@ -307,6 +350,7 @@ class RegisterPageState extends State<RegisterPage> {
                     ],
                   ),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
                         "Cuantitativos COVID-19: ",
@@ -344,7 +388,6 @@ class RegisterPageState extends State<RegisterPage> {
               decoration: new InputDecoration(
                 labelText: 'Equipo o Material necesario',
               ),
-              validator: val.validateName,
             )),
         formItemsDesign(
             Icons.mode_outlined,
@@ -360,7 +403,7 @@ class RegisterPageState extends State<RegisterPage> {
               save();
             },
             child: Container(
-              margin: new EdgeInsets.all(30.0),
+              margin: new EdgeInsets.all(5.0),
               alignment: Alignment.center,
               decoration: ShapeDecoration(
                 shape: RoundedRectangleBorder(
@@ -371,6 +414,31 @@ class RegisterPageState extends State<RegisterPage> {
                 ], begin: Alignment.topLeft, end: Alignment.bottomRight),
               ),
               child: Text("Guardar",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500)),
+              padding: EdgeInsets.only(top: 16, bottom: 16),
+            )),
+        GestureDetector(
+            onTap: () {
+              final route = MaterialPageRoute(builder: (context) {
+                return Botones();
+              });
+              Navigator.pushReplacement(context, route);
+            },
+            child: Container(
+              margin: new EdgeInsets.all(5.0),
+              alignment: Alignment.center,
+              decoration: ShapeDecoration(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30.0)),
+                gradient: LinearGradient(colors: [
+                  Color(0xFF0EDED2),
+                  Color(0xFF03A0FE),
+                ], begin: Alignment.topLeft, end: Alignment.bottomRight),
+              ),
+              child: Text("Cancelar",
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 18,
@@ -534,7 +602,9 @@ class RegisterPageState extends State<RegisterPage> {
   }
 
   DateTime currentDate = DateTime.now();
-  // => 1555837118231
+
+  DateTime fechaProcedimiento = DateTime.now();
+
   int age = 0;
   int meses = 0;
   calcularEdad(DateTime value) {
@@ -547,13 +617,20 @@ class RegisterPageState extends State<RegisterPage> {
     int month2 = value.month;
 
     if (month2 > month1) {
+      print("mes de nacimiento mayor al actual");
       meses = 12 - (month2 - month1);
       age--;
+    } else if (month2 < month1) {
+      print("mes de nacimiento menor al actual");
+      meses = month1 - month2;
     } else if (month1 == month2) {
       int day1 = currentDate.day;
       int day2 = value.day;
       if (day2 > day1) {
+        meses = 11;
         age--;
+      } else if (day2 <= day1) {
+        meses = 0;
       }
     }
 
@@ -575,8 +652,21 @@ class RegisterPageState extends State<RegisterPage> {
       });
   }
 
+  Future<void> selectDateProcess(BuildContext context) async {
+    final DateTime pickedDate = await showDatePicker(
+        context: context,
+        initialDate: fechaProcedimiento,
+        firstDate: DateTime(2021),
+        lastDate: DateTime(2050));
+    if (pickedDate != null && pickedDate != currentDate)
+      setState(() {
+        fechaProcedimiento = pickedDate;
+      });
+  }
+
   save() {
     if (keyForm.currentState.validate()) {
+      print("----------------------------------------------------");
       print("Nombre ${nameCtrl.text}");
       print("Edad del paciente en años: " +
           age.toString() +
@@ -584,9 +674,19 @@ class RegisterPageState extends State<RegisterPage> {
           meses.toString());
 
       print("Tipo de cirujía:" + eleccionRadioButton);
-      print("Enfermedad que tiene: ");
-      print("Procedimiento a realizar: ");
-      print("Fecha y hora de procedimiento:");
+      print("Enfermedad que tiene: " + nombreEnfermedad);
+      print("Procedimiento a realizar: " + procedimientoMedico.text);
+      print("Fecha del procedimiento:" +
+          fechaProcedimiento.year.toString() +
+          "/" +
+          fechaProcedimiento.month.toString() +
+          "/" +
+          fechaProcedimiento.day.toString());
+      print("Tiempo del procedimiento: " +
+          "Horas: " +
+          _horas.toString() +
+          "Minutos: " +
+          _minutos.toString());
 
       print("Necesita sangre:" + eleccionNecesidadDeSangre);
       print("Tiene examenes de sangre:" + eleccionExamenesSangre);
@@ -598,24 +698,8 @@ class RegisterPageState extends State<RegisterPage> {
       print("nombre ayudante: ${ayudante.text}");
       print("equipo necesario: ${equipoMaterial.text}");
       print("observaciones: ${observaciones.text}");
+      print("----------------------------------------------------");
       keyForm.currentState.reset();
     }
-  }
-}
-
-class Enfermedades {
-  int id;
-  String name;
-
-  Enfermedades(this.id, this.name);
-
-  static List<Enfermedades> getCompanies() {
-    return <Enfermedades>[
-      Enfermedades(1, 'Covid'),
-      Enfermedades(2, 'Sida'),
-      Enfermedades(3, 'Cáncer'),
-      Enfermedades(4, 'Diabetes'),
-      Enfermedades(5, 'Gripe'),
-    ];
   }
 }

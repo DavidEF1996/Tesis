@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:qr_flutter/model/doctor.dart';
+
 
 void mostrarAlerta(BuildContext context, String mensaje) {
   showDialog(

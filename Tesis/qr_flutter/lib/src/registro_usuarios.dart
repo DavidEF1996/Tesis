@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/preferences/preferences.dart';
-import 'package:qr_flutter/src/homebotones.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:qr_flutter/src/login.dart';
 import 'package:qr_flutter/validations/validacionesRegistro.dart';
@@ -32,7 +32,7 @@ class insertar extends State<insertar_usuarios> {
         ),
         body: new SingleChildScrollView(
           child: new Container(
-            margin: new EdgeInsets.all(10.0),
+            margin: new EdgeInsets.all(12.0),
             child: new Form(
               key: keyForm,
               child: formUI(),

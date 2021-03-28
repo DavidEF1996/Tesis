@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:qr_flutter/src/registro_usuarios.dart';
+
 import 'package:flutter/cupertino.dart';
 
 class Validaciones {

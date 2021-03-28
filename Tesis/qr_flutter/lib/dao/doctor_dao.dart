@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:qr_flutter/model/doctor.dart';
 
 class DoctorDao {
-  static const String IP = '192.168.100.6';
+  static const String IP = '192.168.100.14';
   static const int PORT = 8080;
   static const String servicio_crear = "/crear";
   static const String servicio_login = "/login";

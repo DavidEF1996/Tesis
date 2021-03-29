@@ -7,7 +7,7 @@ class UserService {
   static var usuariologueado = "";
   static const API =
       "http://192.168.18.4:8080/operatingRoomRs/ws/operatingRoomServices";
-
+  //"http://192.168.10.118:8080/operatingRoomRs/ws/operatingRoomServices";
   static const headers = {'Content-Type': 'application/json'};
 
   Future loginUsuario(String correo, String contrasena) async {
@@ -19,7 +19,7 @@ class UserService {
 
     if (respuesta.statusCode == 200) {
       final decodedata = json.decode(respuesta.body);
-      print('entras');
+      print(decodedata['nombres']);
       //Map<String, dynamic> user = jsonDecode(decodedata);
 
       nombreUsuariologueado = decodedata['nombres'];

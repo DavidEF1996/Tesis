@@ -113,7 +113,7 @@ class _State extends State<CambioContrasena> {
       print(id);
       Changepass c = Changepass();
       c.idDoctor = id;
-      c.password = pass;
+      c.password = encode(pass);
       final resultado = await DoctorDao.changePass(jsonEncode(c.toJson()));
       // String valor = resultado;
       print(resultado.toString());

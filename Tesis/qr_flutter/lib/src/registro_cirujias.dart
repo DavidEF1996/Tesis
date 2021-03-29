@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:flutter_time_picker_spinner/flutter_time_picker_spinner.dart';
+import 'package:qr_flutter/model/registro_cirujias_modelo.dart';
 import 'package:qr_flutter/src/homebotones.dart';
+import 'package:qr_flutter/validations/popupRegistroCirujias.dart';
 import 'package:qr_flutter/validations/usuarioLogueado.dart';
 import 'package:qr_flutter/validations/validacionesRegistro.dart';
 import 'package:find_dropdown/find_dropdown.dart';
@@ -41,6 +43,7 @@ class RegisterPageState extends State<RegisterPage> {
 
   Validaciones val = Validaciones();
   UsuarioLogueado usuariologueado = UsuarioLogueado();
+  popupRegistroCirujias popRegCirugias = popupRegistroCirujias();
 
   @override
   void initState() {
@@ -666,7 +669,7 @@ class RegisterPageState extends State<RegisterPage> {
 
   save() {
     if (keyForm.currentState.validate()) {
-      print("----------------------------------------------------");
+      /* print("----------------------------------------------------");
       print("Nombre ${nameCtrl.text}");
       print("Edad del paciente en años: " +
           age.toString() +
@@ -699,7 +702,36 @@ class RegisterPageState extends State<RegisterPage> {
       print("equipo necesario: ${equipoMaterial.text}");
       print("observaciones: ${observaciones.text}");
       print("----------------------------------------------------");
-      keyForm.currentState.reset();
+      keyForm.currentState.reset();*/
+
+      RegistroCirujias r = RegistroCirujias();
+      r.nombres = nameCtrl.text;
+      r.fechaNacimiento = currentDate;
+      r.anos = age;
+      r.meses = meses;
+      r.tipoCirujia = tipoCirujia;
+      r.enfermedad = nombreEnfermedad;
+      r.procedimientoRealizar = procedimientoMedico.text;
+      r.fechaProcedimiento = fechaProcedimiento;
+      r.horasProcedimiento = _horas;
+      r.minutosProcedimiento = _minutos;
+      r.necesidadSangre = eleccionNecesidadDeSangre;
+      r.examenesSangre = eleccionExamenesSangre;
+      r.radiografiasTorax = eleccionRadiografiaTorax;
+      r.ecg = eleccionExaEcg;
+      r.cuantitativosCovid = eleccionCuantitativos;
+      r.nombreCirujano = cirujano.text;
+      r.nombreAyudante = ayudante.text;
+      r.equipoMaterialNecesario = equipoMaterial.text;
+      r.observaciones = observaciones.text;
+
+      if (keyForm.currentState.validate()) {
+        if (age > 0) {
+          popRegCirugias.menuConfirmacionDatos(r, context);
+        } else {
+          popRegCirugias.handleClickMe(context, 'Falta llenar algunos campos');
+        }
+      }
     }
   }
 }

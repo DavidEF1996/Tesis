@@ -4,7 +4,7 @@ import 'package:qr_flutter/services/user_services.dart';
 import 'package:qr_flutter/src/cambioContrasena.dart';
 import 'package:qr_flutter/src/homebotones.dart';
 import 'package:qr_flutter/src/registro_usuarios.dart';
-import 'package:qr_flutter/utils/utils.dart';
+import 'package:qr_flutter/utils/utils.dart' as utl;
 
 class LoginPage extends StatefulWidget {
   final String usuario;
@@ -48,7 +48,8 @@ class _State extends State<LoginPage> {
   void initState() {
     super.initState();
     nameController.text = (widget.usuario == "") ? "" : widget.usuario;
-    passwordController.text = (widget.usuario == "") ? "" : widget.contrasena;
+    passwordController.text =
+        (widget.usuario == "") ? "" : utl.decode(widget.contrasena);
   }
 
   @override
@@ -110,6 +111,10 @@ class _State extends State<LoginPage> {
                       color: Colors.blue,
                       child: Text('Comenzar'),
                       onPressed: () {
+                        print('object');
+                        utl.encode('CRISTIAN9195CLEON');
+                        String pass = utl.encode('CRISTIAN9195CLEON');
+                        utl.decode(pass);
                         cargar(context);
                       },
                     )),
@@ -139,11 +144,12 @@ class _State extends State<LoginPage> {
 
   Future cargar(BuildContext context) async {
     final String usuario = nameController.text;
-    final String contrasena = passwordController.text;
     print(nameController.text);
     print(passwordController.text);
-
-    final result = await httpServicio.loginUsuario(usuario, contrasena);
+    print("este es el password encriuptado: " +
+        utl.encode(passwordController.text));
+    final result = await httpServicio.loginUsuario(
+        usuario, utl.encode(passwordController.text));
     print(result);
     print((result['acceso']));
     if (result['acceso']) {
@@ -163,13 +169,7 @@ class _State extends State<LoginPage> {
         Navigator.push(context, route);
       }
     } else {
-      mostrarAlerta(context, "Error de usuario");
+      utl.mostrarAlerta(context, "Error de usuario");
     }
-
-    //
-
-    //print("object");
-    //Usuario1 usu = result.data;
-    //print(usu.user);
   }
 }

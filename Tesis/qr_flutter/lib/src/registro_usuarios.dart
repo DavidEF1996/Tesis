@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/preferences/preferences.dart';
-import 'package:qr_flutter/src/homebotones.dart';
-
 import 'package:flutter/cupertino.dart';
+import 'package:qr_flutter/utils/generate_user.dart';
+import 'package:qr_flutter/utils/utils.dart';
+
 import 'package:qr_flutter/validations/popupRegistroUsuarios.dart';
 import 'package:qr_flutter/src/login.dart';
 import 'package:qr_flutter/validations/validacionesRegistro.dart';
@@ -214,16 +215,13 @@ class insertar extends State<insertar_usuarios> {
     if (pickedDate != null && pickedDate != currentDate)
       setState(() {
         currentDate = pickedDate;
-        print('llegue');
-        //val.calcularEdadGeneral(currentDate, age, months);
-        print(calcularEdad(currentDate));
       });
     return currentDate.toString();
   }
 
   calcularEdad(DateTime value) {
     DateTime currentDate = DateTime.now();
-    print("actual" + currentDate.year.toString());
+    //print("actual" + currentDate.year.toString());
     age = currentDate.year - value.year;
     int month1 = currentDate.month;
     int month2 = value.month;
@@ -241,6 +239,7 @@ class insertar extends State<insertar_usuarios> {
   }
 
   save() {
+    List<String> credenciales = generateUser(nombres.text, apellidos.text);
     Doctor d = Doctor();
     d.cedula = cedula.text;
     d.nombres = nombres.text;
@@ -248,12 +247,15 @@ class insertar extends State<insertar_usuarios> {
     d.fechaNacimiento = currentDate;
     d.idDoctor = idDoctor.text;
     d.especialidad = especialidad.text;
+    d.user = credenciales[0];
+    print(credenciales[1]); //prueba
+    d.password = encode(credenciales[1]);
+    print(d.password); //prueba3
+
     if (keyForm.currentState.validate()) {
-      if (age > 0) {
-        popRegUsuario.menuConfirmacionDatos(d, context);
-      } else {
-        popRegUsuario.handleClickMe(context, 'Falta llenar algunos campos');
-      }
+      popRegUsuario.menuConfirmacionDatos(d, context);
+    } else {
+      popRegUsuario.handleClickMe(context, 'Falta llenar algunos campos');
     }
   }
 }

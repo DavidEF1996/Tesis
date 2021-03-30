@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/preferences/preferences.dart';
-import 'dart:convert';
 
 import 'package:qr_flutter/services/user_services.dart';
 import 'package:qr_flutter/src/login.dart';
 
 class UsuarioLogueado {
+  final _preferences = new Preferences();
   Text userloguin2() => Text("Usuario: ",
       style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13));
   Text userloguin() =>
-      Text(UserService.usuariologueado, style: TextStyle(fontSize: 13));
+      Text(_preferences.nombres, style: TextStyle(fontSize: 13));
 
   FloatingActionButton botonSalir(BuildContext context) {
     return FloatingActionButton.extended(

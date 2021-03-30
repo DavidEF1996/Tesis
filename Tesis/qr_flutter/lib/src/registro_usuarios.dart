@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/preferences/preferences.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:qr_flutter/utils/generate_user.dart';
 import 'package:qr_flutter/utils/utils.dart';
@@ -35,7 +36,7 @@ class insertar extends State<insertar_usuarios> {
         ),
         body: new SingleChildScrollView(
           child: new Container(
-            margin: new EdgeInsets.all(10.0),
+            margin: new EdgeInsets.all(12.0),
             child: new Form(
               key: keyForm,
               child: formUI(),
@@ -247,10 +248,8 @@ class insertar extends State<insertar_usuarios> {
     d.fechaNacimiento = currentDate;
     d.idDoctor = idDoctor.text;
     d.especialidad = especialidad.text;
-    d.user = credenciales[0];
-    print(credenciales[1]); //prueba
+    d.user = credenciales[0]; //prueba
     d.password = encode(credenciales[1]);
-    print(d.password); //prueba3
 
     if (keyForm.currentState.validate()) {
       popRegUsuario.menuConfirmacionDatos(d, context);

@@ -1,8 +1,5 @@
 import 'dart:core';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:intl/date_symbol_data_local.dart';
-import 'package:flutter_time_picker_spinner/flutter_time_picker_spinner.dart';
 import 'package:qr_flutter/model/registro_cirujias_modelo.dart';
 import 'package:qr_flutter/src/homebotones.dart';
 import 'package:qr_flutter/validations/popupRegistroCirujias.dart';

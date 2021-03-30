@@ -116,14 +116,16 @@ class popupRegistroUsuario {
               child: Text('Confirmar'),
               onPressed: () async {
                 String decodePassword = d.password;
-                print('SET DOCOTOR PASS: ' + decodePassword);
                 await DoctorDao.crearDoctor(jsonEncode(d.toJson()));
+                final String outputUser = utf8.decode(
+                    latin1.encode(DoctorDao.d.user),
+                    allowMalformed: true);
 
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                         builder: (BuildContext context) => LoginPage(
-                              usuario: DoctorDao.d.user,
+                              usuario: outputUser,
                               contrasena: decodePassword,
                             )));
 

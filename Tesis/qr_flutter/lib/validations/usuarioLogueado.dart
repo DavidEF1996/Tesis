@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/preferences/preferences.dart';
-
-import 'package:qr_flutter/services/user_services.dart';
 import 'package:qr_flutter/src/login.dart';
 
 class UsuarioLogueado {

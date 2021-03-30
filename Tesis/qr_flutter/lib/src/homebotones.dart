@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/preferences/preferences.dart';
 import 'package:qr_flutter/services/user_services.dart';
-import 'package:qr_flutter/src/login.dart';
-import 'package:qr_flutter/src/registro_usuarios.dart';
 import 'package:qr_flutter/utils/responsive.dart';
 import 'package:qr_flutter/validations/usuarioLogueado.dart';
 

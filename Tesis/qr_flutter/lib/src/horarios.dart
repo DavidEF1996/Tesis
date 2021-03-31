@@ -93,7 +93,6 @@ class Horarios extends StatelessWidget {
               child: Container(
                 height: 400,
                 width: 400,
-                color: Colors.amber,
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Column(
@@ -101,10 +100,89 @@ class Horarios extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          Row(
+                          /*Row(
                             
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: myRowChildren,
+                          ),*/
+                          DataTable(
+                            columns: const <DataColumn>[
+                              DataColumn(
+                                label: Text(
+                                  'Lunes',
+                                  style: TextStyle(fontStyle: FontStyle.italic),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Text(
+                                  'Martes',
+                                  style: TextStyle(fontStyle: FontStyle.italic),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Text(
+                                  'Miercoles',
+                                  style: TextStyle(fontStyle: FontStyle.italic),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Text(
+                                  'Jueves',
+                                  style: TextStyle(fontStyle: FontStyle.italic),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Text(
+                                  'Viernes',
+                                  style: TextStyle(fontStyle: FontStyle.italic),
+                                ),
+                              ),
+                            ],
+                            rows: <DataRow>[
+                              DataRow(
+                                cells: <DataCell>[
+                                  DataCell(
+                                      Container(
+                                        color: Colors.amber,
+                                      ), onTap: () {
+                                    print("valor");
+                                  }),
+                                  DataCell(
+                                      Container(
+                                        color: Colors.amber,
+                                      ), onTap: () {
+                                    print("valor");
+                                  }),
+                                  DataCell(
+                                      Container(
+                                        color: Colors.amber,
+                                      ), onTap: () {
+                                    print("valor");
+                                  }),
+                                  DataCell(
+                                      Container(
+                                        color: Colors.amber,
+                                      ), onTap: () {
+                                    print("valor");
+                                  }),
+                                  DataCell(
+                                      Container(
+                                        color: Colors.amber,
+                                      ), onTap: () {
+                                    print("valor");
+                                  }),
+                                ],
+                              ),
+
+                              /*  DataRow(cells: <DataCell>[
+          DataCell(IconButton(
+                    icon: Icon(Icons.delete),
+                    onPressed: () {
+                     _show();
+                    },
+                  ))
+        ])*/
+                            ],
                           ),
                         ],
                       ),

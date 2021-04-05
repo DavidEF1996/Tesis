@@ -48,7 +48,7 @@ class _Horarios extends State<Horarios> {
                 ),
                 usuariologueado.userloguin2(),
                 usuariologueado.userloguin(),
-                Text("  "),
+                Text("   "),
                 usuariologueado.botonRegresar(context),
               ],
             ),

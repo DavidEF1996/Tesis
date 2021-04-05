@@ -1,204 +1,184 @@
-import 'dart:math';
+/// Flutter code sample for DataTable
 
-import 'package:flutter/cupertino.dart';
+// This sample shows how to display a [DataTable] with three columns: name, age, and
+// role. The columns are defined by three [DataColumn] objects. The table
+// contains three rows of data for three example users, the data for which
+// is defined by three [DataRow] objects.
+//
+// ![](https://flutter.github.io/assets-for-api-docs/assets/material/data_table.png)
+
 import 'package:flutter/material.dart';
+import 'dart:core';
+
 import 'package:qr_flutter/validations/usuarioLogueado.dart';
 
-class Horarios extends StatelessWidget {
-  UsuarioLogueado usuariologueado = UsuarioLogueado();
+/// This is the stateless widget that the main application instantiates.
+class Horarios extends StatefulWidget {
+  const Horarios({Key key}) : super(key: key);
 
   @override
+  _Horarios createState() => _Horarios();
+}
+
+class _Horarios extends State<Horarios> {
+  @override
+  UsuarioLogueado usuariologueado = UsuarioLogueado();
+  int index = 1;
+  Color colorBase;
+
+  String nombreC;
+  TextEditingController valorFecha = TextEditingController();
+  TextEditingController valorHora = TextEditingController();
+
+  DateTime fechaActual = DateTime.now();
   Widget build(BuildContext context) {
-    List<Color> manyColors = [
-      Colors.red,
-      Colors.green,
-      Colors.blue,
-      Colors.yellow,
-      Colors.brown,
-      Colors.purple,
-      Colors.orange,
-      Colors.pink
-    ];
-    List<Widget> myRowChildren = [];
-    List<List<int>> numbers = [];
-    List<int> columnNumbers = [];
-    int z = 0;
-    for (int i = 0; i <= 4; i++) {
-      int maxColNr = 9;
-      for (int y = 0; y <= maxColNr; y++) {
-        int currentNumber = z + y; // 0,1,2,3,4,5,6,7,8,9,10, 10,11, 12, 13,14
-        columnNumbers.add(currentNumber);
-      }
-      z += maxColNr;
-      numbers.add(columnNumbers);
-      columnNumbers = [];
-    }
-    print(numbers);
+    final title = 'Grid List';
 
-    myRowChildren = numbers
-        .map(
-          (columns) => Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: columns.map((nr) {
-              int min = 0;
-              int max = manyColors.length;
-              Random rnd = new Random();
-              int randomNumber = min + rnd.nextInt(max - min);
-              return Container(
-                padding: EdgeInsets.all(10),
-                color: manyColors[randomNumber],
-                child: Text(
-                  nr.toString(),
+    return MaterialApp(
+      title: title,
+      home: Scaffold(
+        appBar: new AppBar(
+          title: Container(
+            alignment: Alignment.bottomLeft,
+            child: Row(
+              children: [
+                Text(
+                  "Bienvenido    ",
+                  style: TextStyle(fontSize: 17),
                 ),
-              );
-            }).toList(),
-          ),
-        )
-        .toList();
-
-    List<Widget> _buildCells(int count) {
-      return List.generate(
-        count,
-        (index) => Container(
-          alignment: Alignment.center,
-          width: 120.0,
-          height: 60.0,
-          color: Colors.white,
-          margin: EdgeInsets.all(4.0),
-          child: Text(generar(), style: Theme.of(context).textTheme.title),
-        ),
-      );
-    }
-
-    List<Widget> _buildRows(int count) {
-      return List.generate(
-        count,
-        (index) => Row(
-          children: _buildCells(12),
-        ),
-      );
-    }
-
-    return Scaffold(
-      appBar: AppBar(),
-      body: SingleChildScrollView(
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: _buildCells(5),
+                usuariologueado.userloguin2(),
+                usuariologueado.userloguin(),
+                Text("  "),
+                usuariologueado.botonRegresar(context),
+              ],
             ),
-            Flexible(
-              child: Container(
-                height: 400,
-                width: 400,
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          /*Row(
-                            
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: myRowChildren,
-                          ),*/
-                          DataTable(
-                            columns: const <DataColumn>[
-                              DataColumn(
-                                label: Text(
-                                  'Lunes',
-                                  style: TextStyle(fontStyle: FontStyle.italic),
-                                ),
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  'Martes',
-                                  style: TextStyle(fontStyle: FontStyle.italic),
-                                ),
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  'Miercoles',
-                                  style: TextStyle(fontStyle: FontStyle.italic),
-                                ),
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  'Jueves',
-                                  style: TextStyle(fontStyle: FontStyle.italic),
-                                ),
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  'Viernes',
-                                  style: TextStyle(fontStyle: FontStyle.italic),
-                                ),
-                              ),
-                            ],
-                            rows: <DataRow>[
-                              DataRow(
-                                cells: <DataCell>[
-                                  DataCell(
-                                      Container(
-                                        color: Colors.amber,
-                                      ), onTap: () {
-                                    print("valor");
-                                  }),
-                                  DataCell(
-                                      Container(
-                                        color: Colors.amber,
-                                      ), onTap: () {
-                                    print("valor");
-                                  }),
-                                  DataCell(
-                                      Container(
-                                        color: Colors.amber,
-                                      ), onTap: () {
-                                    print("valor");
-                                  }),
-                                  DataCell(
-                                      Container(
-                                        color: Colors.amber,
-                                      ), onTap: () {
-                                    print("valor");
-                                  }),
-                                  DataCell(
-                                      Container(
-                                        color: Colors.amber,
-                                      ), onTap: () {
-                                    print("valor");
-                                  }),
-                                ],
-                              ),
+          ),
+        ),
+        body: GridView.count(
+          // Create a grid with 2 columns. If you change the scrollDirection to
+          // horizontal, this produces 2 rows.
+          crossAxisCount: 5,
+          // Generate 100 widgets that display their index in the List.
+          children: List.generate(55, (index) {
+            setState(() {
+              _cabeceras(index);
 
-                              /*  DataRow(cells: <DataCell>[
-          DataCell(IconButton(
-                    icon: Icon(Icons.delete),
-                    onPressed: () {
-                     _show();
-                    },
-                  ))
-        ])*/
-                            ],
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+              valorFecha.text = fechas(fechaActual, index);
+              horas(fechaActual, index);
+
+              pintarOcupados(index, valorFecha.text, valorHora.text);
+            });
+            // _valores(index);
+            return Center(
+                child: RaisedButton(
+              child: Container(
+                width: 200,
+                child: Column(
+                  children: [textos(index, valorFecha), Text(valorHora.text)],
                 ),
               ),
-            ),
-          ],
+              color: colorBase,
+              onPressed: () {
+                print("El texto: ");
+                //  sacarTexto(index);
+              },
+            ));
+          }),
         ),
       ),
     );
   }
 
-  String generar() {
-    String nombre = "david";
-    return nombre;
+  Text textos(int index, TextEditingController valor) {
+    if (valor.text == "Lunes" ||
+        valor.text == "Martes" ||
+        valor.text == "Miercoles" ||
+        valor.text == "Jueves" ||
+        valor.text == "Viernes") {
+      return Text(
+        valor.text,
+        style: TextStyle(fontSize: 20),
+      );
+    } else {
+      return Text(
+        valor.text,
+        style: TextStyle(fontSize: 12),
+      );
+    }
+  }
+
+  void _show(int index, TextEditingController texto) {
+    //if (index == 2) {
+    //print("Son iguales" + fechaActual.year.toString());
+    //fechas(fechaActual);
+    //  }
+    print("index = " + index.toString() + texto.text);
+  }
+
+  int cont1 = 0;
+  int val1 = 0;
+  String fechas(DateTime fecha, int index) {
+    if (index > 4) {
+      String enviarFecha = fecha.year.toString() +
+          "/" +
+          fecha.month.toString() +
+          "/" +
+          (fecha.day + cont1).toString();
+      cont1++;
+      if (cont >= 5) {
+        cont = 0;
+      }
+      return enviarFecha;
+    }
+  }
+
+  int cont = 0;
+  int val = 7;
+  String horas(DateTime fecha, int index) {
+    if (index >= 5 && cont % 5 == 0) {
+      valorHora.text = (val + 1).toString();
+      cont++;
+      val++;
+    } else if (index > 5 && cont % 5 != 0) {
+      valorHora.text = val.toString();
+      cont++;
+    }
+  }
+
+  TextEditingController _cabeceras(int index) {
+    if (index == 0) {
+      valorFecha.text = "Lunes";
+      colorBase = Colors.blueGrey;
+    } else if (index == 1) {
+      valorFecha.text = "Martes";
+      colorBase = Colors.blueGrey;
+    } else if (index == 2) {
+      valorFecha.text = "Miercoles";
+      colorBase = Colors.blueGrey;
+    } else if (index == 3) {
+      colorBase = Colors.blueGrey;
+      valorFecha.text = "Jueves";
+    } else if (index == 4) {
+      valorFecha.text = "Viernes";
+      colorBase = Colors.blueGrey;
+    } else {
+      valorFecha.text = "";
+      colorBase = Colors.yellow;
+    }
+
+    return valorFecha;
+  }
+
+  void pintarOcupados(int index, String fecha, String hora) {
+    print(fecha);
+    print(hora);
+
+    if (fecha == "2021/4/10" && hora == "9") {
+      colorBase = Colors.white;
+    }
+
+    if (fecha == "2021/4/15" && hora == "10") {
+      colorBase = Colors.white;
+    }
   }
 }

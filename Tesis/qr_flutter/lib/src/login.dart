@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:qr_flutter/services/user_services.dart';
 
 import 'package:qr_flutter/utils/responsive.dart';
-
+import 'package:qr_flutter/utils/utils.dart' as utl;
 import 'package:qr_flutter/vistas/vistaCelularLoguin.dart';
 
 class LoginPage extends StatefulWidget {
@@ -29,7 +29,8 @@ class _State extends State<LoginPage> {
   void initState() {
     super.initState();
     nameController.text = (widget.usuario == "") ? "" : widget.usuario;
-    passwordController.text = (widget.usuario == "") ? "" : widget.contrasena;
+    passwordController.text =
+        (widget.usuario == "") ? "" : utl.decode(widget.contrasena);
   }
 
   @override

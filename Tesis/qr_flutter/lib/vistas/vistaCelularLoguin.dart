@@ -6,6 +6,7 @@ import 'package:qr_flutter/src/homebotones.dart';
 import 'package:qr_flutter/src/registro_usuarios.dart';
 import 'package:qr_flutter/utils/responsive.dart';
 import 'package:qr_flutter/utils/utils.dart';
+import 'package:qr_flutter/utils/utils.dart' as utl;
 
 class Vista_Celular_Loguin {
   Container vistaPortraitCelular(
@@ -215,7 +216,8 @@ class Vista_Celular_Loguin {
     print(nameController.text);
     print(passwordController.text);
 
-    final result = await httpServicio.loginUsuario(usuario, contrasena);
+    final result = await httpServicio.loginUsuario(
+        usuario, utl.encode(passwordController.text));
     print(result);
     print((result['acceso']));
     if (result['acceso']) {

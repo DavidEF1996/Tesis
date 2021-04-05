@@ -6,7 +6,10 @@ class UserService {
   static var apellidoUsuarioLogueado = "";
   static var usuariologueado = "";
   static const API =
-      "http://192.168.18.125:8080/operatingRoomRs/ws/operatingRoomServices";
+      "http://192.168.100.8:8080/operatingRoomRs/ws/operatingRoomServices";
+
+  //"http://192.168.18.4:8080/operatingRoomRs/ws/operatingRoomServices";
+  //"http://192.168.100.3:8080/operatingRoomRs/ws/operatingRoomServices";
 
   static const headers = {'Content-Type': 'application/json'};
 
@@ -14,12 +17,12 @@ class UserService {
     //print(correo + ' ' + contrasena);
     final body = {"user": correo, "password": contrasena};
     var body2 = jsonEncode(body);
-    final respuesta =
-        await http.post(API + "/login", headers: headers, body: body2);
+    final respuesta = await http.post(API + "/login",
+        headers: headers, body: body2, encoding: Encoding.getByName('utf-8'));
 
     if (respuesta.statusCode == 200) {
       final decodedata = json.decode(respuesta.body);
-      print('entras');
+      print(decodedata['nombres']);
       //Map<String, dynamic> user = jsonDecode(decodedata);
 
       nombreUsuariologueado = decodedata['nombres'];

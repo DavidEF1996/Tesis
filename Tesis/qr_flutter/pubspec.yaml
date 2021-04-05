@@ -21,17 +21,19 @@ environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
+  #numberpicker: ^2.0.0
   flutter:
     sdk: flutter
   http: ^0.12.2
   cupertino_icons: ^1.0.0
   find_dropdown: ^0.1.5+1
-  numberpicker: ^2.0.0
-  after_layout: ^1.1.0
-  horizontal_data_table: ^2.5.2
+  crypto: ^2.1.5
+  encrypt: ^4.1.0
+  #
+  
+ 
 
   shared_preferences:
-    
 
   flutter_time_picker_spinner: ^1.0.6+1
 

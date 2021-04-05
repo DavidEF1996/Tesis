@@ -17,13 +17,13 @@ class Preferences {
 
   // GET JSESSIONID
   get id {
-    //return _prefs.getString('id') ?? '';
-    return _prefs.getString('id');
+    return _prefs.getString('id') ?? '';
+    //return _prefs.getString('id');
   }
 
   // SET JSESSIONID
   set id(String id) {
-    //_prefs.setString('id', id);
+    _prefs.setString('id', id);
   }
 
   get nombres {

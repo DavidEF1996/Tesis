@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 import 'package:flutter/cupertino.dart';
+import 'package:crypto/crypto.dart';
 
 class Validaciones {
   String validateEmail(String value) {
@@ -79,5 +82,9 @@ class Validaciones {
 
   Future redireccionar(BuildContext context) async {
     Navigator.of(context).pushNamed('/Botones');
+  }
+
+  String generateMd5(String input) {
+    return md5.convert(utf8.encode(input)).toString();
   }
 }

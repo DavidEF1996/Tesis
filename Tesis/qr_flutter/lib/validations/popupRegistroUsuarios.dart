@@ -5,6 +5,8 @@ import 'package:qr_flutter/model/doctor.dart';
 import 'package:qr_flutter/dao/doctor_dao.dart';
 import 'dart:convert';
 
+import 'package:qr_flutter/utils/utils.dart';
+
 class popupRegistroUsuario {
   Future<void> handleClickMe(BuildContext context, String mensaje) async {
     return showDialog<void>(
@@ -113,15 +115,18 @@ class popupRegistroUsuario {
             CupertinoDialogAction(
               child: Text('Confirmar'),
               onPressed: () async {
-                print("Llego hasta arriba del await");
+                String decodePassword = d.password;
                 await DoctorDao.crearDoctor(jsonEncode(d.toJson()));
-                print("Usuario desde el popup: " + DoctorDao.d.user);
+                final String outputUser = utf8.decode(
+                    latin1.encode(DoctorDao.d.user),
+                    allowMalformed: true);
+
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                         builder: (BuildContext context) => LoginPage(
-                              usuario: DoctorDao.d.user,
-                              contrasena: DoctorDao.d.password,
+                              usuario: outputUser,
+                              contrasena: decodePassword,
                             )));
 
                 //enviarDatos(context);

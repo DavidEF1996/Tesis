@@ -6,7 +6,7 @@ import 'package:qr_flutter/validations/popupRegistroCirujias.dart';
 import 'package:qr_flutter/validations/usuarioLogueado.dart';
 import 'package:qr_flutter/validations/validacionesRegistro.dart';
 import 'package:find_dropdown/find_dropdown.dart';
-import 'package:numberpicker/numberpicker.dart';
+//import 'package:numberpicker/numberpicker.dart';
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -257,7 +257,7 @@ class RegisterPageState extends State<RegisterPage> {
                       width: 35,
                       child: Column(
                         children: [
-                          NumberPicker(
+                          /* NumberPicker(
                             itemHeight: 25,
                             value: _horas,
                             minValue: 0,
@@ -269,7 +269,7 @@ class RegisterPageState extends State<RegisterPage> {
                             ),
                             onChanged: (value) =>
                                 setState(() => _horas = value),
-                          ),
+                          ),*/
                         ],
                       ),
                     ),
@@ -278,7 +278,7 @@ class RegisterPageState extends State<RegisterPage> {
                       width: 35,
                       child: Column(
                         children: [
-                          NumberPicker(
+                          /*NumberPicker(
                             itemHeight: 25,
                             value: _minutos,
                             minValue: 0,
@@ -290,7 +290,7 @@ class RegisterPageState extends State<RegisterPage> {
                             ),
                             onChanged: (value) =>
                                 setState(() => _minutos = value),
-                          ),
+                          ),*/
                         ],
                       ),
                     ),

@@ -29,6 +29,8 @@ dependencies:
   find_dropdown: ^0.1.5+1
   crypto: ^2.1.5
   encrypt: ^4.1.0
+  riverpod: ^0.12.4
+  flutter_typeahead: ^2.0.0
   #
   
  

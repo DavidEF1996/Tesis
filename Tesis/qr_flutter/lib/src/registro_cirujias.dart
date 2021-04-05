@@ -1,5 +1,7 @@
 import 'dart:core';
 import 'package:flutter/material.dart';
+import 'package:qr_flutter/dao/diagnostico_dao.dart';
+import 'package:qr_flutter/model/diagnostico.dart';
 import 'package:qr_flutter/model/registro_cirujias_modelo.dart';
 import 'package:qr_flutter/src/homebotones.dart';
 import 'package:qr_flutter/validations/popupRegistroCirujias.dart';
@@ -45,6 +47,12 @@ class RegisterPageState extends State<RegisterPage> {
   @override
   void initState() {
     super.initState();
+  }
+
+  List<String> listar() {
+    final List<String> lista = DiagnosticoDao.getAll() as List<String>;
+    print(lista.length);
+    return lista;
   }
 
   @override
@@ -178,10 +186,11 @@ class RegisterPageState extends State<RegisterPage> {
         formItemsDesign(
           Icons.dry_outlined,
           FindDropdown(
-            items: ["Gripe", "Sida", "Covid 19", "Cáncer", "Diabetes"],
+            items: listar(),
             label: "Seleccionar Enfermedad",
             onChanged: (item) {
               nombreEnfermedad = item;
+
               print(item);
             },
             selectedItem: "Enfermedad",
@@ -666,41 +675,6 @@ class RegisterPageState extends State<RegisterPage> {
 
   save() {
     if (keyForm.currentState.validate()) {
-      /* print("----------------------------------------------------");
-      print("Nombre ${nameCtrl.text}");
-      print("Edad del paciente en años: " +
-          age.toString() +
-          "y meses: " +
-          meses.toString());
-
-      print("Tipo de cirujía:" + eleccionRadioButton);
-      print("Enfermedad que tiene: " + nombreEnfermedad);
-      print("Procedimiento a realizar: " + procedimientoMedico.text);
-      print("Fecha del procedimiento:" +
-          fechaProcedimiento.year.toString() +
-          "/" +
-          fechaProcedimiento.month.toString() +
-          "/" +
-          fechaProcedimiento.day.toString());
-      print("Tiempo del procedimiento: " +
-          "Horas: " +
-          _horas.toString() +
-          "Minutos: " +
-          _minutos.toString());
-
-      print("Necesita sangre:" + eleccionNecesidadDeSangre);
-      print("Tiene examenes de sangre:" + eleccionExamenesSangre);
-      print("Posee radiografias de torax: " + eleccionRadiografiaTorax);
-      print("ECG: " + eleccionExaEcg);
-      print("Cuantitativos covid: " + eleccionCuantitativos);
-
-      print("nombre cirujano: ${cirujano.text}");
-      print("nombre ayudante: ${ayudante.text}");
-      print("equipo necesario: ${equipoMaterial.text}");
-      print("observaciones: ${observaciones.text}");
-      print("----------------------------------------------------");
-      keyForm.currentState.reset();*/
-
       RegistroCirujias r = RegistroCirujias();
       r.nombres = nameCtrl.text;
       r.fechaNacimiento = currentDate;
@@ -730,5 +704,10 @@ class RegisterPageState extends State<RegisterPage> {
         }
       }
     }
+  }
+
+  Future<List<Diagnostico>> _loadData() async {
+    var list = await fecthDiagnostico();
+    context.read
   }
 }

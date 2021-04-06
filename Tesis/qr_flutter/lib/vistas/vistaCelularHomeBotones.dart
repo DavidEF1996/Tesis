@@ -133,7 +133,12 @@ class Vista_celular {
                     style: TextStyle(fontSize: 20),
                   ),
                   icon: Icon(Icons.crop_square),
-                  onPressed: () {},
+                  onPressed: () {
+                    final route = MaterialPageRoute(builder: (context) {
+                      return Horarios();
+                    });
+                    Navigator.pushReplacement(context, route);
+                  },
                 ),
               ),
               Container(

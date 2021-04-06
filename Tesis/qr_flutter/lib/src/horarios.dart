@@ -1,3 +1,5 @@
+import 'package:find_dropdown/find_dropdown.dart';
+
 /// Flutter code sample for DataTable
 
 // This sample shows how to display a [DataTable] with three columns: name, age, and
@@ -8,6 +10,7 @@
 // ![](https://flutter.github.io/assets-for-api-docs/assets/material/data_table.png)
 
 import 'package:flutter/material.dart';
+import 'package:qr_flutter/utils/responsive.dart';
 import 'dart:core';
 
 import 'package:qr_flutter/validations/usuarioLogueado.dart';
@@ -25,15 +28,17 @@ class _Horarios extends State<Horarios> {
   UsuarioLogueado usuariologueado = UsuarioLogueado();
   int index = 1;
   Color colorBase;
+  String numeroQuirofano = "";
 
   String nombreC;
   TextEditingController valorFecha = TextEditingController();
   TextEditingController valorHora = TextEditingController();
 
   DateTime fechaActual = DateTime.now();
+  @override
   Widget build(BuildContext context) {
     final title = 'Grid List';
-
+    final Responsive responsive = Responsive.of(context);
     return MaterialApp(
       title: title,
       home: Scaffold(
@@ -54,36 +59,110 @@ class _Horarios extends State<Horarios> {
             ),
           ),
         ),
-        body: GridView.count(
-          // Create a grid with 2 columns. If you change the scrollDirection to
-          // horizontal, this produces 2 rows.
-          crossAxisCount: 5,
-          // Generate 100 widgets that display their index in the List.
-          children: List.generate(55, (index) {
-            setState(() {
-              _cabeceras(index);
-
-              valorFecha.text = fechas(fechaActual, index);
-              horas(fechaActual, index);
-
-              pintarOcupados(index, valorFecha.text, valorHora.text);
-            });
-            // _valores(index);
-            return Center(
-                child: RaisedButton(
-              child: Container(
-                width: 200,
-                child: Column(
-                  children: [textos(index, valorFecha), Text(valorHora.text)],
-                ),
+        body: new Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              child: Row(
+                children: [
+                  Container(
+                    width: responsive.diagonalPorcentaje(25),
+                    alignment: Alignment.bottomCenter,
+                    child: FindDropdown(
+                      items: ["Quirófano 1", "Quirófano 2", "Quirófano 3"],
+                      label: "Seleccionar Quirófano",
+                      onChanged: (item) {
+                        numeroQuirofano = item;
+                        print(item);
+                      },
+                      selectedItem: "Quirófano",
+                      validate: (item) {
+                        if (item == null)
+                          return "Falta seleccionar";
+                        else if (item == "Quirófano")
+                          return "";
+                        else
+                          return null; //return null to "no error"
+                      },
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.all(responsive.diagonalPorcentaje(1.5)),
+                    child: Row(
+                      children: [
+                        Container(
+                          child: Row(
+                            children: [
+                              Text("Oupado:   "),
+                              Container(
+                                color: Colors.yellow,
+                                height: responsive.diagonalPorcentaje(3),
+                                width: responsive.diagonalPorcentaje(5),
+                              ),
+                              Text("  Libre:  "),
+                              Container(
+                                color: Colors.brown,
+                                height: responsive.diagonalPorcentaje(3),
+                                width: responsive.diagonalPorcentaje(5),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-              color: colorBase,
-              onPressed: () {
-                print("El texto: ");
-                //  sacarTexto(index);
-              },
-            ));
-          }),
+            ),
+            new Expanded(
+              child: GridView.count(
+                padding: EdgeInsets.only(
+                    left: responsive.diagonalPorcentaje(1),
+                    right: responsive.diagonalPorcentaje(10),
+                    top: responsive.diagonalPorcentaje(1)),
+                // Create a grid with 2 columns. If you change the scrollDirection to
+                // horizontal, this produces 2 rows.
+                crossAxisCount: 5,
+                childAspectRatio:
+                    responsive.diagonalPorcentaje(0.2), // alto de widget
+                mainAxisSpacing:
+                    responsive.diagonalPorcentaje(0.2), //alto en distancia
+                crossAxisSpacing: responsive.diagonalPorcentaje(0.2),
+                // Generate 100 widgets that display their index in the List.
+                children: List.generate(55, (index) {
+                  setState(() {
+                    _cabeceras(index);
+
+                    valorFecha.text = fechas(fechaActual, index);
+                    horas(fechaActual, index);
+
+                    pintarOcupados(index, valorFecha.text, valorHora.text);
+                  });
+                  // _valores(index);
+
+                  return Container(
+                      child: RaisedButton(
+                    child: Container(
+                      width: responsive.anchoPorcentaje(100),
+
+                      //height: responsive.diagonalPorcentaje(7),
+                      child: Column(
+                        children: [
+                          textos(index, valorFecha),
+                          Text(valorHora.text)
+                        ],
+                      ),
+                    ),
+                    color: colorBase,
+                    onPressed: () {
+                      print("El texto: ");
+                      //  sacarTexto(index);
+                    },
+                  ));
+                }),
+              ),
+            )
+          ],
         ),
       ),
     );
@@ -97,7 +176,7 @@ class _Horarios extends State<Horarios> {
         valor.text == "Viernes") {
       return Text(
         valor.text,
-        style: TextStyle(fontSize: 20),
+        style: TextStyle(fontSize: 17),
       );
     } else {
       return Text(

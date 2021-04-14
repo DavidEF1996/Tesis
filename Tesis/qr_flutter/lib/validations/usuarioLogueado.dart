@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/preferences/preferences.dart';
+import 'package:qr_flutter/src/homebotones.dart';
 import 'package:qr_flutter/src/login.dart';
 
 class UsuarioLogueado {
@@ -21,6 +22,24 @@ class UsuarioLogueado {
         _preferences.id = "";
         final route = MaterialPageRoute(builder: (context) {
           return LoginPage();
+        });
+        Navigator.pushReplacement(context, route);
+      },
+    );
+  }
+
+  FloatingActionButton botonRegresar(BuildContext context) {
+    return FloatingActionButton.extended(
+      label: Text(
+        '',
+      ),
+      icon: Icon(Icons.arrow_left),
+      onPressed: () {
+        // PersonaDAO.eliminarPersona(widget.persona.getID);
+        final _preferences = new Preferences();
+        _preferences.id = "";
+        final route = MaterialPageRoute(builder: (context) {
+          return Botones();
         });
         Navigator.pushReplacement(context, route);
       },

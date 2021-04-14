@@ -3,9 +3,7 @@ import 'package:qr_flutter/model/registro_cirujias_modelo.dart';
 import 'package:qr_flutter/src/homebotones.dart';
 import 'package:qr_flutter/src/login.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:qr_flutter/model/doctor.dart';
 import 'package:qr_flutter/dao/doctor_dao.dart';
-import 'dart:convert';
 
 class popupRegistroCirujias {
   Future<void> handleClickMe(BuildContext context, String mensaje) async {

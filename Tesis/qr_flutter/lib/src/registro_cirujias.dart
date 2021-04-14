@@ -1,7 +1,10 @@
 import 'dart:core';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:qr_flutter/dao/diagnostico_dao.dart';
+import 'package:qr_flutter/dao/doctor_dao.dart';
 import 'package:qr_flutter/model/diagnostico.dart';
+import 'package:qr_flutter/model/doctor_consultas.dart';
 import 'package:qr_flutter/model/registro_cirujias_modelo.dart';
 import 'package:qr_flutter/src/homebotones.dart';
 import 'package:qr_flutter/validations/popupRegistroCirujias.dart';
@@ -47,12 +50,6 @@ class RegisterPageState extends State<RegisterPage> {
   @override
   void initState() {
     super.initState();
-  }
-
-  List<String> listar() {
-    final List<String> lista = DiagnosticoDao.getAll() as List<String>;
-    print(lista.length);
-    return lista;
   }
 
   @override
@@ -184,16 +181,33 @@ class RegisterPageState extends State<RegisterPage> {
               ),
             )),
         formItemsDesign(
-          Icons.dry_outlined,
-          FindDropdown(
-            items: listar(),
-            label: "Seleccionar Enfermedad",
-            onChanged: (item) {
-              nombreEnfermedad = item;
+            Icons.dry_outlined,
+            FindDropdown(
+              label: "Escriba el código",
+              onFind: (String filter) async {
+                /* var datas = Provider.of<DiagnosticoDao>(context).getDiagnosticos(filter) as List<Diagnostico>;;
+                return datas.forEach((element) {element.capitulo});*/
+                //         DiagnosticoDao.getDiagnosticos(filter) as List<Diagnostico>;
 
-              print(item);
-            },
-            selectedItem: "Enfermedad",
+                return await DiagnosticoDao.getDiagnosticos(filter);
+              },
+              onChanged: (Diagnostico data) {
+                print("LLEGA AL METODO");
+                Future<List<DoctorLista>> list =
+                    DoctorDao.listarDoctores("chu");
+                print(list);
+                print(data.capitulo);
+              },
+            )
+            /*FindDropdown<Diagnostico>(
+              label: "Seleccionar Enfermedad",
+              //items:  (String filter) => DiagnosticoDao.getDiagnosticos(codigo),
+              onFind: (String filter) => DiagnosticoDao.getDiagnosticos(filter),
+              
+              // items: DiagnosticoDao.listarDiagnosticos(),
+
+              onChanged: (Diagnostico u) => print(u)),*/
+            /*selectedItem: "Enfermedad",
             validate: (item) {
               if (item == null)
                 return "Falta seleccionar";
@@ -202,8 +216,8 @@ class RegisterPageState extends State<RegisterPage> {
               else
                 return null; //return null to "no error"
             },
-          ),
-        ),
+          ),*/
+            ),
         formItemsDesign(
             Icons.coronavirus,
             TextFormField(
@@ -704,10 +718,5 @@ class RegisterPageState extends State<RegisterPage> {
         }
       }
     }
-  }
-
-  Future<List<Diagnostico>> _loadData() async {
-    var list = await fecthDiagnostico();
-    context.read
   }
 }

@@ -1,39 +1,56 @@
-/// Flutter code sample for DataTable
-
-// This sample shows how to display a [DataTable] with three columns: name, age, and
-// role. The columns are defined by three [DataColumn] objects. The table
-// contains three rows of data for three example users, the data for which
-// is defined by three [DataRow] objects.
-//
-// ![](https://flutter.github.io/assets-for-api-docs/assets/material/data_table.png)
-
+import 'package:find_dropdown/find_dropdown.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:qr_flutter/dao/cirujiaDao.dart';
+import 'package:qr_flutter/model/cirujiasPrincipal.dart';
+import 'package:qr_flutter/src/homebotones.dart';
+import 'package:qr_flutter/utils/responsive.dart';
 import 'dart:core';
-
 import 'package:qr_flutter/validations/usuarioLogueado.dart';
+import 'package:intl/intl.dart';
 
 /// This is the stateless widget that the main application instantiates.
 class Horarios extends StatefulWidget {
-  const Horarios({Key key}) : super(key: key);
+  final String nombreQuirofano;
+  const Horarios({Key key, this.nombreQuirofano = ""}) : super(key: key);
 
   @override
-  _Horarios createState() => _Horarios();
+  State<StatefulWidget> createState() => _Horarios();
 }
 
 class _Horarios extends State<Horarios> {
-  @override
+  //variables usadas en los diferentes métodos
   UsuarioLogueado usuariologueado = UsuarioLogueado();
-  int index = 1;
   Color colorBase;
-
-  String nombreC;
+  String numeroQuirofano = "";
   TextEditingController valorFecha = TextEditingController();
   TextEditingController valorHora = TextEditingController();
-
   DateTime fechaActual = DateTime.now();
+  String nombreQuiro;
+  CirujiaDAO cirujias = new CirujiaDAO();
+
+  @override
+  void initState() {
+    super.initState();
+    int index = 1;
+
+    nombreQuiro = (widget.nombreQuirofano);
+    nombreQuiro =
+        (widget.nombreQuirofano == "") ? "Quirófano 1" : widget.nombreQuirofano;
+    print("El nombre con que inicia es: " + nombreQuiro);
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeRight,
+      DeviceOrientation.landscapeLeft,
+    ]);
+
+    List<Cirujias> guardar = cirujias.listarCirujias() as List<Cirujias>;
+    print(guardar.length);
+  }
+
+  @override
   Widget build(BuildContext context) {
     final title = 'Grid List';
-
+    final Responsive responsive = Responsive.of(context);
     return MaterialApp(
       title: title,
       home: Scaffold(
@@ -54,42 +71,143 @@ class _Horarios extends State<Horarios> {
             ),
           ),
         ),
-        body: GridView.count(
-          // Create a grid with 2 columns. If you change the scrollDirection to
-          // horizontal, this produces 2 rows.
-          crossAxisCount: 5,
-          // Generate 100 widgets that display their index in the List.
-          children: List.generate(55, (index) {
-            setState(() {
-              _cabeceras(index);
-
-              valorFecha.text = fechas(fechaActual, index);
-              horas(fechaActual, index);
-
-              pintarOcupados(index, valorFecha.text, valorHora.text);
-            });
-            // _valores(index);
-            return Center(
-                child: RaisedButton(
-              child: Container(
-                width: 200,
-                child: Column(
-                  children: [textos(index, valorFecha), Text(valorHora.text)],
-                ),
+        body: new Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              child: Row(
+                children: [
+                  Container(
+                      padding: EdgeInsets.all(responsive.diagonalPorcentaje(1)),
+                      alignment: Alignment.bottomCenter,
+                      child: Row(
+                        children: [
+                          RaisedButton(
+                            child: Container(
+                              child: Column(
+                                children: [
+                                  Text("Quirófano 1"),
+                                ],
+                              ),
+                            ),
+                            onPressed: () {
+                              nombreQuiro = "Quirófano 1";
+                              crear(nombreQuiro);
+                            },
+                          ),
+                          RaisedButton(
+                            child: Container(
+                              child: Column(
+                                children: [
+                                  Text("Quirófano 2"),
+                                ],
+                              ),
+                            ),
+                            onPressed: () {
+                              //nombreQuirofano = "Quirófano 2";
+                              nombreQuiro = "Quirófano 2";
+                              crear(nombreQuiro);
+                            },
+                          ),
+                          RaisedButton(
+                            child: Container(
+                              child: Column(
+                                children: [
+                                  Text("Quirófano 3"),
+                                ],
+                              ),
+                            ),
+                            onPressed: () {
+                              // crear();
+                            },
+                          ),
+                          Text("Oupado:   "),
+                          Container(
+                            color: Colors.yellow,
+                            height: responsive.diagonalPorcentaje(3),
+                            width: responsive.diagonalPorcentaje(5),
+                          ),
+                          Text("  Libre:  "),
+                          Container(
+                            color: Colors.brown,
+                            height: responsive.diagonalPorcentaje(3),
+                            width: responsive.diagonalPorcentaje(5),
+                          ),
+                        ],
+                      )),
+                  /*Container(
+                    padding: EdgeInsets.all(responsive.diagonalPorcentaje(1.5)),
+                    child: Row(
+                      children: [
+                        Container(
+                          child: Row(
+                            children: [],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),*/
+                ],
               ),
-              color: colorBase,
-              onPressed: () {
-                print("El texto: ");
-                //  sacarTexto(index);
-              },
-            ));
-          }),
+            ),
+            new Expanded(
+              child: GridView.count(
+                //Codigo para la ubicación y tamaños de la grilla
+                padding: EdgeInsets.only(
+                    left: responsive.diagonalPorcentaje(1),
+                    right: responsive.diagonalPorcentaje(10),
+                    top: responsive.diagonalPorcentaje(1)),
+
+                crossAxisCount: 5,
+                childAspectRatio:
+                    responsive.diagonalPorcentaje(0.2), // alto de widget
+                mainAxisSpacing:
+                    responsive.diagonalPorcentaje(0.2), //alto en distancia
+                crossAxisSpacing: responsive.diagonalPorcentaje(0.2),
+
+                //Código de la lista de widgets para la grilla
+
+                children: List.generate(55, (index) {
+                  setState(() {
+                    cabeceras(index);
+
+                    valorFecha.text = fechas(fechaActual, index);
+                    //horas( index);
+                    valorHora.text = horas(index);
+
+                    pintarOcupados(
+                        index, valorFecha.text, valorHora.text, nombreQuiro);
+                  });
+                  // _valores(index);
+
+                  return Container(
+                      child: RaisedButton(
+                    child: Container(
+                      width: responsive.anchoPorcentaje(100),
+
+                      //height: responsive.diagonalPorcentaje(7),
+                      child: Column(
+                        children: [
+                          textosConFecha(index, valorFecha),
+                          textoConHora(index, valorHora),
+                        ],
+                      ),
+                    ),
+                    color: colorBase,
+                    onPressed: () {
+                      // print(nombreQuirofano);
+                    },
+                  ));
+                }),
+              ),
+            )
+          ],
         ),
       ),
     );
   }
 
-  Text textos(int index, TextEditingController valor) {
+  Text textosConFecha(int index, TextEditingController valor) {
     if (valor.text == "Lunes" ||
         valor.text == "Martes" ||
         valor.text == "Miercoles" ||
@@ -97,7 +215,7 @@ class _Horarios extends State<Horarios> {
         valor.text == "Viernes") {
       return Text(
         valor.text,
-        style: TextStyle(fontSize: 20),
+        style: TextStyle(fontSize: 17),
       );
     } else {
       return Text(
@@ -107,45 +225,65 @@ class _Horarios extends State<Horarios> {
     }
   }
 
-  void _show(int index, TextEditingController texto) {
-    //if (index == 2) {
-    //print("Son iguales" + fechaActual.year.toString());
-    //fechas(fechaActual);
-    //  }
-    print("index = " + index.toString() + texto.text);
+  Text textoConHora(int index, TextEditingController valor) {
+    return Text(
+      valor.text,
+      style: TextStyle(fontSize: 12),
+    );
   }
 
   int cont1 = 0;
-  int val1 = 0;
-  String fechas(DateTime fecha, int index) {
+  String fechas(DateTime fechaActual, int index) {
+    DateTime fechaAuxiliar;
+    int contauxi = 1;
+
+    do {
+      fechaAuxiliar = new DateTime(
+          fechaActual.year, fechaActual.month, fechaActual.day - contauxi);
+      contauxi = contauxi + 1;
+      //print("La fecha es: " + fechaAuxiliar.toString());
+    } while (DateFormat('EEEE').format(fechaAuxiliar).toString() != "Monday");
+
     if (index > 4) {
-      String enviarFecha = fecha.year.toString() +
+      var fechaFinal = new DateTime(
+          fechaAuxiliar.year, fechaAuxiliar.month, fechaAuxiliar.day + cont1);
+      String enviarFechaFinal = fechaFinal.year.toString() +
           "/" +
-          fecha.month.toString() +
+          fechaFinal.month.toString() +
           "/" +
-          (fecha.day + cont1).toString();
+          fechaFinal.day.toString();
+
       cont1++;
-      if (cont >= 5) {
-        cont = 0;
+      if (cont1 == 5) {
+        cont1 = 0;
       }
-      return enviarFecha;
+      return enviarFechaFinal;
     }
   }
 
   int cont = 0;
-  int val = 7;
-  String horas(DateTime fecha, int index) {
-    if (index >= 5 && cont % 5 == 0) {
-      valorHora.text = (val + 1).toString();
+  int val = 8;
+  String horas(int index) {
+    String enviarHoraFinal;
+    if (index <= 4) {
+      valorHora.text = "";
+    } else if (index >= 5 && cont <= 4) {
+      enviarHoraFinal = (val).toString();
       cont++;
-      val++;
-    } else if (index > 5 && cont % 5 != 0) {
-      valorHora.text = val.toString();
-      cont++;
+
+      if (cont == 5) {
+        cont = 0;
+        val = val + 1;
+      }
+
+      if (val == 18) {
+        val = 8;
+      }
+      return enviarHoraFinal;
     }
   }
 
-  TextEditingController _cabeceras(int index) {
+  TextEditingController cabeceras(int index) {
     if (index == 0) {
       valorFecha.text = "Lunes";
       colorBase = Colors.blueGrey;
@@ -169,16 +307,44 @@ class _Horarios extends State<Horarios> {
     return valorFecha;
   }
 
-  void pintarOcupados(int index, String fecha, String hora) {
-    print(fecha);
-    print(hora);
+  void pintarOcupados(
+      int index, String fecha, String hora, String numeroQuirofano) {
+    if (numeroQuirofano == "Quirófano 1") {
+      if (fecha == "2021/4/16" && hora == "9") {
+        colorBase = Colors.white;
+      }
 
-    if (fecha == "2021/4/10" && hora == "9") {
-      colorBase = Colors.white;
+      if (fecha == "2021/4/16" && hora == "10") {
+        colorBase = Colors.white;
+      }
+    } else if (numeroQuirofano == "Quirófano 2") {
+      if (fecha == "2021/4/15" && hora == "8") {
+        colorBase = Colors.white;
+      }
+
+      if (fecha == "2021/4/15" && hora == "9") {
+        colorBase = Colors.white;
+      }
     }
+  }
 
-    if (fecha == "2021/4/15" && hora == "10") {
-      colorBase = Colors.white;
+  void crear(String nombreQuirofano) {
+    if (nombreQuirofano == "Quirófano 1") {
+      print("Llego al quiro 1");
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (BuildContext context) => Horarios(
+                    nombreQuirofano: "Quirófano 1",
+                  )));
+    } else if (nombreQuirofano == "Quirófano 2") {
+      print("Llego al quiro 2");
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (BuildContext context) => Horarios(
+                    nombreQuirofano: "Quirófano 2",
+                  )));
     }
   }
 }

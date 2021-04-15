@@ -7,11 +7,12 @@ import 'package:qr_flutter/model/diagnostico.dart';
 import 'package:qr_flutter/model/doctor_consultas.dart';
 import 'package:qr_flutter/model/registro_cirujias_modelo.dart';
 import 'package:qr_flutter/src/homebotones.dart';
+import 'package:qr_flutter/utils/responsive.dart';
 import 'package:qr_flutter/validations/popupRegistroCirujias.dart';
 import 'package:qr_flutter/validations/usuarioLogueado.dart';
 import 'package:qr_flutter/validations/validacionesRegistro.dart';
 import 'package:find_dropdown/find_dropdown.dart';
-//import 'package:numberpicker/numberpicker.dart';
+import 'package:numberpicker/numberpicker.dart';
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -32,8 +33,11 @@ class RegisterPageState extends State<RegisterPage> {
   TextEditingController passwordCtrl = new TextEditingController();
   TextEditingController repeatPassCtrl = new TextEditingController();
   TextEditingController enfermedad = new TextEditingController();
-  int _horas = 3;
-  int _minutos = 10;
+  int _horasInicio = 3;
+  int _minutosInicio = 10;
+
+  int _horasFin = 3;
+  int _minutosFin = 10;
   String nombreEnfermedad = "";
 
   String tipoCirujia = 'cirujia';
@@ -95,6 +99,7 @@ class RegisterPageState extends State<RegisterPage> {
   }
 
   Widget formUI() {
+    final Responsive responsive = Responsive.of(context);
     return Column(
       children: <Widget>[
         Container(
@@ -231,6 +236,7 @@ class RegisterPageState extends State<RegisterPage> {
         formItemsDesign(
           Icons.mode_outlined,
           Container(
+            width: responsive.diagonalPorcentaje(5),
             padding: EdgeInsets.symmetric(horizontal: 25),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -275,35 +281,35 @@ class RegisterPageState extends State<RegisterPage> {
                 ),
                 Row(
                   children: [
-                    Text('Horas:'),
+                    Text('Hora de Inicio:            '),
                     Container(
                       width: 35,
                       child: Column(
                         children: [
-                          /* NumberPicker(
+                          NumberPicker(
                             itemHeight: 25,
-                            value: _horas,
-                            minValue: 0,
-                            maxValue: 60,
+                            value: _horasInicio,
+                            minValue: 1,
+                            maxValue: 24,
                             textStyle:
                                 TextStyle(fontSize: 15, color: Colors.black),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(0),
                             ),
                             onChanged: (value) =>
-                                setState(() => _horas = value),
-                          ),*/
+                                setState(() => _horasInicio = value),
+                          ),
                         ],
                       ),
                     ),
-                    Text('    Minutos:'),
+                    Text(':'),
                     Container(
-                      width: 35,
+                      width: responsive.diagonalPorcentaje(5),
                       child: Column(
                         children: [
-                          /*NumberPicker(
+                          NumberPicker(
                             itemHeight: 25,
-                            value: _minutos,
+                            value: _minutosInicio,
                             minValue: 0,
                             maxValue: 60,
                             textStyle:
@@ -312,12 +318,25 @@ class RegisterPageState extends State<RegisterPage> {
                               borderRadius: BorderRadius.circular(0),
                             ),
                             onChanged: (value) =>
-                                setState(() => _minutos = value),
-                          ),*/
+                                setState(() => _minutosInicio = value),
+                          ),
                         ],
                       ),
                     ),
                   ],
+                ),
+                Container(
+                  child: Column(
+                    children: [
+                      TextFormField(
+                        controller: observaciones,
+                        decoration: new InputDecoration(
+                          labelText: 'Duración',
+                        ),
+                        validator: val.validateEmail,
+                      )
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -387,23 +406,45 @@ class RegisterPageState extends State<RegisterPage> {
               ),
             )),
         formItemsDesign(
-            Icons.mode_outlined,
-            TextFormField(
-              controller: cirujano,
-              decoration: new InputDecoration(
-                labelText: 'Cirujano',
-              ),
-              validator: val.validateName,
-            )),
+          Icons.dry_outlined,
+          FindDropdown(
+            items: ["Doctor 1"],
+            label: "Cirujano",
+            onChanged: (item) {
+              cirujano = item;
+              print(item);
+            },
+            selectedItem: "Cirujano",
+            validate: (item) {
+              if (item == null)
+                return "Falta seleccionar";
+              else if (item == "Cirujano")
+                return "Campo no válido";
+              else
+                return null; //return null to "no error"
+            },
+          ),
+        ),
         formItemsDesign(
-            Icons.mode_outlined,
-            TextFormField(
-              controller: ayudante,
-              decoration: new InputDecoration(
-                labelText: 'Ayudante',
-              ),
-              validator: val.validateName,
-            )),
+          Icons.dry_outlined,
+          FindDropdown(
+            items: ["Ayudante 1"],
+            label: "Ayudante",
+            onChanged: (item) {
+              ayudante = item;
+              print(item);
+            },
+            selectedItem: "Ayudante",
+            validate: (item) {
+              if (item == null)
+                return "Falta seleccionar";
+              else if (item == "Ayudante")
+                return "Campo no válido";
+              else
+                return null; //return null to "no error"
+            },
+          ),
+        ),
         formItemsDesign(
             Icons.mode_outlined,
             TextFormField(
@@ -698,8 +739,9 @@ class RegisterPageState extends State<RegisterPage> {
       r.enfermedad = nombreEnfermedad;
       r.procedimientoRealizar = procedimientoMedico.text;
       r.fechaProcedimiento = fechaProcedimiento;
-      r.horasProcedimiento = _horas;
-      r.minutosProcedimiento = _minutos;
+      r.horasProcedimiento = _horasInicio;
+      r.minutosProcedimiento = _minutosInicio;
+      //Falta agregar al objeto el minutos fin
       r.necesidadSangre = eleccionNecesidadDeSangre;
       r.examenesSangre = eleccionExamenesSangre;
       r.radiografiasTorax = eleccionRadiografiaTorax;

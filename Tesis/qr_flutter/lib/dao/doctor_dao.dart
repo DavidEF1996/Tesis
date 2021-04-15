@@ -4,16 +4,17 @@ import 'package:http/http.dart' as http;
 import 'package:qr_flutter/model/doctor.dart';
 
 class DoctorDao {
-  static const String IP = '192.168.100.6'; //'192.168.18.4';'192.168.10.118'
+  static const String IP = '192.168.100.4'; //'192.168.18.4';'192.168.10.118'
   //static const String IP = '192.168.100.8'; //'192.168.18.4';'192.168.10.118'
 
   static const int PORT = 8080;
   static const String servicio_crear = "/crear";
   static const String servicio_login = "/login";
   static const String servicio_change = "/changePass";
+  static const String servicio_listar_cirujias = "/cirujias";
   static const String URL =
-      //  'http://$IP:$PORT/operatingRoomRs/ws/operatingRoomServices';
-      'http://$IP:$PORT/OperationTesis/ws/operatingRoomServices';
+      // 'http://$IP:$PORT/operatingRoomRs/ws/operatingRoomServices';
+      'http://$IP:$PORT/TesisOP/ws/operatingRoomServices';
 
   static const headers = {'Content-Type': 'application/json'};
   static Doctor d = Doctor();
@@ -56,4 +57,7 @@ class DoctorDao {
       return false;
     }
   }
+
+
+  
 }

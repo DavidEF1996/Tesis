@@ -1,6 +1,8 @@
 import 'package:find_dropdown/find_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:qr_flutter/dao/cirujiaDao.dart';
+import 'package:qr_flutter/model/cirujiasPrincipal.dart';
 import 'package:qr_flutter/src/homebotones.dart';
 import 'package:qr_flutter/utils/responsive.dart';
 import 'dart:core';
@@ -19,26 +21,30 @@ class Horarios extends StatefulWidget {
 class _Horarios extends State<Horarios> {
   //variables usadas en los diferentes métodos
   UsuarioLogueado usuariologueado = UsuarioLogueado();
-  int index = 1;
   Color colorBase;
   String numeroQuirofano = "";
   TextEditingController valorFecha = TextEditingController();
   TextEditingController valorHora = TextEditingController();
   DateTime fechaActual = DateTime.now();
   String nombreQuiro;
+  CirujiaDAO cirujias = new CirujiaDAO();
 
   @override
   void initState() {
     super.initState();
+    int index = 1;
 
     nombreQuiro = (widget.nombreQuirofano);
     nombreQuiro =
         (widget.nombreQuirofano == "") ? "Quirófano 1" : widget.nombreQuirofano;
     print("El nombre con que inicia es: " + nombreQuiro);
-     SystemChrome.setPreferredOrientations([
+    SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeRight,
       DeviceOrientation.landscapeLeft,
-     ]);
+    ]);
+
+    List<Cirujias> guardar = cirujias.listarCirujias() as List<Cirujias>;
+    print(guardar.length);
   }
 
   @override
@@ -163,10 +169,11 @@ class _Horarios extends State<Horarios> {
 
                 children: List.generate(55, (index) {
                   setState(() {
-                    _cabeceras(index);
+                    cabeceras(index);
 
                     valorFecha.text = fechas(fechaActual, index);
-                    horas(fechaActual, index);
+                    //horas( index);
+                    valorHora.text = horas(index);
 
                     pintarOcupados(
                         index, valorFecha.text, valorHora.text, nombreQuiro);
@@ -181,8 +188,8 @@ class _Horarios extends State<Horarios> {
                       //height: responsive.diagonalPorcentaje(7),
                       child: Column(
                         children: [
-                          textos(index, valorFecha),
-                          Text(valorHora.text)
+                          textosConFecha(index, valorFecha),
+                          textoConHora(index, valorHora),
                         ],
                       ),
                     ),
@@ -200,7 +207,7 @@ class _Horarios extends State<Horarios> {
     );
   }
 
-  Text textos(int index, TextEditingController valor) {
+  Text textosConFecha(int index, TextEditingController valor) {
     if (valor.text == "Lunes" ||
         valor.text == "Martes" ||
         valor.text == "Miercoles" ||
@@ -216,6 +223,13 @@ class _Horarios extends State<Horarios> {
         style: TextStyle(fontSize: 12),
       );
     }
+  }
+
+  Text textoConHora(int index, TextEditingController valor) {
+    return Text(
+      valor.text,
+      style: TextStyle(fontSize: 12),
+    );
   }
 
   int cont1 = 0;
@@ -248,19 +262,28 @@ class _Horarios extends State<Horarios> {
   }
 
   int cont = 0;
-  int val = 7;
-  String horas(DateTime fecha, int index) {
-    if (index >= 5 && cont % 5 == 0) {
-      valorHora.text = (val + 1).toString();
+  int val = 8;
+  String horas(int index) {
+    String enviarHoraFinal;
+    if (index <= 4) {
+      valorHora.text = "";
+    } else if (index >= 5 && cont <= 4) {
+      enviarHoraFinal = (val).toString();
       cont++;
-      val++;
-    } else if (index > 5 && cont % 5 != 0) {
-      valorHora.text = val.toString();
-      cont++;
+
+      if (cont == 5) {
+        cont = 0;
+        val = val + 1;
+      }
+
+      if (val == 18) {
+        val = 8;
+      }
+      return enviarHoraFinal;
     }
   }
 
-  TextEditingController _cabeceras(int index) {
+  TextEditingController cabeceras(int index) {
     if (index == 0) {
       valorFecha.text = "Lunes";
       colorBase = Colors.blueGrey;
@@ -287,19 +310,19 @@ class _Horarios extends State<Horarios> {
   void pintarOcupados(
       int index, String fecha, String hora, String numeroQuirofano) {
     if (numeroQuirofano == "Quirófano 1") {
-      if (fecha == "2021/4/10" && hora == "9") {
+      if (fecha == "2021/4/16" && hora == "9") {
         colorBase = Colors.white;
       }
 
-      if (fecha == "2021/4/10" && hora == "10") {
+      if (fecha == "2021/4/16" && hora == "10") {
         colorBase = Colors.white;
       }
     } else if (numeroQuirofano == "Quirófano 2") {
-      if (fecha == "2021/4/11" && hora == "8") {
+      if (fecha == "2021/4/15" && hora == "8") {
         colorBase = Colors.white;
       }
 
-      if (fecha == "2021/4/11" && hora == "9") {
+      if (fecha == "2021/4/15" && hora == "9") {
         colorBase = Colors.white;
       }
     }

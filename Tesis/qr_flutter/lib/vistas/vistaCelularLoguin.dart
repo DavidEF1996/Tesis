@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:qr_flutter/dao/cirujiaDao.dart';
 import 'package:qr_flutter/preferences/preferences.dart';
 import 'package:qr_flutter/services/user_services.dart';
 import 'package:qr_flutter/src/cambioContrasena.dart';
@@ -211,6 +214,7 @@ class Vista_Celular_Loguin {
       TextEditingController passwordController,
       UserService httpServicio) async {
     print("LLegue a cargar");
+    CirujiaDAO cirujia = new CirujiaDAO();
     final String usuario = nameController.text;
     final String contrasena = passwordController.text;
     print(nameController.text);
@@ -218,7 +222,9 @@ class Vista_Celular_Loguin {
 
     final result = await httpServicio.loginUsuario(
         usuario, utl.encode(passwordController.text));
+    cirujia.listarCirujias();
     print(result);
+
     print((result['acceso']));
     if (result['acceso']) {
       if (result['bandera'] == 0) {

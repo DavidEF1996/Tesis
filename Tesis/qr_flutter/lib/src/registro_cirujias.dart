@@ -1,5 +1,10 @@
 import 'dart:core';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:qr_flutter/dao/diagnostico_dao.dart';
+import 'package:qr_flutter/dao/doctor_dao.dart';
+import 'package:qr_flutter/model/diagnostico.dart';
+import 'package:qr_flutter/model/doctor_consultas.dart';
 import 'package:qr_flutter/model/registro_cirujias_modelo.dart';
 import 'package:qr_flutter/src/homebotones.dart';
 import 'package:qr_flutter/utils/responsive.dart';
@@ -181,15 +186,33 @@ class RegisterPageState extends State<RegisterPage> {
               ),
             )),
         formItemsDesign(
-          Icons.dry_outlined,
-          FindDropdown(
-            items: ["Gripe", "Sida", "Covid 19", "Cáncer", "Diabetes"],
-            label: "Seleccionar Enfermedad",
-            onChanged: (item) {
-              nombreEnfermedad = item;
-              print(item);
-            },
-            selectedItem: "Enfermedad",
+            Icons.dry_outlined,
+            FindDropdown(
+              label: "Escriba el código",
+              onFind: (String filter) async {
+                /* var datas = Provider.of<DiagnosticoDao>(context).getDiagnosticos(filter) as List<Diagnostico>;;
+                return datas.forEach((element) {element.capitulo});*/
+                //         DiagnosticoDao.getDiagnosticos(filter) as List<Diagnostico>;
+
+                return await DiagnosticoDao.getDiagnosticos(filter);
+              },
+              onChanged: (Diagnostico data) {
+                print("LLEGA AL METODO");
+                Future<List<DoctorLista>> list =
+                    DoctorDao.listarDoctores("chu");
+                print(list);
+                print(data.capitulo);
+              },
+            )
+            /*FindDropdown<Diagnostico>(
+              label: "Seleccionar Enfermedad",
+              //items:  (String filter) => DiagnosticoDao.getDiagnosticos(codigo),
+              onFind: (String filter) => DiagnosticoDao.getDiagnosticos(filter),
+              
+              // items: DiagnosticoDao.listarDiagnosticos(),
+
+              onChanged: (Diagnostico u) => print(u)),*/
+            /*selectedItem: "Enfermedad",
             validate: (item) {
               if (item == null)
                 return "Falta seleccionar";
@@ -198,8 +221,8 @@ class RegisterPageState extends State<RegisterPage> {
               else
                 return null; //return null to "no error"
             },
-          ),
-        ),
+          ),*/
+            ),
         formItemsDesign(
             Icons.coronavirus,
             TextFormField(
@@ -707,41 +730,6 @@ class RegisterPageState extends State<RegisterPage> {
 
   save() {
     if (keyForm.currentState.validate()) {
-      /* print("----------------------------------------------------");
-      print("Nombre ${nameCtrl.text}");
-      print("Edad del paciente en años: " +
-          age.toString() +
-          "y meses: " +
-          meses.toString());
-
-      print("Tipo de cirujía:" + eleccionRadioButton);
-      print("Enfermedad que tiene: " + nombreEnfermedad);
-      print("Procedimiento a realizar: " + procedimientoMedico.text);
-      print("Fecha del procedimiento:" +
-          fechaProcedimiento.year.toString() +
-          "/" +
-          fechaProcedimiento.month.toString() +
-          "/" +
-          fechaProcedimiento.day.toString());
-      print("Tiempo del procedimiento: " +
-          "Horas: " +
-          _horas.toString() +
-          "Minutos: " +
-          _minutos.toString());
-
-      print("Necesita sangre:" + eleccionNecesidadDeSangre);
-      print("Tiene examenes de sangre:" + eleccionExamenesSangre);
-      print("Posee radiografias de torax: " + eleccionRadiografiaTorax);
-      print("ECG: " + eleccionExaEcg);
-      print("Cuantitativos covid: " + eleccionCuantitativos);
-
-      print("nombre cirujano: ${cirujano.text}");
-      print("nombre ayudante: ${ayudante.text}");
-      print("equipo necesario: ${equipoMaterial.text}");
-      print("observaciones: ${observaciones.text}");
-      print("----------------------------------------------------");
-      keyForm.currentState.reset();*/
-
       RegistroCirujias r = RegistroCirujias();
       r.nombres = nameCtrl.text;
       r.fechaNacimiento = currentDate;

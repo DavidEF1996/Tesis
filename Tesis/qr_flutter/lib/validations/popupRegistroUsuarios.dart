@@ -5,8 +5,6 @@ import 'package:qr_flutter/model/doctor.dart';
 import 'package:qr_flutter/dao/doctor_dao.dart';
 import 'dart:convert';
 
-import 'package:qr_flutter/utils/utils.dart';
-
 class popupRegistroUsuario {
   Future<void> handleClickMe(BuildContext context, String mensaje) async {
     return showDialog<void>(
@@ -116,6 +114,7 @@ class popupRegistroUsuario {
               child: Text('Confirmar'),
               onPressed: () async {
                 String decodePassword = d.password;
+                print(d.password + "contrase;a");
                 await DoctorDao.crearDoctor(jsonEncode(d.toJson()));
                 final String outputUser = utf8.decode(
                     latin1.encode(DoctorDao.d.user),

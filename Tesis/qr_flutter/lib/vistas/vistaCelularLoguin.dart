@@ -222,7 +222,7 @@ class Vista_Celular_Loguin {
 
     final result = await httpServicio.loginUsuario(
         usuario, utl.encode(passwordController.text));
-    cirujia.listarCirujias();
+
     print(result);
 
     print((result['acceso']));

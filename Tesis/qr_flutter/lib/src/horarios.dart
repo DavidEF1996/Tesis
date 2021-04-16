@@ -1,13 +1,20 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:find_dropdown/find_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:qr_flutter/dao/cirujiaDao.dart';
+import 'package:qr_flutter/model/api_response.dart';
 import 'package:qr_flutter/model/cirujiasPrincipal.dart';
 import 'package:qr_flutter/src/homebotones.dart';
 import 'package:qr_flutter/utils/responsive.dart';
+import 'package:qr_flutter/validations/listaCirujias.dart';
 import 'dart:core';
 import 'package:qr_flutter/validations/usuarioLogueado.dart';
 import 'package:intl/intl.dart';
+
+import 'package:http/http.dart' as http;
 
 /// This is the stateless widget that the main application instantiates.
 class Horarios extends StatefulWidget {
@@ -27,11 +34,17 @@ class _Horarios extends State<Horarios> {
   TextEditingController valorHora = TextEditingController();
   DateTime fechaActual = DateTime.now();
   String nombreQuiro;
-  CirujiaDAO cirujias = new CirujiaDAO();
+  CirujiaDAO cirujiaDao = new CirujiaDAO();
+  List<Cirujias> listaCirujias = [];
+  static const String IP = '192.168.18.125';
+  static const int PORT = 8080;
+  static const String URL = 'http://$IP:$PORT/TesisOP/ws/operatingRoomServices';
+  APIResponse<List<Cirujias>> _apiResponse;
 
   @override
   void initState() {
     super.initState();
+
     int index = 1;
 
     nombreQuiro = (widget.nombreQuirofano);
@@ -42,13 +55,15 @@ class _Horarios extends State<Horarios> {
       DeviceOrientation.landscapeRight,
       DeviceOrientation.landscapeLeft,
     ]);
+  }
 
-    List<Cirujias> guardar = cirujias.listarCirujias() as List<Cirujias>;
-    print(guardar.length);
+  cargarCirujia() async {
+    _apiResponse = await cirujiaDao.obtenerCirujias();
   }
 
   @override
   Widget build(BuildContext context) {
+    cargarCirujia();
     final title = 'Grid List';
     final Responsive responsive = Responsive.of(context);
     return MaterialApp(
@@ -93,6 +108,7 @@ class _Horarios extends State<Horarios> {
                             onPressed: () {
                               nombreQuiro = "Quirófano 1";
                               crear(nombreQuiro);
+                              // listarCirujias();
                             },
                           ),
                           RaisedButton(
@@ -135,6 +151,7 @@ class _Horarios extends State<Horarios> {
                           ),
                         ],
                       )),
+
                   /*Container(
                     padding: EdgeInsets.all(responsive.diagonalPorcentaje(1.5)),
                     child: Row(
@@ -200,7 +217,10 @@ class _Horarios extends State<Horarios> {
                   ));
                 }),
               ),
-            )
+            ),
+            /* Container(
+              child: llenarLista(),
+            )*/
           ],
         ),
       ),
@@ -263,12 +283,13 @@ class _Horarios extends State<Horarios> {
 
   int cont = 0;
   int val = 8;
+
   String horas(int index) {
     String enviarHoraFinal;
     if (index <= 4) {
       valorHora.text = "";
     } else if (index >= 5 && cont <= 4) {
-      enviarHoraFinal = (val).toString();
+      enviarHoraFinal = (val).toString() + ":00";
       cont++;
 
       if (cont == 5) {
@@ -309,20 +330,22 @@ class _Horarios extends State<Horarios> {
 
   void pintarOcupados(
       int index, String fecha, String hora, String numeroQuirofano) {
+        
+    String auxHora;
     if (numeroQuirofano == "Quirófano 1") {
-      if (fecha == "2021/4/16" && hora == "9") {
-        colorBase = Colors.white;
-      }
+      for (var i = 0; i < _apiResponse.data.length; i++) {
+        auxHora = _apiResponse.data[i].horaInicio;
 
-      if (fecha == "2021/4/16" && hora == "10") {
-        colorBase = Colors.white;
+        if (fecha == "2021/4/16" && hora == auxHora.trim()) {
+          colorBase = Colors.white;
+        }
       }
     } else if (numeroQuirofano == "Quirófano 2") {
-      if (fecha == "2021/4/15" && hora == "8") {
+      if (fecha == "2021/4/15" && hora == "8:00") {
         colorBase = Colors.white;
       }
 
-      if (fecha == "2021/4/15" && hora == "9") {
+      if (fecha == "2021/4/15" && hora == "9:00") {
         colorBase = Colors.white;
       }
     }

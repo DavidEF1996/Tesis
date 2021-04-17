@@ -11,6 +11,7 @@ class DoctorDao {
   static const String servicio_crear = "/crear";
   static const String servicio_login = "/login";
   static const String servicio_change = "/changePass";
+
   static const String servicio_listarNombres = "/nombresDoctores";
 
   static const String URL =
@@ -29,19 +30,6 @@ class DoctorDao {
     d.user = user['user'];
     d.password = user['password'];
     return response;
-  }
-
-  static Future<List<DoctorLista>> listarDoctores(String nombres) async {
-    final response = await http.get(URL + servicio_listarNombres + '/$nombres');
-    if (response.statusCode == 200) {
-      print(response.body);
-      return _listDoctrores(response.body).toList();
-    } else if (response.statusCode == 404) {
-      print(response.statusCode);
-      return null;
-    } else {
-      throw Exception("Error del servidor!!");
-    }
   }
 
   TextEditingController cargar(
@@ -67,6 +55,19 @@ class DoctorDao {
       return true;
     } else {
       return false;
+    }
+  }
+
+  static Future<List<DoctorLista>> listarDoctores(String nombres) async {
+    final response = await http.get(URL + servicio_listarNombres + '/$nombres');
+    if (response.statusCode == 200) {
+      print(response.body);
+      return _listDoctrores(response.body).toList();
+    } else if (response.statusCode == 404) {
+      print(response.statusCode);
+      return null;
+    } else {
+      throw Exception("Error del servidor!!");
     }
   }
 

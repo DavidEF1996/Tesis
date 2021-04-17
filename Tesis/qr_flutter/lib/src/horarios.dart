@@ -1,9 +1,7 @@
-import 'package:find_dropdown/find_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:qr_flutter/dao/cirujiaDao.dart';
 import 'package:qr_flutter/model/cirujiasPrincipal.dart';
-import 'package:qr_flutter/src/homebotones.dart';
 import 'package:qr_flutter/utils/responsive.dart';
 import 'dart:core';
 import 'package:qr_flutter/validations/usuarioLogueado.dart';

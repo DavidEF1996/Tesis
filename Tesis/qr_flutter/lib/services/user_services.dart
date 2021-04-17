@@ -6,18 +6,9 @@ class UserService {
   static var apellidoUsuarioLogueado = "";
   static var usuariologueado = "";
   static const API =
-<<<<<<< HEAD
-      "http://192.168.18.4:8080/operatingRoomRs/ws/operatingRoomServices";
+      "http://192.168.6.40:8080/operatingRoomRs/ws/operatingRoomServices";
   // "http://192.168.10.118:8080/operatingRoomRs/ws/operatingRoomServices";
-=======
-      "http://192.168.100.4:8080/TesisOP/ws/operatingRoomServices";
 
-  // "http://192.168.18.83:8080/operatingRoomRs/ws/operatingRoomServices";
-  //"http://192.168.100.3:8080/operatingRoomRs/ws/operatingRoomServices";
-  // "http://192.168.18.125:8080/OperationTesis/ws/operatingRoomServices";
->>>>>>> origin/davidEgas
-
-  //"http://192.168.100.6:8080/OperationTesis/ws/operatingRoomServices";
   static const headers = {'Content-Type': 'application/json'};
 
   Future loginUsuario(String correo, String contrasena) async {

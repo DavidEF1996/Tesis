@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:qr_flutter/model/diagnostico.dart';
 
 class DiagnosticoDao {
-  static const String IP = '192.168.18.4'; //'192.168.18.4';'192.168.10.41'
+  static const String IP = '192.168.6.40'; //'192.168.18.4';'192.168.10.41'
   static const int PORT = 8080;
   static const String servicio_filtro = "/listaFiltro";
   static const String servicio_listar_todo = "/listaDgn";

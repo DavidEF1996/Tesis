@@ -1,10 +1,7 @@
 import 'dart:core';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:qr_flutter/dao/diagnostico_dao.dart';
-import 'package:qr_flutter/dao/doctor_dao.dart';
 import 'package:qr_flutter/model/diagnostico.dart';
-import 'package:qr_flutter/model/doctor_consultas.dart';
 import 'package:qr_flutter/model/registro_cirujias_modelo.dart';
 import 'package:qr_flutter/src/homebotones.dart';
 import 'package:qr_flutter/utils/responsive.dart';
@@ -198,9 +195,9 @@ class RegisterPageState extends State<RegisterPage> {
               },
               onChanged: (Diagnostico data) {
                 print("LLEGA AL METODO");
-                Future<List<DoctorLista>> list =
-                    DoctorDao.listarDoctores("chu");
-                print(list);
+                //Future<List<DoctorLista>> list =
+                // DoctorDao.listarDoctores("chu");
+                //print(list);
                 print(data.capitulo);
               },
             )
@@ -281,7 +278,7 @@ class RegisterPageState extends State<RegisterPage> {
                 ),
                 Row(
                   children: [
-                    Text('Hora de Inicio:            '),
+                    Text('Hora de Inicio:'),
                     Container(
                       width: 35,
                       child: Column(

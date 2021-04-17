@@ -5,22 +5,14 @@ import 'package:qr_flutter/model/doctor.dart';
 import 'package:qr_flutter/model/doctor_consultas.dart';
 
 class DoctorDao {
-<<<<<<< HEAD
-  static const String IP = '192.168.18.4'; //'192.168.18.4';'192.168.10.118'2
-=======
-  static const String IP = '192.168.100.4'; //'192.168.18.4';'192.168.10.118'
-  //static const String IP = '192.168.100.8'; //'192.168.18.4';'192.168.10.118'
->>>>>>> origin/davidEgas
+  static const String IP = '192.168.6.40'; //'192.168.18.4';'192.168.10.118'2
 
   static const int PORT = 8080;
   static const String servicio_crear = "/crear";
   static const String servicio_login = "/login";
   static const String servicio_change = "/changePass";
-<<<<<<< HEAD
   static const String servicio_listarNombres = "/nombresDoctores";
-=======
-  static const String servicio_listar_cirujias = "/cirujias";
->>>>>>> origin/davidEgas
+
   static const String URL =
       // 'http://$IP:$PORT/operatingRoomRs/ws/operatingRoomServices';
       'http://$IP:$PORT/TesisOP/ws/operatingRoomServices';
@@ -37,6 +29,19 @@ class DoctorDao {
     d.user = user['user'];
     d.password = user['password'];
     return response;
+  }
+
+  static Future<List<DoctorLista>> listarDoctores(String nombres) async {
+    final response = await http.get(URL + servicio_listarNombres + '/$nombres');
+    if (response.statusCode == 200) {
+      print(response.body);
+      return _listDoctrores(response.body).toList();
+    } else if (response.statusCode == 404) {
+      print(response.statusCode);
+      return null;
+    } else {
+      throw Exception("Error del servidor!!");
+    }
   }
 
   TextEditingController cargar(
@@ -65,4 +70,10 @@ class DoctorDao {
     }
   }
 
+  static List<DoctorLista> _listDoctrores(String responseBody) {
+    final parsed = json.decode(responseBody).cast<Map<String, dynamic>>();
+    return parsed
+        .map<DoctorLista>((json) => DoctorLista.fromJson(json))
+        .toList();
+  }
 }

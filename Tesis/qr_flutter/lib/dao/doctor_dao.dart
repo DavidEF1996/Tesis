@@ -65,28 +65,4 @@ class DoctorDao {
     }
   }
 
-<<<<<<< HEAD
-  static Future<List<DoctorLista>> listarDoctores(String nombres) async {
-    final response = await http.get(URL + servicio_listarNombres + '/$nombres');
-    if (response.statusCode == 200) {
-      print(response.body);
-      return _listDoctrores(response.body).toList();
-    } else if (response.statusCode == 404) {
-      print(response.statusCode);
-      return null;
-    } else {
-      throw Exception("Error del servidor!!");
-    }
-  }
-
-  static List<DoctorLista> _listDoctrores(String responseBody) {
-    final parsed = json.decode(responseBody).cast<Map<String, dynamic>>();
-    return parsed
-        .map<DoctorLista>((json) => DoctorLista.fromJson(json))
-        .toList();
-  }
-=======
-
-  
->>>>>>> origin/davidEgas
 }

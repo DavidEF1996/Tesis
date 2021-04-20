@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/dao/cirujiaDao.dart';
+import 'package:qr_flutter/model/api_response.dart';
+import 'package:qr_flutter/model/cirujiasPrincipal.dart';
 import 'package:qr_flutter/preferences/preferences.dart';
 import 'package:qr_flutter/services/user_services.dart';
 import 'package:qr_flutter/src/cambioContrasena.dart';
@@ -12,6 +14,8 @@ import 'package:qr_flutter/utils/utils.dart';
 import 'package:qr_flutter/utils/utils.dart' as utl;
 
 class Vista_Celular_Loguin {
+  CirujiaDAO cirujia = new CirujiaDAO();
+  static APIResponse<List<Cirujias>> apiResponse;
   Container vistaPortraitCelular(
       BuildContext context,
       TextEditingController nameController,
@@ -76,6 +80,7 @@ class Vista_Celular_Loguin {
               child: Text('Comenzar'),
               onPressed: () {
                 print("LLegue a comenzar");
+                cargarCirujia();
                 cargar(
                     context, nameController, passwordController, httpServicio);
               },
@@ -176,6 +181,9 @@ class Vista_Celular_Loguin {
                       color: Colors.blue,
                       child: Text('Comenzar'),
                       onPressed: () {
+                        cargarCirujia();
+                        // print("................................");
+                        // print(apiResponse.data[0].paciente);
                         cargar(context, nameController, passwordController,
                             httpServicio);
                       },
@@ -252,5 +260,10 @@ class Vista_Celular_Loguin {
     //print("object");
     //Usuario1 usu = result.data;
     //print(usu.user);
+  }
+
+  cargarCirujia() async {
+    apiResponse = await cirujia.obtenerCirujias();
+   
   }
 }

@@ -27,7 +27,7 @@ class UserService {
       print(respuesta.body);
       print(decodedata);
       print(decodedata['nombres'] + "el nombre");
-      //Map<String, dynamic> user = jsonDecode(decodedata);
+      //Map<String, dynamic> user = jsonDecodeS(decodedata);
 
       nombreUsuariologueado = decodedata['nombres'];
       apellidoUsuarioLogueado = decodedata['apellidos'];

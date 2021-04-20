@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/preferences/preferences.dart';
+import 'package:qr_flutter/src/Horarios2.dart';
 import 'package:qr_flutter/src/horarios.dart';
 import 'package:qr_flutter/src/login.dart';
 import 'package:qr_flutter/utils/responsive.dart';

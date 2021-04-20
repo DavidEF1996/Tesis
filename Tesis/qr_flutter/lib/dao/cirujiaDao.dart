@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'package:qr_flutter/model/api_response.dart';
 import 'package:qr_flutter/model/cirujiasPrincipal.dart';
 
@@ -11,6 +12,7 @@ class CirujiaDAO {
 
   static const int PORT = 8080;
   static const String servicio_crear = "/cirujias";
+  static List<Cirujias> recibir =[];
 
   static const String URL =
       // 'http://$IP:$PORT/operatingRoomRs/ws/operatingRoomServices';
@@ -18,16 +20,16 @@ class CirujiaDAO {
 
   static const headers = {'Content-Type': 'application/json'};
 
-  /*Future listarCirujias() async {
+  Future listarCirujias() async {
     final response = await http.get(URL + servicio_crear,
         headers: {"Content-Type": "application/json"});
     List<dynamic> cirujia = jsonDecode(response.body);
-    print('lista');
-    print(cirujia);
+    //  print('lista');
+    //  print(cirujia);
 
 //    cirujia
 
-    List<Cirujias> listaCirujias;
+    /* List<Cirujias> listaCirujias;
     for (var i = 0; i < cirujia.length; i++) {
       Cirujias cirujiaP = new Cirujias();
 
@@ -44,10 +46,10 @@ class CirujiaDAO {
       }
 
       listaCirujias.add(cirujiaP);
-    }
+    }*/
 
     return cirujia;
-  }*/
+  }
 
   Future<APIResponse<List<Cirujias>>> obtenerCirujias() {
     return http.get(URL + servicio_crear,
@@ -59,10 +61,35 @@ class CirujiaDAO {
         for (var item in jsonData) {
           cirujiaL.add(Cirujias.fromJson(item));
         }
+        recibir = cirujiaL;
         return APIResponse<List<Cirujias>>(data: cirujiaL);
       }
       return APIResponse<List<Cirujias>>(error: true, mensajeError: "Error");
     }).catchError(
         (_) => APIResponse<List<Cirujias>>(error: true, mensajeError: "Error"));
+  }
+
+
+  String readTimestamp(int timestamp) {
+    var now = new DateTime.now();
+    var format = new DateFormat('HH:mm a');
+    var date = new DateTime.fromMicrosecondsSinceEpoch(timestamp * 1000);
+    var diff = date.difference(now);
+    var time = '';
+
+    if (diff.inSeconds <= 0 || diff.inSeconds > 0 && diff.inMinutes == 0 || diff.inMinutes > 0 && diff.inHours == 0 || diff.inHours > 0 && diff.inDays == 0) {
+      time = format.format(date);
+
+      print("----------");
+       print("----------");
+    } else {
+      if (diff.inDays == 1) {
+        time = diff.inDays.toString() + 'DAY AGO';
+      } else {
+        time = diff.inDays.toString() + 'DAYS AGO';
+      }
+    }
+
+    return time;
   }
 }

@@ -6,7 +6,7 @@ class UserService {
   static var apellidoUsuarioLogueado = "";
   static var usuariologueado = "";
   static const API =
-      "http://192.168.6.40:8080/operatingRoomRs/ws/operatingRoomServices";
+      "http://192.168.18.4:8080/operatingRoomRs/ws/operatingRoomServices";
   // "http://192.168.10.118:8080/operatingRoomRs/ws/operatingRoomServices";
 
   static const headers = {'Content-Type': 'application/json'};

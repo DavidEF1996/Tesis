@@ -1,7 +1,10 @@
 import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/dao/diagnostico_dao.dart';
+import 'package:qr_flutter/dao/doctor_dao.dart';
+import 'package:qr_flutter/model/api_response.dart';
 import 'package:qr_flutter/model/diagnostico.dart';
+import 'package:qr_flutter/model/doctor_consultas.dart';
 import 'package:qr_flutter/model/registro_cirujias_modelo.dart';
 import 'package:qr_flutter/src/homebotones.dart';
 import 'package:qr_flutter/utils/responsive.dart';
@@ -43,14 +46,24 @@ class RegisterPageState extends State<RegisterPage> {
   String grupoRadiografiasTorax = 'radTorax';
   String grupoExaECG = 'exaEcg';
   String grupoCuantitativosCovid = 'cuantitativos';
-
+  APIResponse<List<DoctorLista>> _apiResponse;
   Validaciones val = Validaciones();
   UsuarioLogueado usuariologueado = UsuarioLogueado();
   popupRegistroCirujias popRegCirugias = popupRegistroCirujias();
+  DoctorDao ddao = new DoctorDao();
 
   @override
   void initState() {
+    cargarDoctores("a");
     super.initState();
+  }
+
+  cargarDoctores(String nombres) async {
+    print("llega al m[etodo");
+    _apiResponse = (await DoctorDao.listarDoctores(nombres))
+        as APIResponse<List<DoctorLista>>;
+    print("llega aca");
+    print(_apiResponse.toString());
   }
 
   @override
@@ -200,26 +213,7 @@ class RegisterPageState extends State<RegisterPage> {
                 //print(list);
                 print(data.capitulo);
               },
-            )
-            /*FindDropdown<Diagnostico>(
-              label: "Seleccionar Enfermedad",
-              //items:  (String filter) => DiagnosticoDao.getDiagnosticos(codigo),
-              onFind: (String filter) => DiagnosticoDao.getDiagnosticos(filter),
-              
-              // items: DiagnosticoDao.listarDiagnosticos(),
-
-              onChanged: (Diagnostico u) => print(u)),*/
-            /*selectedItem: "Enfermedad",
-            validate: (item) {
-              if (item == null)
-                return "Falta seleccionar";
-              else if (item == "Enfermedad")
-                return "Campo no válido";
-              else
-                return null; //return null to "no error"
-            },
-          ),*/
-            ),
+            )),
         formItemsDesign(
             Icons.coronavirus,
             TextFormField(
@@ -252,28 +246,6 @@ class RegisterPageState extends State<RegisterPage> {
                       onPressed: () => selectDateProcess(context),
                       icon: Icon(Icons.date_range),
                     ),
-                    /*Container(
-                      child: Column(
-                        children: [
-                          TimePickerSpinner(
-                              is24HourMode: true,
-                              normalTextStyle:
-                                  TextStyle(fontSize: 12, color: Colors.black),
-                              highlightedTextStyle:
-                                  TextStyle(fontSize: 14, color: Colors.black),
-                              spacing: 2,
-                              itemHeight: 20,
-                              isForce2Digits: true,
-                              onTimeChange: (time) {
-                                setState(() {
-                                  DateTime _dateTime = DateTime.now();
-                                  _dateTime = time;
-                                  print("las horas son:" + time.toString());
-                                });
-                              })
-                        ],
-                      ),
-                    ),*/
                   ],
                 ),
                 Row(
@@ -405,8 +377,18 @@ class RegisterPageState extends State<RegisterPage> {
         formItemsDesign(
           Icons.dry_outlined,
           FindDropdown(
-            items: ["Doctor 1"],
             label: "Cirujano",
+            onFind: (String filter) async {
+              await cargarDoctores(filter);
+              List<dynamic> lista = [];
+              int lenght = _apiResponse.data.length;
+              print("entrea/////");
+              print("este es el tamanio" + lenght.toString());
+              for (var i = 0; i < _apiResponse.data.length; i++) {
+                lista.add(_apiResponse.data[i].persona.apellidos);
+              }
+              return lista;
+            },
             onChanged: (item) {
               cirujano = item;
               print(item);

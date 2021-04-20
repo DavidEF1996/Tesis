@@ -1,11 +1,13 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
+import 'package:qr_flutter/model/api_response.dart';
 import 'package:qr_flutter/model/doctor.dart';
 import 'package:qr_flutter/model/doctor_consultas.dart';
 
 class DoctorDao {
-  static const String IP = '192.168.6.40'; //'192.168.18.4';'192.168.10.118'2
+  static const String IP = '192.168.18.4'; //'192.168.18.4';'192.168.10.118'2
 
   static const int PORT = 8080;
   static const String servicio_crear = "/crear";
@@ -15,8 +17,8 @@ class DoctorDao {
   static const String servicio_listarNombres = "/nombresDoctores";
 
   static const String URL =
-      // 'http://$IP:$PORT/operatingRoomRs/ws/operatingRoomServices';
-      'http://$IP:$PORT/TesisOP/ws/operatingRoomServices';
+      'http://$IP:$PORT/operatingRoomRs/ws/operatingRoomServices';
+  //'http://$IP:$PORT/TesisOP/ws/operatingRoomServices';
 
   static const headers = {'Content-Type': 'application/json'};
   static Doctor d = Doctor();
@@ -70,6 +72,22 @@ class DoctorDao {
       throw Exception("Error del servidor!!");
     }
   }
+  /*return http.get(URL + servicio_listarNombres + "/$nombres",
+        headers: {"Content-Type": "application/json"}).then((data) {
+      log('La respuesta obtenida es -----------: ' + data.body);
+      if (data.statusCode == 200) {
+        final jsonData = json.decode(data.body);
+        final cirujiaL = <DoctorLista>[];
+        for (var item in jsonData) {
+          cirujiaL.add(DoctorLista.fromJson(item));
+        }
+        return APIResponse<List<DoctorLista>>(data: cirujiaL);
+      }
+      return APIResponse<List<DoctorLista>>(error: true, mensajeError: "Error");
+    }).catchError((_) =>
+        APIResponse<List<DoctorLista>>(error: true, mensajeError: "Error"));
+  }*/
+  /* */
 
   static List<DoctorLista> _listDoctrores(String responseBody) {
     final parsed = json.decode(responseBody).cast<Map<String, dynamic>>();

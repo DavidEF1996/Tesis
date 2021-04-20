@@ -6,7 +6,7 @@ import 'package:qr_flutter/model/api_response.dart';
 import 'package:qr_flutter/model/cirujiasPrincipal.dart';
 
 class CirujiaDAO {
-  static const String IP = '192.168.18.125'; //'192.168.18.4';'192.168.10.118'
+  static const String IP = '192.168.100.4'; //'192.168.18.4';'192.168.10.118'
   //static const String IP = '192.168.100.8'; //'192.168.18.4';'192.168.10.118'
 
   static const int PORT = 8080;

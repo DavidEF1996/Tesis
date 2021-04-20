@@ -5,11 +5,10 @@ import 'package:qr_flutter/model/doctor.dart';
 import 'package:qr_flutter/model/doctor_consultas.dart';
 
 class DoctorDao {
-
   static const String IP = '192.168.100.4'; //'192.168.18.4';'192.168.10.118'
   //static const String IP = '192.168.100.8'; //'192.168.18.4';'192.168.10.118'
 
-    static const int PORT = 8080;
+  static const int PORT = 8080;
   static const String servicio_crear = "/crear";
   static const String servicio_login = "/login";
   static const String servicio_change = "/changePass";
@@ -61,6 +60,7 @@ class DoctorDao {
       return false;
     }
   }
+
   static Future<List<DoctorLista>> listarDoctores(String nombres) async {
     final response = await http.get(URL + servicio_listarNombres + '/$nombres');
     if (response.statusCode == 200) {
@@ -80,5 +80,4 @@ class DoctorDao {
         .map<DoctorLista>((json) => DoctorLista.fromJson(json))
         .toList();
   }
-
 }

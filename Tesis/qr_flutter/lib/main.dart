@@ -17,7 +17,7 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    //Widget routePage = LoginPage();
+    Widget routePage = LoginPage();
     final _preferences = new Preferences();
 
     return MaterialApp(

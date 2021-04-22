@@ -4,60 +4,68 @@
 
 import 'dart:convert';
 
-List<Cirujias> cirujiasFromJson(String str) => List<Cirujias>.from(json.decode(str).map((x) => Cirujias.fromJson(x)));
+List<Cirujias> cirujiasFromJson(String str) =>
+    List<Cirujias>.from(json.decode(str).map((x) => Cirujias.fromJson(x)));
 
-String cirujiasToJson(List<Cirujias> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+String cirujiasToJson(List<Cirujias> data) =>
+    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class Cirujias {
-    Cirujias({
-        this.idCirujia,
-        this.paciente,
-        this.edadPaciente,
-        this.diagnostico,
-        this.horaFin,
-        this.necesidadSangre,
-        this.examenSangre,
-        this.examenTorax,
-        this.crjEcj,
-        this.covid,
-        this.materiales,
-        this.observaciones,
-        this.tipoCirujia,
-        this.estadoCirujia,
-        this.procedimiento,
-        this.doctores,
-        this.quirofano,
-        this.fechaCirujia,
-        this.horaInicio,
-        this.duracion,
-    });
+  Cirujias({
+    this.idCirujia,
+    this.paciente,
+    this.edadPaciente,
+    this.diagnostico,
+    this.horaFin,
+    this.necesidadSangre,
+    this.examenSangre,
+    this.examenTorax,
+    this.crjEcj,
+    this.covid,
+    this.materiales,
+    this.observaciones,
+    this.tipoCirujia,
+    this.estadoCirujia,
+    this.procedimiento,
+    this.doctores,
+    this.quirofano,
+    this.fechaCirujia,
+    this.horaInicio,
+    this.duracion,
+    this.anios,
+    this.fechaNacimiento,
+    this.meses,
+  });
 
-    int idCirujia;
-    String paciente;
-    int edadPaciente;
-    Diagnostico diagnostico;
-    String horaFin;
-    String necesidadSangre;
-    String examenSangre;
-    bool examenTorax;
-    bool crjEcj;
-    bool covid;
-    String materiales;
-    String observaciones;
-    String tipoCirujia;
-    String estadoCirujia;
-    String procedimiento;
-    List<Doctore> doctores;
-    int quirofano;
-    int fechaCirujia;
-    String horaInicio;
-    String duracion;
+  int idCirujia;
+  String paciente;
+  int edadPaciente;
+  DiagnosticoCp diagnostico;
+  String horaFin;
+  String necesidadSangre;
+  String examenSangre;
+  bool examenTorax;
+  bool crjEcj;
+  bool covid;
+  String materiales;
+  String observaciones;
+  String tipoCirujia;
+  String estadoCirujia;
+  String procedimiento;
+  List<Doctore> doctores;
+  int quirofano;
+  DateTime fechaCirujia;
+  String horaInicio;
+  String duracion;
+  int anios;
+  int meses;
+  DateTime fechaNacimiento;
 
-    factory Cirujias.fromJson(Map<String, dynamic> json) => Cirujias(
+  factory Cirujias.fromJson(Map<String, dynamic> json) => Cirujias(
         idCirujia: json["idCirujia"],
         paciente: json["paciente"],
         edadPaciente: json["edadPaciente"],
-        diagnostico: Diagnostico.fromJson(json["diagnostico"]),
+        diagnostico: DiagnosticoCp.fromJson(json["diagnostico"]),
         horaFin: json["horaFin"],
         necesidadSangre: json["necesidadSangre"],
         examenSangre: json["examenSangre"],
@@ -69,14 +77,18 @@ class Cirujias {
         tipoCirujia: json["tipoCirujia"],
         estadoCirujia: json["estadoCirujia"],
         procedimiento: json["procedimiento"],
-        doctores: List<Doctore>.from(json["doctores"].map((x) => Doctore.fromJson(x))),
+        doctores: List<Doctore>.from(
+            json["doctores"].map((x) => Doctore.fromJson(x))),
         quirofano: json["quirofano"],
-        fechaCirujia: json["fechaCirujia"],
+        fechaCirujia: DateTime.parse(json["fechaCirujia"]),
         horaInicio: json["horaInicio"],
         duracion: json["duracion"],
-    );
+        anios: json['anios'],
+        meses: json['meses'],
+        fechaNacimiento: json['fechaNacimiento'],
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "idCirujia": idCirujia,
         "paciente": paciente,
         "edadPaciente": edadPaciente,
@@ -94,32 +106,36 @@ class Cirujias {
         "procedimiento": procedimiento,
         "doctores": List<dynamic>.from(doctores.map((x) => x.toJson())),
         "quirofano": quirofano,
-        "fechaCirujia": fechaCirujia,
+        "fechaCirujia":
+            "${fechaCirujia.year.toString().padLeft(4, '0')}-${fechaCirujia.month.toString().padLeft(2, '0')}-${fechaCirujia.day.toString().padLeft(2, '0')}",
         "horaInicio": horaInicio,
         "duracion": duracion,
-    };
+        "anios": anios,
+        "meses": meses,
+        "fechaNacimiento": fechaNacimiento,
+      };
 }
 
-class Diagnostico {
-    Diagnostico({
-        this.idDiagnostico,
-        this.capitulo,
-        this.nombreCapitulo,
-        this.codigoTres,
-        this.nombreTresCaracteres,
-        this.codigoCuatro,
-        this.nombreCuatroCaracteres,
-    });
+class DiagnosticoCp {
+  DiagnosticoCp({
+    this.idDiagnostico,
+    this.capitulo,
+    this.nombreCapitulo,
+    this.codigoTres,
+    this.nombreTresCaracteres,
+    this.codigoCuatro,
+    this.nombreCuatroCaracteres,
+  });
 
-    int idDiagnostico;
-    String capitulo;
-    String nombreCapitulo;
-    String codigoTres;
-    dynamic nombreTresCaracteres;
-    String codigoCuatro;
-    String nombreCuatroCaracteres;
+  int idDiagnostico;
+  String capitulo;
+  String nombreCapitulo;
+  String codigoTres;
+  dynamic nombreTresCaracteres;
+  String codigoCuatro;
+  String nombreCuatroCaracteres;
 
-    factory Diagnostico.fromJson(Map<String, dynamic> json) => Diagnostico(
+  factory DiagnosticoCp.fromJson(Map<String, dynamic> json) => DiagnosticoCp(
         idDiagnostico: json["idDiagnostico"],
         capitulo: json["capitulo"],
         nombreCapitulo: json["nombreCapitulo"],
@@ -127,9 +143,9 @@ class Diagnostico {
         nombreTresCaracteres: json["nombreTresCaracteres"],
         codigoCuatro: json["codigoCuatro"],
         nombreCuatroCaracteres: json["nombreCuatroCaracteres"],
-    );
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "idDiagnostico": idDiagnostico,
         "capitulo": capitulo,
         "nombreCapitulo": nombreCapitulo,
@@ -137,35 +153,35 @@ class Diagnostico {
         "nombreTresCaracteres": nombreTresCaracteres,
         "codigoCuatro": codigoCuatro,
         "nombreCuatroCaracteres": nombreCuatroCaracteres,
-    };
+      };
 }
 
 class Doctore {
-    Doctore({
-        this.cedula,
-        this.nombres,
-        this.apellidos,
-        this.fechaNacimiento,
-        this.idDoctor,
-        this.especialidad,
-        this.user,
-        this.password,
-        this.bandera,
-        this.acceso,
-    });
+  Doctore({
+    this.cedula,
+    this.nombres,
+    this.apellidos,
+    this.fechaNacimiento,
+    this.idDoctor,
+    this.especialidad,
+    this.user,
+    this.password,
+    this.bandera,
+    this.acceso,
+  });
 
-    dynamic cedula;
-    String nombres;
-    String apellidos;
-    dynamic fechaNacimiento;
-    String idDoctor;
-    String especialidad;
-    dynamic user;
-    dynamic password;
-    int bandera;
-    bool acceso;
+  dynamic cedula;
+  String nombres;
+  String apellidos;
+  dynamic fechaNacimiento;
+  String idDoctor;
+  String especialidad;
+  dynamic user;
+  dynamic password;
+  int bandera;
+  bool acceso;
 
-    factory Doctore.fromJson(Map<String, dynamic> json) => Doctore(
+  factory Doctore.fromJson(Map<String, dynamic> json) => Doctore(
         cedula: json["cedula"],
         nombres: json["nombres"],
         apellidos: json["apellidos"],
@@ -176,9 +192,9 @@ class Doctore {
         password: json["password"],
         bandera: json["bandera"],
         acceso: json["acceso"],
-    );
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "cedula": cedula,
         "nombres": nombres,
         "apellidos": apellidos,
@@ -189,5 +205,5 @@ class Doctore {
         "password": password,
         "bandera": bandera,
         "acceso": acceso,
-    };
+      };
 }

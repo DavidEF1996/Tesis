@@ -1,10 +1,12 @@
+import 'dart:convert';
 import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/dao/diagnostico_dao.dart';
 import 'package:qr_flutter/dao/doctor_dao.dart';
 import 'package:qr_flutter/model/api_response.dart';
+import 'package:qr_flutter/model/cirujiasPrincipal.dart';
 import 'package:qr_flutter/model/diagnostico.dart';
-import 'package:qr_flutter/model/doctor_consultas.dart';
+import 'package:qr_flutter/model/modelo_doctor.dart';
 import 'package:qr_flutter/model/registro_cirujias_modelo.dart';
 import 'package:qr_flutter/src/homebotones.dart';
 import 'package:qr_flutter/utils/responsive.dart';
@@ -33,6 +35,7 @@ class RegisterPageState extends State<RegisterPage> {
   TextEditingController passwordCtrl = new TextEditingController();
   TextEditingController repeatPassCtrl = new TextEditingController();
   TextEditingController enfermedad = new TextEditingController();
+  TextEditingController duracion = new TextEditingController();
   int _horasInicio = 3;
   int _minutosInicio = 10;
 
@@ -46,22 +49,27 @@ class RegisterPageState extends State<RegisterPage> {
   String grupoRadiografiasTorax = 'radTorax';
   String grupoExaECG = 'exaEcg';
   String grupoCuantitativosCovid = 'cuantitativos';
-  APIResponse<List<DoctorLista>> _apiResponse;
+  APIResponse<List<DoctorModelo>> _apiResponse;
+  APIResponse<List<Diagnostico>> _apiResponseDgn;
   Validaciones val = Validaciones();
   UsuarioLogueado usuariologueado = UsuarioLogueado();
   popupRegistroCirujias popRegCirugias = popupRegistroCirujias();
   DoctorDao ddao = new DoctorDao();
+  DiagnosticoDao dgndao = new DiagnosticoDao();
+  String nombres_parametro;
+  List<Doctore> doctores = [];
+  DiagnosticoCp diagnosticoCp = new DiagnosticoCp();
 
   @override
   void initState() {
-    cargarDoctores("a");
+    //cargarDoctores("a");
     super.initState();
+    nombres_parametro = "a";
   }
 
   cargarDoctores(String nombres) async {
     print("llega al m[etodo");
-    _apiResponse = (await DoctorDao.listarDoctores(nombres))
-        as APIResponse<List<DoctorLista>>;
+    _apiResponse = await ddao.listarDoctores(nombres);
     print("llega aca");
     print(_apiResponse.toString());
   }
@@ -200,18 +208,35 @@ class RegisterPageState extends State<RegisterPage> {
             FindDropdown(
               label: "Escriba el código",
               onFind: (String filter) async {
-                /* var datas = Provider.of<DiagnosticoDao>(context).getDiagnosticos(filter) as List<Diagnostico>;;
-                return datas.forEach((element) {element.capitulo});*/
-                //         DiagnosticoDao.getDiagnosticos(filter) as List<Diagnostico>;
+                _apiResponseDgn = await dgndao.getDiagnosticos(filter);
+                List<String> datos = [];
 
-                return await DiagnosticoDao.getDiagnosticos(filter);
+                int valor;
+                if (_apiResponseDgn.data == null) {
+                  valor = 0;
+                } else {
+                  valor = _apiResponseDgn.data.length;
+                }
+
+                for (var i = 0; i < valor; i++) {
+                  String doctor;
+
+                  doctor = utf8.decode(
+                      latin1.encode(
+                          _apiResponseDgn.data.elementAt(i).codigoCuatro +
+                              " " +
+                              _apiResponseDgn.data
+                                  .elementAt(i)
+                                  .nombreCuatroCaracteres),
+                      allowMalformed: true);
+
+                  datos.add(doctor);
+                }
+                return datos;
               },
-              onChanged: (Diagnostico data) {
-                print("LLEGA AL METODO");
-                //Future<List<DoctorLista>> list =
-                // DoctorDao.listarDoctores("chu");
-                //print(list);
-                print(data.capitulo);
+              onChanged: (data) {
+                diagnosticoCp.nombreCuatroCaracteres = data.toString();
+                setState(() => enfermedad.text = data);
               },
             )),
         formItemsDesign(
@@ -298,7 +323,7 @@ class RegisterPageState extends State<RegisterPage> {
                   child: Column(
                     children: [
                       TextFormField(
-                        controller: observaciones,
+                        controller: duracion,
                         decoration: new InputDecoration(
                           labelText: 'Duración',
                         ),
@@ -378,20 +403,36 @@ class RegisterPageState extends State<RegisterPage> {
           Icons.dry_outlined,
           FindDropdown(
             label: "Cirujano",
-            onFind: (String filter) async {
-              await cargarDoctores(filter);
-              List<dynamic> lista = [];
-              int lenght = _apiResponse.data.length;
-              print("entrea/////");
-              print("este es el tamanio" + lenght.toString());
-              for (var i = 0; i < _apiResponse.data.length; i++) {
-                lista.add(_apiResponse.data[i].persona.apellidos);
+            onFind: (nombres_parametro) async {
+              _apiResponse = await ddao.listarDoctores(nombres_parametro);
+              List<String> datos = [];
+
+              int valor;
+              if (_apiResponse.data == null) {
+                valor = 0;
+              } else {
+                valor = _apiResponse.data.length;
               }
-              return lista;
+
+              for (var i = 0; i < valor; i++) {
+                String doctor;
+
+                doctor = utf8.decode(
+                    latin1.encode(_apiResponse.data.elementAt(i).nombres +
+                        " " +
+                        _apiResponse.data.elementAt(i).apellidos),
+                    allowMalformed: true);
+
+                datos.add(doctor);
+              }
+              return datos;
             },
             onChanged: (item) {
-              cirujano = item;
-              print(item);
+              Doctore doctore = new Doctore();
+
+              doctore.nombres = item;
+              doctores.add(doctore);
+              setState(() => cirujano.text = item);
             },
             selectedItem: "Cirujano",
             validate: (item) {
@@ -407,11 +448,37 @@ class RegisterPageState extends State<RegisterPage> {
         formItemsDesign(
           Icons.dry_outlined,
           FindDropdown(
-            items: ["Ayudante 1"],
             label: "Ayudante",
+            onFind: (nombres_parametro) async {
+              _apiResponse = await ddao.listarDoctores(nombres_parametro);
+              List<String> datos = [];
+
+              int valor;
+              if (_apiResponse.data == null) {
+                valor = 0;
+              } else {
+                valor = _apiResponse.data.length;
+              }
+
+              for (var i = 0; i < valor; i++) {
+                String doctor;
+
+                doctor = utf8.decode(
+                    latin1.encode(_apiResponse.data.elementAt(i).nombres +
+                        " " +
+                        _apiResponse.data.elementAt(i).apellidos),
+                    allowMalformed: true);
+
+                datos.add(doctor);
+              }
+              return datos;
+            },
             onChanged: (item) {
-              ayudante = item;
-              print(item);
+              Doctore doctore = new Doctore();
+
+              doctore.nombres = item;
+              doctores.add(doctore);
+              setState(() => ayudante.text = item);
             },
             selectedItem: "Ayudante",
             validate: (item) {
@@ -442,27 +509,28 @@ class RegisterPageState extends State<RegisterPage> {
               validator: val.validateEmail,
             )),
         GestureDetector(
-            onTap: () {
-              save();
-            },
-            child: Container(
-              margin: new EdgeInsets.all(5.0),
-              alignment: Alignment.center,
-              decoration: ShapeDecoration(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30.0)),
-                gradient: LinearGradient(colors: [
-                  Color(0xFF0EDED2),
-                  Color(0xFF03A0FE),
-                ], begin: Alignment.topLeft, end: Alignment.bottomRight),
-              ),
-              child: Text("Guardar",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500)),
-              padding: EdgeInsets.only(top: 16, bottom: 16),
-            )),
+          onTap: () {
+            save();
+          },
+          child: Container(
+            margin: new EdgeInsets.all(5.0),
+            alignment: Alignment.center,
+            decoration: ShapeDecoration(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30.0)),
+              gradient: LinearGradient(colors: [
+                Color(0xFF0EDED2),
+                Color(0xFF03A0FE),
+              ], begin: Alignment.topLeft, end: Alignment.bottomRight),
+            ),
+            child: Text("Guardar",
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500)),
+            padding: EdgeInsets.only(top: 16, bottom: 16),
+          ),
+        ),
         GestureDetector(
             onTap: () {
               final route = MaterialPageRoute(builder: (context) {
@@ -493,12 +561,12 @@ class RegisterPageState extends State<RegisterPage> {
   }
 
 //Variables Globales -------------------------
-  var eleccionRadioButton;
+  bool eleccionRadioButton;
   var eleccionExamenesSangre;
   var eleccionNecesidadDeSangre;
-  var eleccionRadiografiaTorax;
-  var eleccionExaEcg;
-  var eleccionCuantitativos;
+  bool eleccionRadiografiaTorax;
+  bool eleccionExaEcg;
+  bool eleccionCuantitativos;
 // -------------------------------------------
 
 //Mètodos
@@ -654,7 +722,7 @@ class RegisterPageState extends State<RegisterPage> {
     List<int> intArr = [1, 2, 3, 4, 5];
     print(intArr);
     DateTime currentDate = DateTime.now();
-    print("actual" + currentDate.year.toString());
+    //print("actual" + currentDate.year.toString());
     age = currentDate.year - value.year;
     int month1 = currentDate.month;
     int month2 = value.month;
@@ -677,7 +745,7 @@ class RegisterPageState extends State<RegisterPage> {
       }
     }
 
-    print('La edad es' + age.toString() + 'y los meses' + meses.toString());
+    // print('La edad es' + age.toString() + 'y los meses' + meses.toString());
     return age;
   }
 
@@ -708,29 +776,27 @@ class RegisterPageState extends State<RegisterPage> {
   }
 
   save() {
+    Cirujias r = Cirujias();
+    r.paciente = nameCtrl.text;
+    r.fechaNacimiento = currentDate;
+    r.anios = age;
+    r.meses = meses;
+    r.tipoCirujia = tipoCirujia;
+    r.diagnostico = diagnosticoCp;
+    r.procedimiento = procedimientoMedico.text;
+    r.fechaCirujia = fechaProcedimiento;
+    if (_minutosFin != 0) {
+      _horasInicio += 1;
+    }
+    r.duracion = _horasInicio.toString();
+    r.necesidadSangre = eleccionNecesidadDeSangre;
+    r.examenSangre = eleccionExamenesSangre;
+    r.examenTorax = true;
+    r.crjEcj = true;
+    r.covid = true;
+    r.doctores = doctores;
+    r.observaciones = observaciones.text;
     if (keyForm.currentState.validate()) {
-      RegistroCirujias r = RegistroCirujias();
-      r.nombres = nameCtrl.text;
-      r.fechaNacimiento = currentDate;
-      r.anos = age;
-      r.meses = meses;
-      r.tipoCirujia = tipoCirujia;
-      r.enfermedad = nombreEnfermedad;
-      r.procedimientoRealizar = procedimientoMedico.text;
-      r.fechaProcedimiento = fechaProcedimiento;
-      r.horasProcedimiento = _horasInicio;
-      r.minutosProcedimiento = _minutosInicio;
-      //Falta agregar al objeto el minutos fin
-      r.necesidadSangre = eleccionNecesidadDeSangre;
-      r.examenesSangre = eleccionExamenesSangre;
-      r.radiografiasTorax = eleccionRadiografiaTorax;
-      r.ecg = eleccionExaEcg;
-      r.cuantitativosCovid = eleccionCuantitativos;
-      r.nombreCirujano = cirujano.text;
-      r.nombreAyudante = ayudante.text;
-      r.equipoMaterialNecesario = equipoMaterial.text;
-      r.observaciones = observaciones.text;
-
       if (keyForm.currentState.validate()) {
         if (age > 0) {
           popRegCirugias.menuConfirmacionDatos(r, context);

@@ -221,12 +221,8 @@ class Vista_Celular_Loguin {
       TextEditingController nameController,
       TextEditingController passwordController,
       UserService httpServicio) async {
-    print("LLegue a cargar");
-    CirujiaDAO cirujia = new CirujiaDAO();
     final String usuario = nameController.text;
     final String contrasena = passwordController.text;
-    print(nameController.text);
-    print(passwordController.text);
 
     final result = await httpServicio.loginUsuario(
         usuario, utl.encode(passwordController.text));
@@ -264,6 +260,5 @@ class Vista_Celular_Loguin {
 
   cargarCirujia() async {
     apiResponse = await cirujia.obtenerCirujias();
-   
   }
 }

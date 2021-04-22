@@ -339,8 +339,7 @@ class _Horarios extends State<Horarios> {
         if (CirujiaDAO.recibir[i].quirofano == 1) {
           horaInicio = CirujiaDAO.recibir[i].horaInicio;
           horaFin = CirujiaDAO.recibir[i].horaFin;
-          auxFecha = new DateTime.fromMillisecondsSinceEpoch(
-              CirujiaDAO.recibir[i].fechaCirujia);
+          auxFecha = CirujiaDAO.recibir[i].fechaCirujia;
           var format = new DateFormat("yyyy/MM/dd");
           var dateString = format.format(auxFecha);
           if (fecha == dateString && hora == horaInicio.trim() ||
@@ -354,8 +353,7 @@ class _Horarios extends State<Horarios> {
         if (CirujiaDAO.recibir[i].quirofano == 2) {
           horaInicio = CirujiaDAO.recibir[i].horaInicio;
           horaFin = CirujiaDAO.recibir[i].horaFin;
-          auxFecha = new DateTime.fromMillisecondsSinceEpoch(
-              CirujiaDAO.recibir[i].fechaCirujia);
+          auxFecha = CirujiaDAO.recibir[i].fechaCirujia;
           var format = new DateFormat("yyyy/MM/dd");
           var dateString = format.format(auxFecha);
           if (fecha == dateString && hora == horaInicio.trim() ||

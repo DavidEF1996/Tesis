@@ -7,10 +7,11 @@ import 'package:qr_flutter/model/api_response.dart';
 import 'package:qr_flutter/model/cirujiasPrincipal.dart';
 
 class CirujiaDAO {
-  static const String IP = '192.168.18.9'; //'192.168.18.4';'192.168.10.118'
+  static const String IP = '192.168.18.4'; //'192.168.18.4';'192.168.10.118'
 
   static const int PORT = 8080;
-  static const String servicio_crear = "/cirujias";
+  static const String servicio_listar = "/cirujias";
+  static const String servicio_crear = "/insertarCirujia";
   static List<Cirujias> recibir = [];
 
   static const String URL =
@@ -19,8 +20,17 @@ class CirujiaDAO {
 
   static const headers = {'Content-Type': 'application/json'};
 
+  static Future crearCirujia(json) async {
+    http.Response response = await http.post(URL + servicio_crear,
+        body: json, headers: headers, encoding: Encoding.getByName('utf-8'));
+
+    print(response.body);
+
+    return response;
+  }
+
   Future listarCirujias() async {
-    final response = await http.get(URL + servicio_crear,
+    final response = await http.get(URL + servicio_listar,
         headers: {"Content-Type": "application/json"});
     List<dynamic> cirujia = jsonDecode(response.body);
     //  print('lista');
@@ -51,7 +61,7 @@ class CirujiaDAO {
   }
 
   Future<APIResponse<List<Cirujias>>> obtenerCirujias() {
-    return http.get(URL + servicio_crear,
+    return http.get(URL + servicio_listar,
         headers: {"Content-Type": "application/json"}).then((data) {
       log('La respuesta obtenida es -----------: ' + data.body);
       if (data.statusCode == 200) {

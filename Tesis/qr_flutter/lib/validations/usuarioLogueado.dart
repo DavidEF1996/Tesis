@@ -1,14 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:qr_flutter/preferences/preferences.dart';
 import 'package:qr_flutter/src/homebotones.dart';
 import 'package:qr_flutter/src/login.dart';
 
 class UsuarioLogueado {
   final _preferences = new Preferences();
-  Text userloguin2() => Text("Usuario: ",
-      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13));
-  Text userloguin() =>
-      Text(_preferences.nombres, style: TextStyle(fontSize: 13));
+  Text UserLoguinCabeceraLandsCape() => Text("Usuario: ",
+      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18));
+  Text UserLoguinLandsCape() =>
+      Text(_preferences.nombres, style: TextStyle(fontSize: 18));
+
+
+       Text UserLoguinCabeceraPortrait() => Text("Usuario: ",
+      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14));
+  Text UserLoguinPortrait() =>
+      Text(_preferences.nombres, style: TextStyle(fontSize: 14));
 
   FloatingActionButton botonSalir(BuildContext context) {
     return FloatingActionButton.extended(
@@ -30,11 +37,18 @@ class UsuarioLogueado {
 
   FloatingActionButton botonRegresar(BuildContext context) {
     return FloatingActionButton.extended(
+          icon: Icon(Icons.arrow_left),
       label: Text(
-        '',
+        'Salir',
       ),
-      icon: Icon(Icons.arrow_left),
+  
       onPressed: () {
+        SystemChrome.setPreferredOrientations([
+          DeviceOrientation.landscapeLeft,
+          DeviceOrientation.landscapeRight,
+          DeviceOrientation.portraitUp,
+          DeviceOrientation.portraitDown,
+        ]);
         // PersonaDAO.eliminarPersona(widget.persona.getID);
         final _preferences = new Preferences();
         _preferences.id = "";

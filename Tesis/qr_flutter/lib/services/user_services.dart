@@ -6,7 +6,7 @@ class UserService {
   static var apellidoUsuarioLogueado = "";
   static var usuariologueado = "";
   static const API =
-      "http://192.168.100.4:8080/TesisOP/ws/operatingRoomServices";
+      "http://192.168.1.23:8080/TesisOP/ws/operatingRoomServices";
 
   // "http://192.168.18.83:8080/operatingRoomRs/ws/operatingRoomServices";
   //"http://192.168.100.3:8080/operatingRoomRs/ws/operatingRoomServices";

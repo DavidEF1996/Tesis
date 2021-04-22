@@ -42,7 +42,7 @@ class _BotonesState extends State<Botones> {
         title: Container(
           alignment: Alignment.bottomLeft,
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
                 "Bienvenido    ",
@@ -51,8 +51,8 @@ class _BotonesState extends State<Botones> {
               Container(
                 child: Row(
                   children: [
-                    usuariologueado.userloguin2(),
-                    usuariologueado.userloguin(),
+                    usuariologueado.UserLoguinCabeceraPortrait(),
+                    usuariologueado.UserLoguinPortrait(),
                   ],
                 ),
               ),

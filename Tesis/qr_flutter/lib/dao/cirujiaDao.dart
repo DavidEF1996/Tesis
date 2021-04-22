@@ -7,12 +7,12 @@ import 'package:qr_flutter/model/api_response.dart';
 import 'package:qr_flutter/model/cirujiasPrincipal.dart';
 
 class CirujiaDAO {
-  static const String IP = '192.168.100.4'; //'192.168.18.4';'192.168.10.118'
+  static const String IP = '192.168.1.23'; //'192.168.18.4';'192.168.10.118'
   //static const String IP = '192.168.100.8'; //'192.168.18.4';'192.168.10.118'
 
   static const int PORT = 8080;
   static const String servicio_crear = "/cirujias";
-  static List<Cirujias> recibir =[];
+  static List<Cirujias> recibir = [];
 
   static const String URL =
       // 'http://$IP:$PORT/operatingRoomRs/ws/operatingRoomServices';
@@ -69,7 +69,6 @@ class CirujiaDAO {
         (_) => APIResponse<List<Cirujias>>(error: true, mensajeError: "Error"));
   }
 
-
   String readTimestamp(int timestamp) {
     var now = new DateTime.now();
     var format = new DateFormat('HH:mm a');
@@ -77,11 +76,14 @@ class CirujiaDAO {
     var diff = date.difference(now);
     var time = '';
 
-    if (diff.inSeconds <= 0 || diff.inSeconds > 0 && diff.inMinutes == 0 || diff.inMinutes > 0 && diff.inHours == 0 || diff.inHours > 0 && diff.inDays == 0) {
+    if (diff.inSeconds <= 0 ||
+        diff.inSeconds > 0 && diff.inMinutes == 0 ||
+        diff.inMinutes > 0 && diff.inHours == 0 ||
+        diff.inHours > 0 && diff.inDays == 0) {
       time = format.format(date);
 
       print("----------");
-       print("----------");
+      print("----------");
     } else {
       if (diff.inDays == 1) {
         time = diff.inDays.toString() + 'DAY AGO';

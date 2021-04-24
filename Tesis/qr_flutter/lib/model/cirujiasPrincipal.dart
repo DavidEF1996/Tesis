@@ -54,12 +54,12 @@ class Cirujias {
   String procedimiento;
   List<Doctore> doctores;
   int quirofano;
-  DateTime fechaCirujia;
+  int fechaCirujia;
   String horaInicio;
   String duracion;
   int anios;
   int meses;
-  DateTime fechaNacimiento;
+  int fechaNacimiento;
 
   factory Cirujias.fromJson(Map<String, dynamic> json) => Cirujias(
         idCirujia: json["idCirujia"],
@@ -80,7 +80,7 @@ class Cirujias {
         doctores: List<Doctore>.from(
             json["doctores"].map((x) => Doctore.fromJson(x))),
         quirofano: json["quirofano"],
-        fechaCirujia: DateTime.parse(json["fechaCirujia"]),
+        fechaCirujia: json["fechaCirujia"],
         horaInicio: json["horaInicio"],
         duracion: json["duracion"],
         anios: json['anios'],
@@ -106,8 +106,7 @@ class Cirujias {
         "procedimiento": procedimiento,
         "doctores": List<dynamic>.from(doctores.map((x) => x.toJson())),
         "quirofano": quirofano,
-        "fechaCirujia":
-            "${fechaCirujia.year.toString().padLeft(4, '0')}-${fechaCirujia.month.toString().padLeft(2, '0')}-${fechaCirujia.day.toString().padLeft(2, '0')}",
+        "fechaCirujia": fechaCirujia,
         "horaInicio": horaInicio,
         "duracion": duracion,
         "anios": anios,

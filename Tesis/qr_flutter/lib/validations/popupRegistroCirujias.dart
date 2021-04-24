@@ -204,7 +204,6 @@ class popupRegistroCirujias {
             CupertinoDialogAction(
               child: Text('Confirmar'),
               onPressed: () async {
-                print("Llego hasta arriba del await");
                 print("Nombres: " + r.paciente);
                 // await RegistroCirujias.crearDoctor(jsonEncode(r.toJson()()));
                 // print("Usuario desde el popup: " + DoctorDao.d.user);

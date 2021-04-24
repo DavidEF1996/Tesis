@@ -12,18 +12,20 @@ class CirujiaDAO {
   static const int PORT = 8080;
   static const String servicio_listar = "/cirujias";
   static const String servicio_crear = "/insertarCirujia";
+
   static List<Cirujias> recibir = [];
 
   static const String URL =
-      // 'http://$IP:$PORT/operatingRoomRs/ws/operatingRoomServices';
-      'http://$IP:$PORT/TesisOP/ws/operatingRoomServices';
+      'http://$IP:$PORT/operatingRoomRs/ws/operatingRoomServices';
+  // 'http://$IP:$PORT/TesisOP/ws/operatingRoomServices';
 
   static const headers = {'Content-Type': 'application/json'};
 
   static Future crearCirujia(json) async {
+    print(json);
     http.Response response = await http.post(URL + servicio_crear,
         body: json, headers: headers, encoding: Encoding.getByName('utf-8'));
-
+    print(response.statusCode);
     print(response.body);
 
     return response;
@@ -63,13 +65,20 @@ class CirujiaDAO {
   Future<APIResponse<List<Cirujias>>> obtenerCirujias() {
     return http.get(URL + servicio_listar,
         headers: {"Content-Type": "application/json"}).then((data) {
-      log('La respuesta obtenida es -----------: ' + data.body);
+      //log('La respuesta obtenida es -----------: ' + data.body);
+      print(data.statusCode);
+      print("ANTES DEL IF");
       if (data.statusCode == 200) {
         final jsonData = json.decode(data.body);
+
         final cirujiaL = <Cirujias>[];
         for (var item in jsonData) {
+          log(item.toString());
           cirujiaL.add(Cirujias.fromJson(item));
         }
+        print(data.body);
+
+        print(cirujiaL.length);
         recibir = cirujiaL;
         return APIResponse<List<Cirujias>>(data: cirujiaL);
       }

@@ -1,57 +1,51 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:qr_flutter/dao/cirujiaDao.dart';
-import 'package:qr_flutter/model/api_response.dart';
-import 'package:qr_flutter/model/cirujiasPrincipal.dart';
+
 import 'package:qr_flutter/utils/responsive.dart';
 import 'dart:core';
 import 'package:qr_flutter/validations/usuarioLogueado.dart';
 import 'package:intl/intl.dart';
 
-/// This is the stateless widget that the main application instantiates.
 class Horarios extends StatefulWidget {
   final int nombreQuirofano;
-  const Horarios({Key key, this.nombreQuirofano}) : super(key: key);
+  const Horarios({Key key, this.nombreQuirofano = 1}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _Horarios();
 }
 
 class _Horarios extends State<Horarios> {
-  //variables usadas en los diferentes métodos
   UsuarioLogueado usuariologueado = UsuarioLogueado();
   Color colorBase;
+  Color colorBotonQuirofano1;
+  Color colorBotonQuirofano2;
+  Color colorBotonQuirofano3;
   String numeroQuirofano = "";
   TextEditingController valorFecha = TextEditingController();
   TextEditingController valorHora = TextEditingController();
+  TextEditingController valorNombreDoctor = TextEditingController();
+  TextEditingController fechaConNegrita = TextEditingController();
+  TextEditingController horaConNegrita = TextEditingController();
+  TextEditingController nombreDoctorConNegrita = TextEditingController();
   DateTime fechaActual = DateTime.now();
   int nombreQuiro;
   CirujiaDAO cirujiaDao = new CirujiaDAO();
-  List<Cirujias> listaCirujias = [];
-  static const String IP = '192.168.18.125';
-  static const int PORT = 8080;
-  static const String URL = 'http://$IP:$PORT/TesisOP/ws/operatingRoomServices';
-  APIResponse<List<Cirujias>> _apiResponse;
 
   @override
   void initState() {
     super.initState();
     int index = 1;
 
-    //cargarCirujia();
-
     nombreQuiro = (widget.nombreQuirofano);
-    nombreQuiro = (widget.nombreQuirofano == "") ? 1 : widget.nombreQuirofano;
+    nombreQuiro = (widget.nombreQuirofano == 1) ? 1 : widget.nombreQuirofano;
 
-    /* SystemChrome.setPreferredOrientations([
+    SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeRight,
       DeviceOrientation.landscapeLeft,
-    ]);*/
-    //print("-------------------------------------------------");
-    //print(cirujiaDao.obtenerCirujias());
-  }
+    ]);
 
-  cargarCirujia() async {
-    _apiResponse = await cirujiaDao.obtenerCirujias();
+    cambiarColorBotonQuirofano(nombreQuiro);
   }
 
   @override
@@ -60,18 +54,20 @@ class _Horarios extends State<Horarios> {
     final Responsive responsive = Responsive.of(context);
     return MaterialApp(
       title: title,
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: new AppBar(
           title: Container(
-            alignment: Alignment.bottomLeft,
+            padding: EdgeInsets.all(responsive.diagonalPorcentaje(10)),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
                   "Bienvenido    ",
-                  style: TextStyle(fontSize: 17),
+                  style: TextStyle(fontSize: 22),
                 ),
-                usuariologueado.userloguin2(),
-                usuariologueado.userloguin(),
+                usuariologueado.UserLoguinCabeceraLandsCape(),
+                usuariologueado.UserLoguinLandsCape(),
                 Text("   "),
                 usuariologueado.botonRegresar(context),
               ],
@@ -90,6 +86,7 @@ class _Horarios extends State<Horarios> {
                       child: Row(
                         children: [
                           RaisedButton(
+                            color: colorBotonQuirofano1,
                             child: Container(
                               child: Column(
                                 children: [
@@ -99,12 +96,11 @@ class _Horarios extends State<Horarios> {
                             ),
                             onPressed: () {
                               nombreQuiro = 1;
-                              crear(nombreQuiro, context);
-                              //         cargarCirujia();
-                              // listarCirujias();
+                              cargarQuirofano(nombreQuiro, context);
                             },
                           ),
                           RaisedButton(
+                            color: colorBotonQuirofano2,
                             child: Container(
                               child: Column(
                                 children: [
@@ -113,13 +109,12 @@ class _Horarios extends State<Horarios> {
                               ),
                             ),
                             onPressed: () {
-                              //nombreQuirofano = "Quirófano 2";
                               nombreQuiro = 2;
-                              crear(nombreQuiro, context);
-                              // cargarCirujia();
+                              cargarQuirofano(nombreQuiro, context);
                             },
                           ),
                           RaisedButton(
+                            color: colorBotonQuirofano3,
                             child: Container(
                               child: Column(
                                 children: [
@@ -128,38 +123,24 @@ class _Horarios extends State<Horarios> {
                               ),
                             ),
                             onPressed: () {
-                              // crear();
-                              //   cargarCirujia();
-                              cirujiaDao.obtenerCirujias();
+                              nombreQuiro = 3;
+                              cargarQuirofano(nombreQuiro, context);
                             },
                           ),
-                          Text("Oupado:   "),
+                          Text("     Oupado:   "),
                           Container(
-                            color: Colors.yellow,
+                            color: Colors.red,
                             height: responsive.diagonalPorcentaje(3),
                             width: responsive.diagonalPorcentaje(5),
                           ),
                           Text("  Libre:  "),
                           Container(
-                            color: Colors.brown,
+                            color: Colors.blue[50],
                             height: responsive.diagonalPorcentaje(3),
                             width: responsive.diagonalPorcentaje(5),
                           ),
                         ],
                       )),
-
-                  /*Container(
-                    padding: EdgeInsets.all(responsive.diagonalPorcentaje(1.5)),
-                    child: Row(
-                      children: [
-                        Container(
-                          child: Row(
-                            children: [],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),*/
                 ],
               ),
             ),
@@ -168,7 +149,7 @@ class _Horarios extends State<Horarios> {
                 //Codigo para la ubicación y tamaños de la grilla
                 padding: EdgeInsets.only(
                     left: responsive.diagonalPorcentaje(1),
-                    right: responsive.diagonalPorcentaje(10),
+                    right: responsive.diagonalPorcentaje(1),
                     top: responsive.diagonalPorcentaje(1)),
 
                 crossAxisCount: 5,
@@ -176,56 +157,78 @@ class _Horarios extends State<Horarios> {
                     responsive.diagonalPorcentaje(0.2), // alto de widget
                 mainAxisSpacing:
                     responsive.diagonalPorcentaje(0.2), //alto en distancia
+
                 crossAxisSpacing: responsive.diagonalPorcentaje(0.2),
 
                 //Código de la lista de widgets para la grilla
-
                 children: List.generate(55, (index) {
                   setState(() {
-                    //cargarCirujia();
-                    cabeceras(index);
-
-                    valorFecha.text = fechas(fechaActual, index);
-                    //horas( index);
-                    valorHora.text = horas(index);
-
-                    pintarOcupados(
+                    cabeceraTabla(index);
+                    valorFecha.text = cargarFechasTabla(fechaActual, index);
+                    valorHora.text = cargarHorasTabla(index);
+                    pintarQuirofanosOcupados(
                         index, valorFecha.text, valorHora.text, nombreQuiro);
                   });
-                  // _valores(index);
-
                   return Container(
                       child: RaisedButton(
                     child: Container(
-                      width: responsive.anchoPorcentaje(100),
-
-                      //height: responsive.diagonalPorcentaje(7),
                       child: Column(
                         children: [
-                          textosConFecha(index, valorFecha),
-                          textoConHora(index, valorHora),
+                          Row(
+                            children: [
+                              Text(
+                                fechaConNegrita.text,
+                                style: TextStyle(
+                                    fontSize: 13, fontWeight: FontWeight.bold),
+                              ),
+                              textosConFecha(index, valorFecha),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Text(
+                                horaConNegrita.text,
+                                style: TextStyle(
+                                    fontSize: 13, fontWeight: FontWeight.bold),
+                              ),
+                              textoConHora(index, valorHora),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                nombreDoctorConNegrita.text,
+                                style: TextStyle(
+                                    fontSize: 12, fontWeight: FontWeight.bold),
+                              ),
+                              textoConNombreDoctor(index, valorNombreDoctor),
+                            ],
+                          ),
                         ],
                       ),
                     ),
                     color: colorBase,
-                    onPressed: () {
-                      // print(nombreQuirofano);
-                    },
+                    onPressed: () {},
                   ));
                 }),
               ),
             ),
-            /* Container(
-              child: llenarLista(),
-            )*/
           ],
         ),
       ),
     );
   }
 
+  Text textoFechaConNegrita(TextEditingController valor) {
+    return Text(
+      "",
+      style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+    );
+  }
+
   Text textosConFecha(int index, TextEditingController valor) {
-    if (valor.text == "" ||
+    if (valor.text == "Lunes" ||
         valor.text == "Martes" ||
         valor.text == "Miercoles" ||
         valor.text == "Jueves" ||
@@ -249,8 +252,15 @@ class _Horarios extends State<Horarios> {
     );
   }
 
+  Text textoConNombreDoctor(int index, TextEditingController valor) {
+    return Text(
+      valor.text,
+      style: TextStyle(fontSize: 12),
+    );
+  }
+
   int cont1 = 0;
-  String fechas(DateTime fechaActual, int index) {
+  String cargarFechasTabla(DateTime fechaActual, int index) {
     DateTime fechaAuxiliar;
     int contauxi = 1;
 
@@ -259,20 +269,16 @@ class _Horarios extends State<Horarios> {
           fechaActual.year, fechaActual.month, fechaActual.day - contauxi);
       contauxi = contauxi + 1;
       //print("La fecha es: " + fechaAuxiliar.toString());
+      fechaConNegrita.text = "";
     } while (DateFormat('EEEE').format(fechaAuxiliar).toString() != "Monday");
 
     if (index > 4) {
       var fechaFinal = new DateTime(
           fechaAuxiliar.year, fechaAuxiliar.month, fechaAuxiliar.day + cont1);
 
-      /*String enviarFechaFinal = fechaFinal.year.toString() +
-          "/" +
-   
-          fechaFinal.month.toString() +
-          "/" +
-          fechaFinal.day.toString();*/
       var format = new DateFormat("yyyy/MM/dd");
       var dateString = format.format(fechaFinal);
+      fechaConNegrita.text = "Fecha: ";
 
       cont1++;
       if (cont1 == 5) {
@@ -285,12 +291,14 @@ class _Horarios extends State<Horarios> {
   int cont = 0;
   int val = 8;
 
-  String horas(int index) {
+  String cargarHorasTabla(int index) {
     String enviarHoraFinal;
     if (index <= 4) {
       valorHora.text = "";
+      horaConNegrita.text = "";
     } else if (index >= 5 && cont <= 4) {
       enviarHoraFinal = (val).toString() + ":00";
+      horaConNegrita.text = "Hora: ";
       cont++;
 
       if (cont == 5) {
@@ -305,46 +313,55 @@ class _Horarios extends State<Horarios> {
     }
   }
 
-  TextEditingController cabeceras(int index) {
+  TextEditingController cabeceraTabla(int index) {
     if (index == 0) {
       valorFecha.text = "Lunes";
-      colorBase = Colors.blueGrey;
+      colorBase = Colors.blue[400];
     } else if (index == 1) {
       valorFecha.text = "Martes";
-      colorBase = Colors.blueGrey;
+      colorBase = Colors.blue[400];
     } else if (index == 2) {
       valorFecha.text = "Miercoles";
-      colorBase = Colors.blueGrey;
+      colorBase = Colors.blue[400];
     } else if (index == 3) {
-      colorBase = Colors.blueGrey;
+      colorBase = Colors.blue[400];
       valorFecha.text = "Jueves";
     } else if (index == 4) {
       valorFecha.text = "Viernes";
-      colorBase = Colors.blueGrey;
+      colorBase = Colors.blue[400];
     } else {
       valorFecha.text = "";
-      colorBase = Colors.yellow;
+      colorBase = Colors.blue[50];
     }
 
     return valorFecha;
   }
 
-  void pintarOcupados(
+  void pintarQuirofanosOcupados(
       int index, String fecha, String hora, int numeroQuirofano) {
     String horaInicio;
     String horaFin;
     DateTime auxFecha;
+    print("LLEGA AL M[ETODO PINTAR");
+    print(CirujiaDAO.recibir.length);
     if (numeroQuirofano == 1) {
       for (var i = 0; i < CirujiaDAO.recibir.length; i++) {
         if (CirujiaDAO.recibir[i].quirofano == 1) {
           horaInicio = CirujiaDAO.recibir[i].horaInicio;
           horaFin = CirujiaDAO.recibir[i].horaFin;
-          auxFecha = CirujiaDAO.recibir[i].fechaCirujia;
+          auxFecha = new DateTime.fromMillisecondsSinceEpoch(
+              CirujiaDAO.recibir[i].fechaCirujia);
+          print(CirujiaDAO.recibir[i].quirofano);
           var format = new DateFormat("yyyy/MM/dd");
           var dateString = format.format(auxFecha);
           if (fecha == dateString && hora == horaInicio.trim() ||
               fecha == dateString && hora == horaFin.trim()) {
-            colorBase = Colors.white;
+            valorNombreDoctor.text = CirujiaDAO.recibir[0].doctores[0].nombres;
+            nombreDoctorConNegrita.text = "Dr: ";
+            colorBase = Colors.red;
+          } else {
+            valorNombreDoctor.text = "";
+            nombreDoctorConNegrita.text = "";
           }
         }
       }
@@ -353,19 +370,47 @@ class _Horarios extends State<Horarios> {
         if (CirujiaDAO.recibir[i].quirofano == 2) {
           horaInicio = CirujiaDAO.recibir[i].horaInicio;
           horaFin = CirujiaDAO.recibir[i].horaFin;
-          auxFecha = CirujiaDAO.recibir[i].fechaCirujia;
+          auxFecha = new DateTime.fromMillisecondsSinceEpoch(
+              CirujiaDAO.recibir[i].fechaCirujia);
+          print(CirujiaDAO.recibir[i].quirofano);
           var format = new DateFormat("yyyy/MM/dd");
           var dateString = format.format(auxFecha);
           if (fecha == dateString && hora == horaInicio.trim() ||
               fecha == dateString && hora == horaFin.trim()) {
-            colorBase = Colors.white;
+            valorNombreDoctor.text = CirujiaDAO.recibir[0].doctores[0].nombres;
+            nombreDoctorConNegrita.text = "Dr: ";
+            colorBase = Colors.red;
+          } else {
+            valorNombreDoctor.text = "";
+            nombreDoctorConNegrita.text = "";
+          }
+        }
+      }
+    } else if (numeroQuirofano == 3) {
+      for (var i = 0; i < CirujiaDAO.recibir.length; i++) {
+        if (CirujiaDAO.recibir[i].quirofano == 3) {
+          horaInicio = CirujiaDAO.recibir[i].horaInicio;
+          horaFin = CirujiaDAO.recibir[i].horaFin;
+          auxFecha = new DateTime.fromMillisecondsSinceEpoch(
+              CirujiaDAO.recibir[i].fechaCirujia);
+          var format = new DateFormat("yyyy/MM/dd");
+          print(CirujiaDAO.recibir[i].quirofano);
+          var dateString = format.format(auxFecha);
+          if (fecha == dateString && hora == horaInicio.trim() ||
+              fecha == dateString && hora == horaFin.trim()) {
+            valorNombreDoctor.text = CirujiaDAO.recibir[0].doctores[0].nombres;
+            nombreDoctorConNegrita.text = "Dr: ";
+            colorBase = Colors.red;
+          } else {
+            valorNombreDoctor.text = "";
+            nombreDoctorConNegrita.text = "";
           }
         }
       }
     }
   }
 
-  void crear(int nombreQuirofano, BuildContext context) {
+  void cargarQuirofano(int nombreQuirofano, BuildContext context) {
     if (nombreQuirofano == 1) {
       //cargarCirujia();
       print("Llego al quiro 1");
@@ -384,6 +429,31 @@ class _Horarios extends State<Horarios> {
               builder: (context) => Horarios(
                     nombreQuirofano: 2,
                   )));
+    } else if (nombreQuirofano == 3) {
+      // cargarCirujia();
+      print("Llego al quiro 3");
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) => Horarios(
+                    nombreQuirofano: 3,
+                  )));
+    }
+  }
+
+  void cambiarColorBotonQuirofano(int valor) {
+    if (nombreQuiro == 1) {
+      colorBotonQuirofano1 = Colors.greenAccent;
+      colorBotonQuirofano2 = Colors.blueGrey[200];
+      colorBotonQuirofano3 = Colors.blueGrey[200];
+    } else if (nombreQuiro == 2) {
+      colorBotonQuirofano1 = Colors.blueGrey[200];
+      colorBotonQuirofano2 = Colors.greenAccent;
+      colorBotonQuirofano3 = Colors.blueGrey[200];
+    } else if (nombreQuiro == 3) {
+      colorBotonQuirofano1 = Colors.blueGrey[200];
+      colorBotonQuirofano2 = Colors.blueGrey[200];
+      colorBotonQuirofano3 = Colors.greenAccent;
     }
   }
 }

@@ -7,7 +7,6 @@ import 'package:qr_flutter/model/api_response.dart';
 import 'package:qr_flutter/model/cirujiasPrincipal.dart';
 import 'package:qr_flutter/model/diagnostico.dart';
 import 'package:qr_flutter/model/modelo_doctor.dart';
-import 'package:qr_flutter/model/registro_cirujias_modelo.dart';
 import 'package:qr_flutter/src/homebotones.dart';
 import 'package:qr_flutter/utils/responsive.dart';
 import 'package:qr_flutter/validations/popupRegistroCirujias.dart';
@@ -41,7 +40,7 @@ class RegisterPageState extends State<RegisterPage> {
 
   int _horasFin = 3;
   int _minutosFin = 10;
-  String nombreEnfermedad = "";
+  String codigoEnfermedad = "";
 
   String tipoCirujia = 'cirujia';
   String grupoNecesidadSangre = 'necSangre';
@@ -88,8 +87,8 @@ class RegisterPageState extends State<RegisterPage> {
                 "Bienvenido    ",
                 style: TextStyle(fontSize: 17),
               ),
-              usuariologueado.userloguin2(),
-              usuariologueado.userloguin(),
+              usuariologueado.UserLoguinCabeceraPortrait(),
+              usuariologueado.UserLoguinPortrait(),
               Text("  "),
               usuariologueado.botonSalir(context),
             ],
@@ -327,7 +326,6 @@ class RegisterPageState extends State<RegisterPage> {
                         decoration: new InputDecoration(
                           labelText: 'Duración',
                         ),
-                        validator: val.validateEmail,
                       )
                     ],
                   ),
@@ -413,10 +411,9 @@ class RegisterPageState extends State<RegisterPage> {
               } else {
                 valor = _apiResponse.data.length;
               }
-
+              String cedula;
               for (var i = 0; i < valor; i++) {
                 String doctor;
-
                 doctor = utf8.decode(
                     latin1.encode(_apiResponse.data.elementAt(i).nombres +
                         " " +
@@ -424,7 +421,9 @@ class RegisterPageState extends State<RegisterPage> {
                     allowMalformed: true);
 
                 datos.add(doctor);
+                cedula = _apiResponse.data.elementAt(i).cedula;
               }
+              print(cedula);
               return datos;
             },
             onChanged: (item) {
@@ -561,12 +560,12 @@ class RegisterPageState extends State<RegisterPage> {
   }
 
 //Variables Globales -------------------------
-  bool eleccionRadioButton;
+  var eleccionRadioButton;
   var eleccionExamenesSangre;
   var eleccionNecesidadDeSangre;
-  bool eleccionRadiografiaTorax;
-  bool eleccionExaEcg;
-  bool eleccionCuantitativos;
+  var eleccionRadiografiaTorax;
+  var eleccionExaEcg;
+  var eleccionCuantitativos;
 // -------------------------------------------
 
 //Mètodos
@@ -778,13 +777,14 @@ class RegisterPageState extends State<RegisterPage> {
   save() {
     Cirujias r = Cirujias();
     r.paciente = nameCtrl.text;
-    r.fechaNacimiento = currentDate;
+    r.fechaNacimiento = currentDate.microsecondsSinceEpoch;
     r.anios = age;
     r.meses = meses;
     r.tipoCirujia = tipoCirujia;
     r.diagnostico = diagnosticoCp;
     r.procedimiento = procedimientoMedico.text;
-    r.fechaCirujia = fechaProcedimiento;
+    //var date = DateTime.fromMillisecondsSinceEpoch( * 1000);
+    r.fechaCirujia = fechaProcedimiento.millisecondsSinceEpoch;
     if (_minutosFin != 0) {
       _horasInicio += 1;
     }
@@ -796,6 +796,12 @@ class RegisterPageState extends State<RegisterPage> {
     r.covid = true;
     r.doctores = doctores;
     r.observaciones = observaciones.text;
+    r.materiales = equipoMaterial.text;
+    r.edadPaciente = age;
+    r.horaInicio = _horasInicio.toString();
+    var auxDuracion = int.parse(duracion.text);
+    _horasFin = _horasInicio + auxDuracion;
+    r.horaFin = _horasFin.toString();
     if (keyForm.currentState.validate()) {
       if (keyForm.currentState.validate()) {
         if (age > 0) {

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/preferences/preferences.dart';
-import 'package:qr_flutter/services/user_services.dart';
 import 'package:qr_flutter/utils/responsive.dart';
 import 'package:qr_flutter/validations/usuarioLogueado.dart';
 
@@ -15,7 +14,7 @@ class Botones extends StatefulWidget {
 }
 
 class _BotonesState extends State<Botones> {
-  UserService user = UserService();
+  // UserService user = UserService();
 
   UsuarioLogueado usuariologueado = UsuarioLogueado();
 
@@ -42,7 +41,7 @@ class _BotonesState extends State<Botones> {
         title: Container(
           alignment: Alignment.bottomLeft,
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
                 "Bienvenido    ",
@@ -51,8 +50,8 @@ class _BotonesState extends State<Botones> {
               Container(
                 child: Row(
                   children: [
-                    usuariologueado.userloguin2(),
-                    usuariologueado.userloguin(),
+                    usuariologueado.UserLoguinCabeceraPortrait(),
+                    usuariologueado.UserLoguinPortrait(),
                   ],
                 ),
               ),

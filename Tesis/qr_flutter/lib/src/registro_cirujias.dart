@@ -35,12 +35,13 @@ class RegisterPageState extends State<RegisterPage> {
   TextEditingController enfermedad = new TextEditingController();
   int _horasInicio = 3;
   int _minutosInicio = 10;
-
+  final focus = FocusNode();
   int _horasFin = 3;
   int _minutosFin = 10;
   String nombreEnfermedad = "";
 
   String tipoCirujia = 'cirujia';
+  String numeroQuirofano = '';
   String grupoNecesidadSangre = 'necSangre';
   String grupoExamenesSangre = 'exaSangre';
   String grupoRadiografiasTorax = 'radTorax';
@@ -110,12 +111,37 @@ class RegisterPageState extends State<RegisterPage> {
           ),
         ),
         formItemsDesign(
+            Icons.picture_in_picture_alt_outlined,
+            Container(
+              child: Column(
+                children: [
+                  Wrap(
+                    children: [
+                      Container(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            elegirQuirofano('1', 'Uno'),
+                            elegirQuirofano('2', 'Dos'),
+                            elegirQuirofano('3', 'Tres'),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ],
+              ),
+            )),
+        formItemsDesign(
             Icons.person,
             TextFormField(
               controller: nameCtrl,
               decoration: new InputDecoration(
                 labelText: 'Nombre del Paciente',
               ),
+              onFieldSubmitted: (v) {
+                FocusScope.of(context).requestFocus(focus);
+              },
               validator: val.validateName,
             )),
         formItemsDesign(
@@ -203,29 +229,11 @@ class RegisterPageState extends State<RegisterPage> {
                 print(list);
                 print(data.capitulo);
               },
-            )
-            /*FindDropdown<Diagnostico>(
-              label: "Seleccionar Enfermedad",
-              //items:  (String filter) => DiagnosticoDao.getDiagnosticos(codigo),
-              onFind: (String filter) => DiagnosticoDao.getDiagnosticos(filter),
-              
-              // items: DiagnosticoDao.listarDiagnosticos(),
-
-              onChanged: (Diagnostico u) => print(u)),*/
-            /*selectedItem: "Enfermedad",
-            validate: (item) {
-              if (item == null)
-                return "Falta seleccionar";
-              else if (item == "Enfermedad")
-                return "Campo no válido";
-              else
-                return null; //return null to "no error"
-            },
-          ),*/
-            ),
+            )),
         formItemsDesign(
             Icons.coronavirus,
             TextFormField(
+              focusNode: focus,
               controller: procedimientoMedico,
               decoration: new InputDecoration(
                 labelText: 'Procedimiento a Realizar: ',
@@ -255,28 +263,6 @@ class RegisterPageState extends State<RegisterPage> {
                       onPressed: () => selectDateProcess(context),
                       icon: Icon(Icons.date_range),
                     ),
-                    /*Container(
-                      child: Column(
-                        children: [
-                          TimePickerSpinner(
-                              is24HourMode: true,
-                              normalTextStyle:
-                                  TextStyle(fontSize: 12, color: Colors.black),
-                              highlightedTextStyle:
-                                  TextStyle(fontSize: 14, color: Colors.black),
-                              spacing: 2,
-                              itemHeight: 20,
-                              isForce2Digits: true,
-                              onTimeChange: (time) {
-                                setState(() {
-                                  DateTime _dateTime = DateTime.now();
-                                  _dateTime = time;
-                                  print("las horas son:" + time.toString());
-                                });
-                              })
-                        ],
-                      ),
-                    ),*/
                   ],
                 ),
                 Row(
@@ -464,7 +450,8 @@ class RegisterPageState extends State<RegisterPage> {
             )),
         GestureDetector(
             onTap: () {
-              save();
+              // save();
+              print(numeroQuirofano);
             },
             child: Container(
               margin: new EdgeInsets.all(5.0),
@@ -515,13 +502,14 @@ class RegisterPageState extends State<RegisterPage> {
 
 //Variables Globales -------------------------
   var eleccionRadioButton;
+  var eleccionNumeroQuirofano;
   var eleccionExamenesSangre;
   var eleccionNecesidadDeSangre;
   var eleccionRadiografiaTorax;
   var eleccionExaEcg;
   var eleccionCuantitativos;
 // -------------------------------------------
-
+  Responsive responsive;
 //Mètodos
   Container crearRadio(String value, String text) {
     return Container(
@@ -535,6 +523,30 @@ class RegisterPageState extends State<RegisterPage> {
               setState(() {
                 tipoCirujia = value;
                 eleccionRadioButton = value;
+              });
+            },
+          ),
+          Text(
+            text,
+            style: TextStyle(fontSize: 14),
+          )
+        ],
+      ),
+    );
+  }
+
+  Container elegirQuirofano(String value, String text) {
+    return Container(
+      width: 80,
+      child: Row(
+        children: [
+          Radio(
+            value: value,
+            groupValue: numeroQuirofano,
+            onChanged: (value) {
+              setState(() {
+                numeroQuirofano = value;
+                eleccionNumeroQuirofano = value;
               });
             },
           ),

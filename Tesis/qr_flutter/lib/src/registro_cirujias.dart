@@ -37,12 +37,13 @@ class RegisterPageState extends State<RegisterPage> {
   TextEditingController duracion = new TextEditingController();
   int _horasInicio = 3;
   int _minutosInicio = 10;
-
+  final focus = FocusNode();
   int _horasFin = 3;
   int _minutosFin = 10;
   String codigoEnfermedad = "";
 
   String tipoCirujia = 'cirujia';
+  String numeroQuirofano = '';
   String grupoNecesidadSangre = 'necSangre';
   String grupoExamenesSangre = 'exaSangre';
   String grupoRadiografiasTorax = 'radTorax';
@@ -127,12 +128,37 @@ class RegisterPageState extends State<RegisterPage> {
           ),
         ),
         formItemsDesign(
+            Icons.picture_in_picture_alt_outlined,
+            Container(
+              child: Column(
+                children: [
+                  Wrap(
+                    children: [
+                      Container(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            elegirQuirofano('1', 'Uno'),
+                            elegirQuirofano('2', 'Dos'),
+                            elegirQuirofano('3', 'Tres'),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ],
+              ),
+            )),
+        formItemsDesign(
             Icons.person,
             TextFormField(
               controller: nameCtrl,
               decoration: new InputDecoration(
                 labelText: 'Nombre del Paciente',
               ),
+              onFieldSubmitted: (v) {
+                FocusScope.of(context).requestFocus(focus);
+              },
               validator: val.validateName,
             )),
         formItemsDesign(
@@ -241,6 +267,7 @@ class RegisterPageState extends State<RegisterPage> {
         formItemsDesign(
             Icons.coronavirus,
             TextFormField(
+              focusNode: focus,
               controller: procedimientoMedico,
               decoration: new InputDecoration(
                 labelText: 'Procedimiento a Realizar: ',
@@ -508,28 +535,28 @@ class RegisterPageState extends State<RegisterPage> {
               validator: val.validateEmail,
             )),
         GestureDetector(
-          onTap: () {
-            save();
-          },
-          child: Container(
-            margin: new EdgeInsets.all(5.0),
-            alignment: Alignment.center,
-            decoration: ShapeDecoration(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30.0)),
-              gradient: LinearGradient(colors: [
-                Color(0xFF0EDED2),
-                Color(0xFF03A0FE),
-              ], begin: Alignment.topLeft, end: Alignment.bottomRight),
-            ),
-            child: Text("Guardar",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500)),
-            padding: EdgeInsets.only(top: 16, bottom: 16),
-          ),
-        ),
+            onTap: () {
+              // save();
+              print(numeroQuirofano);
+            },
+            child: Container(
+              margin: new EdgeInsets.all(5.0),
+              alignment: Alignment.center,
+              decoration: ShapeDecoration(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30.0)),
+                gradient: LinearGradient(colors: [
+                  Color(0xFF0EDED2),
+                  Color(0xFF03A0FE),
+                ], begin: Alignment.topLeft, end: Alignment.bottomRight),
+              ),
+              child: Text("Guardar",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500)),
+              padding: EdgeInsets.only(top: 16, bottom: 16),
+            )),
         GestureDetector(
             onTap: () {
               final route = MaterialPageRoute(builder: (context) {
@@ -561,13 +588,14 @@ class RegisterPageState extends State<RegisterPage> {
 
 //Variables Globales -------------------------
   var eleccionRadioButton;
+  var eleccionNumeroQuirofano;
   var eleccionExamenesSangre;
   var eleccionNecesidadDeSangre;
   var eleccionRadiografiaTorax;
   var eleccionExaEcg;
   var eleccionCuantitativos;
 // -------------------------------------------
-
+  Responsive responsive;
 //Mètodos
   Container crearRadio(String value, String text) {
     return Container(
@@ -581,6 +609,30 @@ class RegisterPageState extends State<RegisterPage> {
               setState(() {
                 tipoCirujia = value;
                 eleccionRadioButton = value;
+              });
+            },
+          ),
+          Text(
+            text,
+            style: TextStyle(fontSize: 14),
+          )
+        ],
+      ),
+    );
+  }
+
+  Container elegirQuirofano(String value, String text) {
+    return Container(
+      width: 80,
+      child: Row(
+        children: [
+          Radio(
+            value: value,
+            groupValue: numeroQuirofano,
+            onChanged: (value) {
+              setState(() {
+                numeroQuirofano = value;
+                eleccionNumeroQuirofano = value;
               });
             },
           ),

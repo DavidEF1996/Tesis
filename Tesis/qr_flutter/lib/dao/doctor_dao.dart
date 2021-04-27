@@ -8,7 +8,7 @@ import 'package:qr_flutter/model/doctor_consultas.dart';
 import 'package:qr_flutter/model/modelo_doctor.dart';
 
 class DoctorDao {
-  static const String IP = '192.168.18.4'; //'192.168.18.4';'192.168.10.118'2
+  static const String IP = '192.168.6.40'; //'192.168.18.4';'192.168.10.118'2
 
   static const int PORT = 8080;
   static const String servicio_crear = "/crear";
@@ -25,7 +25,7 @@ class DoctorDao {
   static Doctor d = Doctor();
 
   static Future crearDoctor(json) async {
-    http.Response response = await http.post(URL + servicio_crear,
+    http.Response response = await http.post(Uri.parse(URL + servicio_crear),
         body: json, headers: headers, encoding: Encoding.getByName('utf-8'));
 
     print(response.body);
@@ -44,14 +44,14 @@ class DoctorDao {
   }
 
   static Future login(json) async {
-    http.Response response = await http.post(URL + servicio_login,
+    http.Response response = await http.post(Uri.parse(URL + servicio_login),
         body: json, headers: headers, encoding: Encoding.getByName("utf-8"));
 
     return response;
   }
 
   static Future<bool> changePass(json) async {
-    http.Response response = await http.post(URL + servicio_change,
+    http.Response response = await http.post(Uri.parse(URL + servicio_change),
         body: json, headers: headers, encoding: Encoding.getByName("utf-8"));
     //print(response.body);
     if (response.body.contains('true')) {
@@ -62,7 +62,7 @@ class DoctorDao {
   }
 
   Future<APIResponse<List<DoctorModelo>>> listarDoctores(String nombres) async {
-    return http.get(URL + servicio_listarNombres + "/$nombres",
+    return http.get(Uri.parse(URL + servicio_listarNombres + "/$nombres"),
         headers: {"Content-Type": "application/json"}).then((data) {
       //log('La respuesta obtenida es -----------: ' + data.body);
       if (data.statusCode == 200) {
@@ -82,7 +82,8 @@ class DoctorDao {
   /* 
   }*/
   Future<List<DoctorLista>> getDoctores(String nombres) async {
-    final response = await http.get(URL + servicio_listarNombres + '/$nombres');
+    final response =
+        await http.get(Uri.parse(URL + servicio_listarNombres + '/$nombres'));
     if (response.statusCode == 200) {
       print(response.body);
       return _listDoctrores(response.body).toList();

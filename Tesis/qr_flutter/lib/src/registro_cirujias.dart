@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:core';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:qr_flutter/dao/diagnostico_dao.dart';
 import 'package:qr_flutter/dao/doctor_dao.dart';
 import 'package:qr_flutter/model/api_response.dart';
@@ -64,6 +65,12 @@ class RegisterPageState extends State<RegisterPage> {
   void initState() {
     //cargarDoctores("a");
     super.initState();
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     nombres_parametro = "a";
   }
 
@@ -535,28 +542,28 @@ class RegisterPageState extends State<RegisterPage> {
               validator: val.validateEmail,
             )),
         GestureDetector(
-            onTap: () {
-              // save();
-              print(numeroQuirofano);
-            },
-            child: Container(
-              margin: new EdgeInsets.all(5.0),
-              alignment: Alignment.center,
-              decoration: ShapeDecoration(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30.0)),
-                gradient: LinearGradient(colors: [
-                  Color(0xFF0EDED2),
-                  Color(0xFF03A0FE),
-                ], begin: Alignment.topLeft, end: Alignment.bottomRight),
-              ),
-              child: Text("Guardar",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500)),
-              padding: EdgeInsets.only(top: 16, bottom: 16),
-            )),
+          onTap: () {
+            save();
+          },
+          child: Container(
+            margin: new EdgeInsets.all(5.0),
+            alignment: Alignment.center,
+            decoration: ShapeDecoration(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30.0)),
+              gradient: LinearGradient(colors: [
+                Color(0xFF0EDED2),
+                Color(0xFF03A0FE),
+              ], begin: Alignment.topLeft, end: Alignment.bottomRight),
+            ),
+            child: Text("Guardar",
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500)),
+            padding: EdgeInsets.only(top: 16, bottom: 16),
+          ),
+        ),
         GestureDetector(
             onTap: () {
               final route = MaterialPageRoute(builder: (context) {
@@ -588,7 +595,7 @@ class RegisterPageState extends State<RegisterPage> {
 
 //Variables Globales -------------------------
   var eleccionRadioButton;
-  var eleccionNumeroQuirofano;
+  String eleccionNumeroQuirofano;
   var eleccionExamenesSangre;
   var eleccionNecesidadDeSangre;
   var eleccionRadiografiaTorax;
@@ -804,8 +811,8 @@ class RegisterPageState extends State<RegisterPage> {
     final DateTime pickedDate = await showDatePicker(
         context: context,
         initialDate: currentDate,
-        firstDate: DateTime(1990),
-        lastDate: DateTime(2050));
+        firstDate: DateTime(1910),
+        lastDate: DateTime(2100));
     if (pickedDate != null && pickedDate != currentDate)
       setState(() {
         currentDate = pickedDate;
@@ -814,12 +821,13 @@ class RegisterPageState extends State<RegisterPage> {
       });
   }
 
+  DateTime fechAux = DateTime.now();
   Future<void> selectDateProcess(BuildContext context) async {
     final DateTime pickedDate = await showDatePicker(
         context: context,
         initialDate: fechaProcedimiento,
-        firstDate: DateTime(2021),
-        lastDate: DateTime(2050));
+        firstDate: DateTime(fechAux.year, fechAux.month, fechAux.day),
+        lastDate: DateTime(fechAux.year, fechAux.month, fechAux.day + 8));
     if (pickedDate != null && pickedDate != currentDate)
       setState(() {
         fechaProcedimiento = pickedDate;
@@ -828,6 +836,7 @@ class RegisterPageState extends State<RegisterPage> {
 
   save() {
     Cirujias r = Cirujias();
+    r.quirofano = int.parse(eleccionNumeroQuirofano);
     r.paciente = nameCtrl.text;
     r.fechaNacimiento = currentDate.microsecondsSinceEpoch;
     r.anios = age;
@@ -843,9 +852,11 @@ class RegisterPageState extends State<RegisterPage> {
     if (_minutosInicio != 0) {
       auxDuracion += 1;
     }
+
     r.duracion = auxDuracion.toString();
     _horasFin = _horasInicio + auxDuracion;
     r.horaFin = _horasFin.toString();
+
     r.necesidadSangre = eleccionNecesidadDeSangre;
     r.examenSangre = eleccionExamenesSangre;
     r.examenTorax = true;

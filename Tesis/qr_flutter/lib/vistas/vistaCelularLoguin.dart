@@ -80,7 +80,7 @@ class Vista_Celular_Loguin {
               child: Text('Comenzar'),
               onPressed: () {
                 print("LLegue a comenzar");
-                cargarCirujia();
+
                 cargar(
                     context, nameController, passwordController, httpServicio);
               },
@@ -181,7 +181,6 @@ class Vista_Celular_Loguin {
                       color: Colors.blue,
                       child: Text('Comenzar'),
                       onPressed: () {
-                        cargarCirujia();
                         // print("................................");
                         // print(apiResponse.data[0].paciente);
                         cargar(context, nameController, passwordController,

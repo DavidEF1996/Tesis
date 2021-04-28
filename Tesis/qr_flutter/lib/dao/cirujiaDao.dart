@@ -16,8 +16,8 @@ class CirujiaDAO {
   static List<Cirujias> recibir = [];
 
   static const String URL =
-      'http://$IP:$PORT/operatingRoomRs/ws/operatingRoomServices';
-  // 'http://$IP:$PORT/TesisOP/ws/operatingRoomServices';
+      // 'http://$IP:$PORT/operatingRoomRs/ws/operatingRoomServices';
+      'http://$IP:$PORT/TesisOP/ws/operatingRoomServices';
 
   static const headers = {'Content-Type': 'application/json'};
 

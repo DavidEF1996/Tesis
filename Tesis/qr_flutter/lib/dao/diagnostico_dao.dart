@@ -9,8 +9,7 @@ class DiagnosticoDao {
   static const int PORT = 8080;
   static const String servicio_filtro = "/listaFiltro";
   static const String servicio_listar_todo = "/listaDgn";
-  static const String URL =
-      'http://$IP:$PORT/operatingRoomRs/ws/operatingRoomServices';
+  static const String URL = 'http://$IP:$PORT/TesisOP/ws/operatingRoomServices';
 
   static const headers = {'Content-Type': 'application/json'};
 

@@ -18,8 +18,8 @@ class DoctorDao {
   static const String servicio_listarNombres = "/nombresDoctores";
 
   static const String URL =
-      'http://$IP:$PORT/operatingRoomRs/ws/operatingRoomServices';
-  //'http://$IP:$PORT/TesisOP/ws/operatingRoomServices';
+      //'http://$IP:$PORT/operatingRoomRs/ws/operatingRoomServices';
+      'http://$IP:$PORT/TesisOP/ws/operatingRoomServices';
 
   static const headers = {'Content-Type': 'application/json'};
   static Doctor d = Doctor();

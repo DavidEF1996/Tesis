@@ -11,8 +11,7 @@ class UsuarioLogueado {
   Text UserLoguinLandsCape() =>
       Text(_preferences.nombres, style: TextStyle(fontSize: 18));
 
-
-       Text UserLoguinCabeceraPortrait() => Text("Usuario: ",
+  Text UserLoguinCabeceraPortrait() => Text("Usuario: ",
       style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14));
   Text UserLoguinPortrait() =>
       Text(_preferences.nombres, style: TextStyle(fontSize: 14));
@@ -37,25 +36,15 @@ class UsuarioLogueado {
 
   FloatingActionButton botonRegresar(BuildContext context) {
     return FloatingActionButton.extended(
-          icon: Icon(Icons.arrow_left),
+      icon: Icon(Icons.arrow_left),
       label: Text(
-        'Salir',
+        'Regresar',
       ),
-  
       onPressed: () {
-        SystemChrome.setPreferredOrientations([
-          DeviceOrientation.landscapeLeft,
-          DeviceOrientation.landscapeRight,
-          DeviceOrientation.portraitUp,
-          DeviceOrientation.portraitDown,
-        ]);
         // PersonaDAO.eliminarPersona(widget.persona.getID);
         final _preferences = new Preferences();
         _preferences.id = "";
-        final route = MaterialPageRoute(builder: (context) {
-          return Botones();
-        });
-        Navigator.pushReplacement(context, route);
+        Navigator.of(context).pushNamed('/botones');
       },
     );
   }

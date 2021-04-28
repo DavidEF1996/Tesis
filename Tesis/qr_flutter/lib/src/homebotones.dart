@@ -1,10 +1,13 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:qr_flutter/preferences/preferences.dart';
-import 'package:qr_flutter/services/user_services.dart';
 import 'package:qr_flutter/utils/responsive.dart';
 import 'package:qr_flutter/validations/usuarioLogueado.dart';
 
 import 'package:qr_flutter/vistas/vistaCelularHomeBotones.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Botones extends StatefulWidget {
   //final String nombre;
@@ -15,7 +18,7 @@ class Botones extends StatefulWidget {
 }
 
 class _BotonesState extends State<Botones> {
-  UserService user = UserService();
+  // UserService user = UserService();
 
   UsuarioLogueado usuariologueado = UsuarioLogueado();
 
@@ -23,14 +26,25 @@ class _BotonesState extends State<Botones> {
 
   Vista_celular vistaCelular = Vista_celular();
   String usuario;
+  bool isLoaded = false;
   @override
   void initState() {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     super.initState();
+    setState(() {
+      isLoaded = true;
+    });
+
+    setState(() {
+      isLoaded = false;
+    });
     //nombre = (widget.nombre)
     final _preferences = new Preferences();
-    print("-------");
-    print(_preferences.id);
-    print(_preferences.nombres);
   }
 
   @override
@@ -41,34 +55,40 @@ class _BotonesState extends State<Botones> {
       appBar: new AppBar(
         title: Container(
           alignment: Alignment.bottomLeft,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                "Bienvenido    ",
-                style: TextStyle(fontSize: 17),
-              ),
-              Container(
-                child: Row(
-                  children: [
-                    usuariologueado.UserLoguinCabeceraPortrait(),
-                    usuariologueado.UserLoguinPortrait(),
-                  ],
+          child: SafeArea(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Bienvenido    ",
+                  style: TextStyle(fontSize: 17),
                 ),
-              ),
-              Text("  "),
-              usuariologueado.botonSalir(context),
-            ],
+                Container(
+                  child: Row(
+                    children: [
+                      usuariologueado.UserLoguinCabeceraPortrait(),
+                      usuariologueado.UserLoguinPortrait(),
+                    ],
+                  ),
+                ),
+                Text("  "),
+                usuariologueado.botonSalir(context),
+              ],
+            ),
           ),
         ),
       ),
       body: OrientationBuilder(builder: (_, Orientation orientation) {
         if (orientation == Orientation.portrait) {
-          return SingleChildScrollView(
-            child: vistaCelular.vistaPortraitCelular(responsive, context),
-          );
+          return isLoaded
+              ? CircularProgressIndicator()
+              : SingleChildScrollView(
+                  child: vistaCelular.vistaPortraitCelular(responsive, context),
+                );
         } else {
-          return vistaCelular.vistaLandScapeCelular(responsive, context);
+          return !isLoaded
+              ? CircularProgressIndicator()
+              : vistaCelular.vistaLandScapeCelular(responsive, context);
         }
       }),
     );

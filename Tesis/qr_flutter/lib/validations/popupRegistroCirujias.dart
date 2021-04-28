@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:qr_flutter/model/registro_cirujias_modelo.dart';
+import 'package:qr_flutter/dao/cirujiaDao.dart';
+import 'package:qr_flutter/model/cirujiasPrincipal.dart';
 import 'package:qr_flutter/src/homebotones.dart';
 import 'package:qr_flutter/src/login.dart';
 import 'package:flutter/cupertino.dart';
@@ -29,10 +32,10 @@ class popupRegistroCirujias {
   }
 
   Future<void> menuConfirmacionDatos(
-    RegistroCirujias r,
+    Cirujias r,
     BuildContext context,
   ) async {
-    print(r.nombres);
+    // print(r.doctores.);
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -52,7 +55,7 @@ class popupRegistroCirujias {
                       'Nombres: ',
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    Text(r.nombres), //cedula.text),
+                    Text(r.paciente), //cedula.text),
                   ],
                 ),
                 Row(
@@ -63,7 +66,7 @@ class popupRegistroCirujias {
                     ),
                     Text(r.fechaNacimiento
                         .toString()
-                        .substring(0, 4)), //nombres.text),
+                        .substring(0, 10)), //nombres.text),
                   ],
                 ),
                 Row(
@@ -72,7 +75,7 @@ class popupRegistroCirujias {
                       'Años: ',
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    Text(r.anos.toString()), //apellidos.text),
+                    Text(r.anios.toString()), //apellidos.text),
                   ],
                 ),
                 Row(
@@ -102,7 +105,8 @@ class popupRegistroCirujias {
                       'Nombre enfermedad: ',
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    Text(r.enfermedad), //.text),
+                    Text(r.diagnostico.nombreCuatroCaracteres
+                        .toString()), //.text),
                   ],
                 ),
                 Row(
@@ -111,9 +115,7 @@ class popupRegistroCirujias {
                       'Fecha del Procedimiento: ',
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    Text(r.fechaProcedimiento
-                        .toString()
-                        .substring(0, 7)), //.text),
+                    Text(r.fechaCirujia.toString().substring(0, 7)), //.text),
                   ],
                 ),
                 Row(
@@ -122,16 +124,7 @@ class popupRegistroCirujias {
                       'Horas requeridas: ',
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    Text(r.horasProcedimiento.toString()), //.text),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Text(
-                      'Minutos requeridos: ',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    Text(r.minutosProcedimiento.toString()), //.text),
+                    Text(r.duracion), //.text),
                   ],
                 ),
                 Row(
@@ -149,7 +142,7 @@ class popupRegistroCirujias {
                       'Exámenes de Sangre: ',
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    Text(r.examenesSangre), //.text),
+                    Text(r.examenSangre), //.text),
                   ],
                 ),
                 Row(
@@ -158,7 +151,7 @@ class popupRegistroCirujias {
                       'Radiografías de Torax: ',
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    Text(r.radiografiasTorax), //.text),
+                    Text(r.examenTorax.toString()), //.text),
                   ],
                 ),
                 Row(
@@ -167,7 +160,7 @@ class popupRegistroCirujias {
                       'Examen ECG: ',
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    Text(r.ecg), //.text),
+                    Text(r.crjEcj.toString()), //.text),
                   ],
                 ),
                 Row(
@@ -176,7 +169,7 @@ class popupRegistroCirujias {
                       'Cuantitativos Covid-19: ',
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    Text(r.cuantitativosCovid), //.text),
+                    Text(r.covid.toString()), //.text),
                   ],
                 ),
                 Row(
@@ -185,7 +178,7 @@ class popupRegistroCirujias {
                       'Nombre del Cirujano: ',
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    Text(r.nombreCirujano), //.text),
+                    Text(""), //.text),
                   ],
                 ),
                 Row(
@@ -194,7 +187,7 @@ class popupRegistroCirujias {
                       'Nombre del Ayudante: ',
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    Text(r.nombreAyudante), //.text),
+                    Text(""), //.text),
                   ],
                 ),
               ],
@@ -211,10 +204,10 @@ class popupRegistroCirujias {
             CupertinoDialogAction(
               child: Text('Confirmar'),
               onPressed: () async {
-                print("Llego hasta arriba del await");
-                print("Nombres: " + r.nombres);
+                print("Nombres: " + r.paciente);
                 // await RegistroCirujias.crearDoctor(jsonEncode(r.toJson()()));
                 // print("Usuario desde el popup: " + DoctorDao.d.user);
+                await CirujiaDAO.crearCirujia(jsonEncode(r.toJson()));
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(

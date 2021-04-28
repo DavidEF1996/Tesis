@@ -223,7 +223,9 @@ packages:
       name: json_annotation
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.0.1"
+
+    version: "3.1.1"
+
   matcher:
     dependency: transitive
     description:
@@ -244,7 +246,9 @@ packages:
       name: nested
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.0"
+
+    version: "0.0.4"
+
   numberpicker:
     dependency: "direct main"
     description:
@@ -410,7 +414,9 @@ packages:
       name: state_notifier
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.7.0"
+
+    version: "0.6.0"
+
   stream_channel:
     dependency: transitive
     description:

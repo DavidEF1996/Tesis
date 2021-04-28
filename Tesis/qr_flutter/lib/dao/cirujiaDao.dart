@@ -11,7 +11,9 @@ class CirujiaDAO {
   //static const String IP = '192.168.100.8'; //'192.168.18.4';'192.168.10.118'
 
   static const int PORT = 8080;
-  static const String servicio_crear = "/cirujias";
+  static const String servicio_listar = "/cirujias";
+  static const String servicio_crear = "/insertarCirujia";
+
   static List<Cirujias> recibir = [];
 
   static const String URL =
@@ -20,8 +22,18 @@ class CirujiaDAO {
 
   static const headers = {'Content-Type': 'application/json'};
 
+  static Future crearCirujia(json) async {
+    print(json);
+    http.Response response = await http.post(URL + servicio_crear,
+        body: json, headers: headers, encoding: Encoding.getByName('utf-8'));
+    print(response.statusCode);
+    print(response.body);
+
+    return response;
+  }
+
   Future listarCirujias() async {
-    final response = await http.get(URL + servicio_crear,
+    final response = await http.get(URL + servicio_listar,
         headers: {"Content-Type": "application/json"});
     List<dynamic> cirujia = jsonDecode(response.body);
     //  print('lista');
@@ -52,15 +64,22 @@ class CirujiaDAO {
   }
 
   Future<APIResponse<List<Cirujias>>> obtenerCirujias() {
-    return http.get(URL + servicio_crear,
+    return http.get(URL + servicio_listar,
         headers: {"Content-Type": "application/json"}).then((data) {
-      log('La respuesta obtenida es -----------: ' + data.body);
+      //log('La respuesta obtenida es -----------: ' + data.body);
+      print(data.statusCode);
+      print("ANTES DEL IF");
       if (data.statusCode == 200) {
         final jsonData = json.decode(data.body);
+
         final cirujiaL = <Cirujias>[];
         for (var item in jsonData) {
+          log(item.toString());
           cirujiaL.add(Cirujias.fromJson(item));
         }
+        print(data.body);
+
+        print(cirujiaL.length);
         recibir = cirujiaL;
         return APIResponse<List<Cirujias>>(data: cirujiaL);
       }
@@ -68,6 +87,8 @@ class CirujiaDAO {
     }).catchError(
         (_) => APIResponse<List<Cirujias>>(error: true, mensajeError: "Error"));
   }
+
+  
 
   String readTimestamp(int timestamp) {
     var now = new DateTime.now();

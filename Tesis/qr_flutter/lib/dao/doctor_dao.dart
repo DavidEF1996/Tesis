@@ -1,25 +1,28 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
+import 'package:qr_flutter/model/api_response.dart';
 import 'package:qr_flutter/model/doctor.dart';
 import 'package:qr_flutter/model/doctor_consultas.dart';
+import 'package:qr_flutter/model/modelo_doctor.dart';
 
 class DoctorDao {
+
   static const String IP = '192.168.100.4'; //'192.168.18.4';'192.168.10.118'
   //static const String IP = '192.168.100.8'; //'192.168.18.4';'192.168.10.118'
+
 
   static const int PORT = 8080;
   static const String servicio_crear = "/crear";
   static const String servicio_login = "/login";
   static const String servicio_change = "/changePass";
 
-  static const String servicio_listar_cirujias = "/cirujias";
-
   static const String servicio_listarNombres = "/nombresDoctores";
 
   static const String URL =
-      // 'http://$IP:$PORT/operatingRoomRs/ws/operatingRoomServices';
-      'http://$IP:$PORT/TesisOP/ws/operatingRoomServices';
+      //'http://$IP:$PORT/operatingRoomRs/ws/operatingRoomServices';
+  'http://$IP:$PORT/TesisOP/ws/operatingRoomServices';
 
   static const headers = {'Content-Type': 'application/json'};
   static Doctor d = Doctor();
@@ -61,7 +64,27 @@ class DoctorDao {
     }
   }
 
-  static Future<List<DoctorLista>> listarDoctores(String nombres) async {
+  Future<APIResponse<List<DoctorModelo>>> listarDoctores(String nombres) async {
+    return http.get(URL + servicio_listarNombres + "/$nombres",
+        headers: {"Content-Type": "application/json"}).then((data) {
+      //log('La respuesta obtenida es -----------: ' + data.body);
+      if (data.statusCode == 200) {
+        final jsonData = json.decode(data.body);
+        final doctorL = <DoctorModelo>[];
+        for (var item in jsonData) {
+          doctorL.add(DoctorModelo.fromJson(item));
+        }
+        return APIResponse<List<DoctorModelo>>(data: doctorL);
+      }
+      return APIResponse<List<DoctorModelo>>(
+          error: true, mensajeError: "Error");
+    }).catchError((_) =>
+        APIResponse<List<DoctorModelo>>(error: true, mensajeError: "Error"));
+  }
+
+  /* 
+  }*/
+  Future<List<DoctorLista>> getDoctores(String nombres) async {
     final response = await http.get(URL + servicio_listarNombres + '/$nombres');
     if (response.statusCode == 200) {
       print(response.body);

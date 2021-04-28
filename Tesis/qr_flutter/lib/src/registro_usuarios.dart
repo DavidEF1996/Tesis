@@ -250,7 +250,6 @@ class insertar extends State<insertar_usuarios> {
     d.especialidad = especialidad.text;
     d.user = credenciales[0]; //prueba
     d.password = encode(credenciales[1]);
-    print(encode(credenciales[1]) + "pasword registro");
     if (keyForm.currentState.validate()) {
       popRegUsuario.menuConfirmacionDatos(d, context);
     } else {

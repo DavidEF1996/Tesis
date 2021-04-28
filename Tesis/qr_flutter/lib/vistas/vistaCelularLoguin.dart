@@ -80,7 +80,7 @@ class Vista_Celular_Loguin {
               child: Text('Comenzar'),
               onPressed: () {
                 print("LLegue a comenzar");
-                cargarCirujia();
+
                 cargar(
                     context, nameController, passwordController, httpServicio);
               },
@@ -181,7 +181,6 @@ class Vista_Celular_Loguin {
                       color: Colors.blue,
                       child: Text('Comenzar'),
                       onPressed: () {
-                        cargarCirujia();
                         // print("................................");
                         // print(apiResponse.data[0].paciente);
                         cargar(context, nameController, passwordController,
@@ -221,12 +220,8 @@ class Vista_Celular_Loguin {
       TextEditingController nameController,
       TextEditingController passwordController,
       UserService httpServicio) async {
-    print("LLegue a cargar");
-    CirujiaDAO cirujia = new CirujiaDAO();
     final String usuario = nameController.text;
     final String contrasena = passwordController.text;
-    print(nameController.text);
-    print(passwordController.text);
 
     final result = await httpServicio.loginUsuario(
         usuario, utl.encode(passwordController.text));
@@ -264,6 +259,5 @@ class Vista_Celular_Loguin {
 
   cargarCirujia() async {
     apiResponse = await cirujia.obtenerCirujias();
-   
   }
 }

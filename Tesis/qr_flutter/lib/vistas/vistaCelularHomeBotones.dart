@@ -54,10 +54,11 @@ class Vista_celular {
                   ),
                   icon: Icon(Icons.crop_square),
                   onPressed: () {
-                    final route = MaterialPageRoute(builder: (context) {
+                    /*final route = MaterialPageRoute(builder: (context) {
                       return Horarios();
                     });
-                    Navigator.pushReplacement(context, route);
+                    Navigator.pushReplacement(context, route);*/
+                    _cargarQuirofanos(context);
                   },
                 ),
               ),
@@ -179,5 +180,9 @@ class Vista_celular {
 
   Future _submit(BuildContext context) async {
     Navigator.of(context).pushNamed('/tabla');
+  }
+
+  Future _cargarQuirofanos(BuildContext context) async {
+    Navigator.of(context).pushNamed('/horarios');
   }
 }

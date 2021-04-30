@@ -3,21 +3,17 @@ import 'dart:developer';
 
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:qr_flutter/connections/urls.dart';
 import 'package:qr_flutter/model/api_response.dart';
 import 'package:qr_flutter/model/cirujiasPrincipal.dart';
 
 class CirujiaDAO {
-  static const String IP = '192.168.6.40'; //'192.168.18.4';'192.168.10.118'
-
-  static const int PORT = 8080;
   static const String servicio_listar = "/cirujias";
   static const String servicio_crear = "/insertarCirujia";
 
   static List<Cirujias> recibir = [];
 
-  static const String URL =
-      // 'http://$IP:$PORT/operatingRoomRs/ws/operatingRoomServices';
-      'http://$IP:$PORT/TesisOP/ws/operatingRoomServices';
+  static const String URL = Conn.URL;
 
   static const headers = {'Content-Type': 'application/json'};
 

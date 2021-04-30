@@ -870,10 +870,17 @@ class RegisterPageState extends State<RegisterPage> {
     r.procedimiento = procedimientoMedico.text;
     //var date = DateTime.fromMillisecondsSinceEpoch( * 1000);
     r.fechaCirujia = fechaProcedimiento.millisecondsSinceEpoch;
-    if (_minutosFin != 0) {
-      _horasInicio += 1;
+
+    r.horaInicio = _horasInicio.toString();
+    var auxDuracion = int.parse(duracion.text);
+    if (_minutosInicio != 0) {
+      auxDuracion += 1;
     }
-    r.duracion = duracion.text;
+
+    r.duracion = auxDuracion.toString();
+    _horasFin = _horasInicio + auxDuracion;
+    r.horaFin = _horasFin.toString();
+
     r.necesidadSangre = eleccionNecesidadDeSangre;
     r.examenSangre = eleccionExamenesSangre;
     r.examenTorax = true;
@@ -883,10 +890,6 @@ class RegisterPageState extends State<RegisterPage> {
     r.observaciones = observaciones.text;
     r.materiales = equipoMaterial.text;
     r.edadPaciente = age;
-    r.horaInicio = _horasInicio.toString();
-    var auxDuracion = int.parse(duracion.text);
-    _horasFin = _horasInicio + auxDuracion;
-    r.horaFin = _horasFin.toString();
     if (keyForm.currentState.validate()) {
       if (keyForm.currentState.validate()) {
         if (age > 0) {

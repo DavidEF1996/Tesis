@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(primarySwatch: Colors.blue),
-        home: (_preferences.id == "") ? Botones() : Botones(),
+        home: (_preferences.id == "") ? LoginPage() : Botones(),
         routes: builAppRoutes());
   }
 }

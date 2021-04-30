@@ -3,28 +3,23 @@ import 'dart:developer';
 
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:qr_flutter/connections/urls.dart';
 import 'package:qr_flutter/model/api_response.dart';
 import 'package:qr_flutter/model/cirujiasPrincipal.dart';
 
 class CirujiaDAO {
-  static const String IP = '192.168.100.4'; //'192.168.18.4';'192.168.10.118'
-  //static const String IP = '192.168.100.8'; //'192.168.18.4';'192.168.10.118'
-
-  static const int PORT = 8080;
   static const String servicio_listar = "/cirujias";
   static const String servicio_crear = "/insertarCirujia";
 
   static List<Cirujias> recibir = [];
 
-  static const String URL =
-      // 'http://$IP:$PORT/operatingRoomRs/ws/operatingRoomServices';
-      'http://$IP:$PORT/TesisOP/ws/operatingRoomServices';
+  static const String URL = Conn.URL;
 
   static const headers = {'Content-Type': 'application/json'};
 
   static Future crearCirujia(json) async {
     print(json);
-    http.Response response = await http.post(URL + servicio_crear,
+    http.Response response = await http.post(Uri.parse(URL + servicio_crear),
         body: json, headers: headers, encoding: Encoding.getByName('utf-8'));
     print(response.statusCode);
     print(response.body);
@@ -33,7 +28,7 @@ class CirujiaDAO {
   }
 
   Future listarCirujias() async {
-    final response = await http.get(URL + servicio_listar,
+    final response = await http.get(Uri.parse(URL + servicio_listar),
         headers: {"Content-Type": "application/json"});
     List<dynamic> cirujia = jsonDecode(response.body);
     //  print('lista');
@@ -64,7 +59,7 @@ class CirujiaDAO {
   }
 
   Future<APIResponse<List<Cirujias>>> obtenerCirujias() {
-    return http.get(URL + servicio_listar,
+    return http.get(Uri.parse(URL + servicio_listar),
         headers: {"Content-Type": "application/json"}).then((data) {
       //log('La respuesta obtenida es -----------: ' + data.body);
       print(data.statusCode);
@@ -87,8 +82,6 @@ class CirujiaDAO {
     }).catchError(
         (_) => APIResponse<List<Cirujias>>(error: true, mensajeError: "Error"));
   }
-
-  
 
   String readTimestamp(int timestamp) {
     var now = new DateTime.now();

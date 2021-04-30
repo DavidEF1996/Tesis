@@ -1,20 +1,20 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:qr_flutter/connections/urls.dart';
 
 class UserService {
   static var nombreUsuariologueado = "";
   static var apellidoUsuarioLogueado = "";
   static var usuariologueado = "";
-  static const API =
-      "http://192.168.100.4:8080/TesisOP/ws/operatingRoomServices";
+  static const URL = Conn.URL;
 
-  static const headers = {'Content-Type': 'application/json'};
+  static const headers = {"Content-type": " application/json"};
 
   Future loginUsuario(String correo, String contrasena) async {
     //print(correo + ' ' + contrasena);
     final body = {"user": correo, "password": contrasena};
     var body2 = jsonEncode(body);
-    final respuesta = await http.post(API + "/login",
+    final respuesta = await http.post(Uri.parse(URL + "/login"),
         headers: headers, body: body2, encoding: Encoding.getByName('utf-8'));
 
     if (respuesta.statusCode == 200) {

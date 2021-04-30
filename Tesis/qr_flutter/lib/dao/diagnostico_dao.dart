@@ -1,36 +1,18 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:qr_flutter/connections/urls.dart';
 import 'package:qr_flutter/model/api_response.dart';
 import 'package:qr_flutter/model/diagnostico.dart';
 
 class DiagnosticoDao {
-
-  static const String IP = '192.168.100.4'; //'192.168.18.4';'192.168.10.41'
-
-  static const int PORT = 8080;
   static const String servicio_filtro = "/listaFiltro";
   static const String servicio_listar_todo = "/listaDgn";
-  static const String URL =
-      'http://$IP:$PORT/TesisOP/ws/operatingRoomServices';
+  static const String URL = Conn.URL;
 
   static const headers = {'Content-Type': 'application/json'};
 
-  /*static Future<List<Diagnostico>> getDiagnosticos(String codigo) async {
-    final response = await http.get(URL + servicio_filtro + '/$codigo');
-    if (response.statusCode == 200) {
-      return _listDiagnostico(response.body).toList();
-    } else if (response.statusCode == 404) {
-      print(response.statusCode);
-      return null;
-    } else {
-      throw Exception("Error del servidor!!");
-    }
-    /*print(response.body);
-    List<Diagnostico> lista = jsonDecode(response.body);
-    return lista;*/
-  }*/
   Future<APIResponse<List<Diagnostico>>> getDiagnosticos(codigo) async {
-    return http.get(URL + servicio_filtro + '/$codigo',
+    return http.get(Uri.parse(URL + servicio_filtro + '/$codigo'),
         headers: {"Content-Type": "application/json"}).then((data) {
       //log('La respuesta obtenida es -----------: ' + data.body);
       if (data.statusCode == 200) {
@@ -47,7 +29,7 @@ class DiagnosticoDao {
   }
 
   static Future<List<Diagnostico>> listarDiagnosticos() async {
-    final response = await http.get(URL + servicio_listar_todo);
+    final response = await http.get(Uri.parse(URL + servicio_listar_todo));
     if (response.statusCode == 200) {
       return _listDiagnostico(response.body);
     } else {

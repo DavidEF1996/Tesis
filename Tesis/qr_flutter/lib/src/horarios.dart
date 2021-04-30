@@ -272,7 +272,7 @@ class _Horarios extends State<Horarios> {
         valor.text == "Viernes") {
       return Text(
         valor.text,
-        style: TextStyle(fontSize: responsive.diagonalPorcentaje(2.65)),
+        style: TextStyle(fontSize: responsive.diagonalPorcentaje(2.5)),
       );
     } else {
       return Text(

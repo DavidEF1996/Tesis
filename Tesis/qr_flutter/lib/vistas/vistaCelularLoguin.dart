@@ -20,93 +20,105 @@ class Vista_Celular_Loguin {
       BuildContext context,
       TextEditingController nameController,
       TextEditingController passwordController,
-      UserService httpServicio) {
+      UserService httpServicio,
+      Responsive responsive) {
     print("LLegue a portrait");
     return Container(
-        child: ListView(
-      children: <Widget>[
-        Image(
-          image: AssetImage('assets/logoOperation.PNG'),
-        ),
-        Container(
-            alignment: Alignment.center,
-            padding: EdgeInsets.all(10),
-            child: Text(
-              'Bienvenido',
-              style: TextStyle(
-                  color: Colors.blue,
-                  fontWeight: FontWeight.w500,
-                  fontSize: 30),
-            )),
-        Container(
-          padding: EdgeInsets.all(10),
-          child: TextField(
-            controller: nameController,
-            decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: "Usuario",
-            ),
+      width: MediaQuery.of(context).size.width,
+      child: Column(
+        children: [
+          Image(
+            height: responsive.diagonalPorcentaje(30),
+            image: AssetImage('assets/logoOperation.PNG'),
           ),
-        ),
-        Container(
-          padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
-          child: TextField(
-            obscureText: true,
-            controller: passwordController,
-            decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: "Contraseña",
-            ),
-          ),
-        ),
-        FlatButton(
-          onPressed: () {
-            final route = MaterialPageRoute(builder: (context) {
-              //return CambioContrasena();
-
-              //return CambioContrasena();
-            });
-            Navigator.push(context, route);
-          },
-          textColor: Colors.blue,
-          child: Text('Olvido su contraseña'),
-        ),
-        Container(
-            height: 50,
-            padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-            child: RaisedButton(
-              textColor: Colors.white,
-              color: Colors.blue,
-              child: Text('Comenzar'),
-              onPressed: () {
-                print("LLegue a comenzar");
-
-                cargar(
-                    context, nameController, passwordController, httpServicio);
-              },
-            )),
-        Container(
-            child: Row(
-          children: <Widget>[
-            Text('¿No tiene una cuenta?'),
-            FlatButton(
-              textColor: Colors.blue,
+          Container(
+              alignment: Alignment.center,
+              padding: EdgeInsets.all(10),
               child: Text(
-                'Crear cuenta',
-                style: TextStyle(fontSize: 20),
+                'Bienvenido',
+                style: TextStyle(
+                    color: Colors.blue,
+                    fontWeight: FontWeight.w500,
+                    fontSize: responsive.diagonalPorcentaje(5)),
+              )),
+          Container(
+            padding: EdgeInsets.all(10),
+            child: TextField(
+              controller: nameController,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: "Usuario",
               ),
-              onPressed: () {
-                final route = MaterialPageRoute(builder: (context) {
-                  return insertar_usuarios();
-                });
-                Navigator.push(context, route);
-              },
-            )
-          ],
-          mainAxisAlignment: MainAxisAlignment.center,
-        ))
-      ],
-    ));
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+            child: TextField(
+              obscureText: true,
+              controller: passwordController,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: "Contraseña",
+              ),
+            ),
+          ),
+          FlatButton(
+            onPressed: () {
+              final route = MaterialPageRoute(builder: (context) {
+                //return CambioContrasena();
+
+                //return CambioContrasena();
+              });
+              Navigator.push(context, route);
+            },
+            textColor: Colors.blue,
+            child: Text('Olvido su contraseña'),
+          ),
+          Container(
+              height: 50,
+              padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+              child: RaisedButton(
+                textColor: Colors.white,
+                color: Colors.blue,
+                child: Text(
+                  'Comenzar',
+                  style:
+                      TextStyle(fontSize: responsive.diagonalPorcentaje(2.75)),
+                ),
+                onPressed: () {
+                  print("LLegue a comenzar");
+
+                  cargar(context, nameController, passwordController,
+                      httpServicio);
+                },
+              )),
+          Container(
+              child: Row(
+            children: <Widget>[
+              Text(
+                '¿No tiene una cuenta?',
+                style: TextStyle(fontSize: responsive.diagonalPorcentaje(2.5)),
+              ),
+              FlatButton(
+                textColor: Colors.blue,
+                child: Text(
+                  'Crear cuenta',
+                  style:
+                      TextStyle(fontSize: responsive.diagonalPorcentaje(2.5)),
+                ),
+                onPressed: () {
+                  final route = MaterialPageRoute(builder: (context) {
+                    return insertar_usuarios();
+                  });
+                  Navigator.push(context, route);
+                },
+              )
+            ],
+            mainAxisAlignment: MainAxisAlignment.center,
+          ))
+        ],
+      ),
+    );
   }
 
   Row vistaLandScapeCelular(
@@ -119,6 +131,7 @@ class Vista_Celular_Loguin {
       children: [
         Expanded(
             child: Container(
+          width: MediaQuery.of(context).size.width,
           child: Image(
             width: responsive.diagonalPorcentaje(50),
             height: responsive.diagonalPorcentaje(75),
@@ -128,17 +141,18 @@ class Vista_Celular_Loguin {
         Expanded(
             child: SingleChildScrollView(
           child: Container(
+            width: MediaQuery.of(context).size.width,
             child: Column(
               children: [
                 Container(
                     alignment: Alignment.center,
-                    padding: EdgeInsets.all(20),
+                    padding: EdgeInsets.all(1),
                     child: Text(
                       'Bienvenido',
                       style: TextStyle(
                           color: Colors.blue,
                           fontWeight: FontWeight.w500,
-                          fontSize: 30),
+                          fontSize: responsive.diagonalPorcentaje(5.5)),
                     )),
                 Container(
                   padding: EdgeInsets.all(10),
@@ -179,7 +193,9 @@ class Vista_Celular_Loguin {
                     child: RaisedButton(
                       textColor: Colors.white,
                       color: Colors.blue,
-                      child: Text('Comenzar'),
+                      child: Text('Comenzar',
+                          style: TextStyle(
+                              fontSize: responsive.diagonalPorcentaje(2.75))),
                       onPressed: () {
                         // print("................................");
                         // print(apiResponse.data[0].paciente);
@@ -190,12 +206,17 @@ class Vista_Celular_Loguin {
                 Container(
                     child: Row(
                   children: <Widget>[
-                    Text('¿No tiene una cuenta?'),
+                    Text(
+                      '¿No tiene una cuenta?',
+                      style: TextStyle(
+                          fontSize: responsive.diagonalPorcentaje(2.2)),
+                    ),
                     FlatButton(
                       textColor: Colors.blue,
                       child: Text(
                         'Crear cuenta',
-                        style: TextStyle(fontSize: 20),
+                        style: TextStyle(
+                            fontSize: responsive.diagonalPorcentaje(2.2)),
                       ),
                       onPressed: () {
                         final route = MaterialPageRoute(builder: (context) {

@@ -62,6 +62,7 @@ class RegisterPageState extends State<RegisterPage> {
   List<Doctore> doctores = [];
   DiagnosticoCp diagnosticoCp = new DiagnosticoCp();
   MainAxisAlignment portr;
+  
 
   @override
   void initState() {
@@ -142,8 +143,10 @@ class RegisterPageState extends State<RegisterPage> {
           ),
         ),
         formItemsDesign(
+          
             Icons.picture_in_picture_alt_outlined,
             Container(
+              
               child: Column(
                 children: [
                   Wrap(

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:qr_flutter/preferences/preferences.dart';
 import 'package:qr_flutter/utils/responsive.dart';
+import 'package:qr_flutter/validations/cabecera.dart';
 import 'package:qr_flutter/validations/usuarioLogueado.dart';
 
 import 'package:qr_flutter/vistas/vistaCelularHomeBotones.dart';
@@ -55,26 +56,13 @@ class _BotonesState extends State<Botones> {
       appBar: new AppBar(
         title: Container(
           alignment: Alignment.bottomLeft,
-          child: SafeArea(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "Bienvenido    ",
-                  style: TextStyle(fontSize: 17),
-                ),
-                Container(
-                  child: Row(
-                    children: [
-                      usuariologueado.UserLoguinCabeceraPortrait(),
-                      usuariologueado.UserLoguinPortrait(),
-                    ],
-                  ),
-                ),
-                Text("  "),
-                usuariologueado.botonSalir(context),
-              ],
-            ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Cabecera(),
+              Text("  "),
+              usuariologueado.botonSalir(context),
+            ],
           ),
         ),
       ),
@@ -86,7 +74,7 @@ class _BotonesState extends State<Botones> {
                   child: vistaCelular.vistaPortraitCelular(responsive, context),
                 );
         } else {
-          return !isLoaded
+          return isLoaded
               ? CircularProgressIndicator()
               : vistaCelular.vistaLandScapeCelular(responsive, context);
         }

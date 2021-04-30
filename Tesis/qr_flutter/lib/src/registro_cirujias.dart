@@ -10,6 +10,7 @@ import 'package:qr_flutter/model/diagnostico.dart';
 import 'package:qr_flutter/model/modelo_doctor.dart';
 import 'package:qr_flutter/src/homebotones.dart';
 import 'package:qr_flutter/utils/responsive.dart';
+import 'package:qr_flutter/validations/cabecera.dart';
 import 'package:qr_flutter/validations/popupRegistroCirujias.dart';
 import 'package:qr_flutter/validations/usuarioLogueado.dart';
 import 'package:qr_flutter/validations/validacionesRegistro.dart';
@@ -60,6 +61,7 @@ class RegisterPageState extends State<RegisterPage> {
   String nombres_parametro;
   List<Doctore> doctores = [];
   DiagnosticoCp diagnosticoCp = new DiagnosticoCp();
+  MainAxisAlignment portr;
 
   @override
   void initState() {
@@ -83,23 +85,28 @@ class RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
+    final data = MediaQuery.of(context);
     //return MaterialApp(
     //home: new Scaffold(
+    if (data.orientation == Orientation.portrait) {
+      portr = MainAxisAlignment.spaceEvenly;
+    } else {
+      portr = MainAxisAlignment.center;
+    }
     return Scaffold(
       appBar: new AppBar(
         title: Container(
           alignment: Alignment.bottomLeft,
-          child: Row(
-            children: [
-              Text(
-                "Bienvenido    ",
-                style: TextStyle(fontSize: 17),
-              ),
-              usuariologueado.UserLoguinCabeceraPortrait(),
-              usuariologueado.UserLoguinPortrait(),
-              Text("  "),
-              usuariologueado.botonSalir(context),
-            ],
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            child: Row(
+              mainAxisAlignment: portr,
+              children: [
+                Cabecera(),
+                SizedBox(width: 5),
+                usuariologueado.botonSalir(context),
+              ],
+            ),
           ),
         ),
       ),
@@ -374,58 +381,68 @@ class RegisterPageState extends State<RegisterPage> {
               child: Column(
                 children: [
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "Necesidad de Sangre:    ",
-                        style: TextStyle(fontSize: 14, color: Colors.black),
+                        "Necesidad de Sangre:",
+                        style: TextStyle(
+                            fontSize: responsive.diagonalPorcentaje(1.6),
+                            color: Colors.black),
                       ),
-                      necesidadSangre('si', 'SI'),
-                      necesidadSangre('no', 'NO'),
+                      necesidadSangre('si', 'SI', responsive),
+                      necesidadSangre('no', 'NO', responsive),
                     ],
                   ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "Exámenes de Sangre:     ",
-                        style: TextStyle(fontSize: 14, color: Colors.black),
+                        "Exámenes de Sangre:",
+                        style: TextStyle(
+                            fontSize: responsive.diagonalPorcentaje(1.6),
+                            color: Colors.black),
                       ),
-                      examenesSangre('si', 'SI'),
-                      examenesSangre('no', 'NO'),
+                      examenesSangre('si', 'SI', responsive),
+                      examenesSangre('no', 'NO', responsive),
                     ],
                   ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "Radiografías de Torax:  ",
-                        style: TextStyle(fontSize: 14, color: Colors.black),
+                        "Radiografías de Torax:",
+                        style: TextStyle(
+                            fontSize: responsive.diagonalPorcentaje(1.6),
+                            color: Colors.black),
                       ),
-                      radiografiasTorax('si', 'SI'),
-                      radiografiasTorax('no', 'NO'),
+                      radiografiasTorax('si', 'SI', responsive),
+                      radiografiasTorax('no', 'NO', responsive),
                     ],
                   ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "ECG: ",
-                        style: TextStyle(fontSize: 14, color: Colors.black),
+                        "ECG:                                ",
+                        style: TextStyle(
+                            fontSize: responsive.diagonalPorcentaje(1.6),
+                            color: Colors.black),
                       ),
-                      examenEcg('si', 'SI'),
-                      examenEcg('no', 'NO'),
+                      examenEcg('si', 'SI', responsive),
+                      examenEcg('no', 'NO', responsive),
                     ],
                   ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "Cuantitativos COVID-19: ",
-                        style: TextStyle(fontSize: 14, color: Colors.black),
+                        "Cuantitativos COVID-19:",
+                        style: TextStyle(
+                            fontSize: responsive.diagonalPorcentaje(1.55),
+                            color: Colors.black),
                       ),
-                      cuantitativosCovid('si', 'SI'),
-                      cuantitativosCovid('no', 'NO'),
+                      cuantitativosCovid('si', 'SI', responsive),
+                      cuantitativosCovid('no', 'NO', responsive),
                     ],
                   ),
                 ],
@@ -652,9 +669,10 @@ class RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  Container necesidadSangre(String value, String text) {
+  Container necesidadSangre(String value, String text, Responsive responsive) {
     return Container(
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Radio(
             value: value,
@@ -668,16 +686,17 @@ class RegisterPageState extends State<RegisterPage> {
           ),
           Text(
             text,
-            style: TextStyle(fontSize: 14),
+            style: TextStyle(fontSize: responsive.diagonalPorcentaje(1.4)),
           )
         ],
       ),
     );
   }
 
-  Container examenesSangre(String value, String text) {
+  Container examenesSangre(String value, String text, Responsive responsive) {
     return Container(
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Radio(
             value: value,
@@ -691,16 +710,18 @@ class RegisterPageState extends State<RegisterPage> {
           ),
           Text(
             text,
-            style: TextStyle(fontSize: 14),
+            style: TextStyle(fontSize: responsive.diagonalPorcentaje(1.4)),
           )
         ],
       ),
     );
   }
 
-  Container radiografiasTorax(String value, String text) {
+  Container radiografiasTorax(
+      String value, String text, Responsive responsive) {
     return Container(
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Radio(
             value: value,
@@ -715,16 +736,17 @@ class RegisterPageState extends State<RegisterPage> {
           ),
           Text(
             text,
-            style: TextStyle(fontSize: 14),
+            style: TextStyle(fontSize: responsive.diagonalPorcentaje(1.4)),
           )
         ],
       ),
     );
   }
 
-  Container examenEcg(String value, String text) {
+  Container examenEcg(String value, String text, Responsive responsive) {
     return Container(
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Radio(
             value: value,
@@ -739,16 +761,18 @@ class RegisterPageState extends State<RegisterPage> {
           ),
           Text(
             text,
-            style: TextStyle(fontSize: 14),
+            style: TextStyle(fontSize: responsive.diagonalPorcentaje(1.4)),
           )
         ],
       ),
     );
   }
 
-  Container cuantitativosCovid(String value, String text) {
+  Container cuantitativosCovid(
+      String value, String text, Responsive responsive) {
     return Container(
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Radio(
             value: value,
@@ -763,7 +787,7 @@ class RegisterPageState extends State<RegisterPage> {
           ),
           Text(
             text,
-            style: TextStyle(fontSize: 14),
+            style: TextStyle(fontSize: responsive.diagonalPorcentaje(1.4)),
           )
         ],
       ),

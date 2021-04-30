@@ -6,12 +6,12 @@ import 'package:qr_flutter/src/login.dart';
 import 'package:qr_flutter/src/registro_cirujias.dart';
 
 import 'package:qr_flutter/utils/responsive.dart';
+import 'package:qr_flutter/validations/cabecera.dart';
 import 'dart:core';
 import 'package:qr_flutter/validations/usuarioLogueado.dart';
 import 'package:intl/intl.dart';
 
 class Horarios extends StatefulWidget {
-  
   final int nombreQuirofano;
   const Horarios({Key key, this.nombreQuirofano = 1}) : super(key: key);
 
@@ -22,7 +22,6 @@ class Horarios extends StatefulWidget {
 bool isloaded = false;
 
 class _Horarios extends State<Horarios> {
-  
   UsuarioLogueado usuariologueado = UsuarioLogueado();
   Color colorBase;
   Color colorBotonQuirofano1;
@@ -77,20 +76,13 @@ class _Horarios extends State<Horarios> {
         appBar: new AppBar(
           title: Container(
             padding: EdgeInsets.all(responsive.diagonalPorcentaje(10)),
-            child: SafeArea(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "Bienvenido    ",
-                    style: TextStyle(fontSize: 22),
-                  ),
-                  usuariologueado.UserLoguinCabeceraLandsCape(),
-                  usuariologueado.UserLoguinLandsCape(),
-                  Text("   "),
-                  usuariologueado.botonRegresar(context),
-                ],
-              ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Cabecera(),
+                Text(" "),
+                usuariologueado.botonRegresar(context),
+              ],
             ),
           ),
         ),
@@ -202,10 +194,12 @@ class _Horarios extends State<Horarios> {
                                     Text(
                                       fechaConNegrita.text,
                                       style: TextStyle(
-                                          fontSize: 13,
+                                          fontSize: responsive
+                                              .diagonalPorcentaje(1.2),
                                           fontWeight: FontWeight.bold),
                                     ),
-                                    textosConFecha(index, valorFecha),
+                                    textosConFecha(
+                                        index, valorFecha, responsive),
                                   ],
                                 ),
                                 Row(
@@ -213,10 +207,11 @@ class _Horarios extends State<Horarios> {
                                     Text(
                                       horaConNegrita.text,
                                       style: TextStyle(
-                                          fontSize: 13,
+                                          fontSize: responsive
+                                              .diagonalPorcentaje(1.2),
                                           fontWeight: FontWeight.bold),
                                     ),
-                                    textoConHora(index, valorHora),
+                                    textoConHora(index, valorHora, responsive),
                                   ],
                                 ),
                                 Row(
@@ -225,11 +220,12 @@ class _Horarios extends State<Horarios> {
                                     Text(
                                       nombreDoctorConNegrita.text,
                                       style: TextStyle(
-                                          fontSize: 12,
+                                          fontSize: responsive
+                                              .diagonalPorcentaje(1.2),
                                           fontWeight: FontWeight.bold),
                                     ),
                                     textoConNombreDoctor(
-                                        index, valorNombreDoctor),
+                                        index, valorNombreDoctor, responsive),
                                   ],
                                 ),
                               ],
@@ -246,6 +242,7 @@ class _Horarios extends State<Horarios> {
                                 print("Libre");
 
                                 Navigator.of(context).pushNamed('/tabla');
+                                break;
                               }
                             }
                           },
@@ -266,7 +263,8 @@ class _Horarios extends State<Horarios> {
     );
   }
 
-  Text textosConFecha(int index, TextEditingController valor) {
+  Text textosConFecha(
+      int index, TextEditingController valor, Responsive responsive) {
     if (valor.text == "Lunes" ||
         valor.text == "Martes" ||
         valor.text == "Miercoles" ||
@@ -274,27 +272,29 @@ class _Horarios extends State<Horarios> {
         valor.text == "Viernes") {
       return Text(
         valor.text,
-        style: TextStyle(fontSize: 17),
+        style: TextStyle(fontSize: responsive.diagonalPorcentaje(2.8)),
       );
     } else {
       return Text(
         valor.text,
-        style: TextStyle(fontSize: 12),
+        style: TextStyle(fontSize: responsive.diagonalPorcentaje(1.2)),
       );
     }
   }
 
-  Text textoConHora(int index, TextEditingController valor) {
+  Text textoConHora(
+      int index, TextEditingController valor, Responsive responsive) {
     return Text(
       valor.text,
-      style: TextStyle(fontSize: 12),
+      style: TextStyle(fontSize: responsive.diagonalPorcentaje(1.2)),
     );
   }
 
-  Text textoConNombreDoctor(int index, TextEditingController valor) {
+  Text textoConNombreDoctor(
+      int index, TextEditingController valor, Responsive responsive) {
     return Text(
       valor.text,
-      style: TextStyle(fontSize: 12),
+      style: TextStyle(fontSize: responsive.diagonalPorcentaje(1.2)),
     );
   }
 
@@ -488,7 +488,7 @@ class _Horarios extends State<Horarios> {
                     CirujiaDAO.recibir[0].doctores[0].nombres;
                 nombreDoctorConNegrita.text = "Dr: ";
 
-                //indices.add(index);
+                indices.add(index);
               } else {
                 valorNombreDoctor.text = "";
                 nombreDoctorConNegrita.text = "";

@@ -484,11 +484,10 @@ class _Horarios extends State<Horarios> {
               }
 
               if (colorBase == Colors.red) {
+                indices.add(index);
                 valorNombreDoctor.text =
                     CirujiaDAO.recibir[0].doctores[0].nombres;
                 nombreDoctorConNegrita.text = "Dr: ";
-
-                indices.add(index);
               } else {
                 valorNombreDoctor.text = "";
                 nombreDoctorConNegrita.text = "";

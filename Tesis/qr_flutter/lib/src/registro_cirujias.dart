@@ -62,7 +62,6 @@ class RegisterPageState extends State<RegisterPage> {
   List<Doctore> doctores = [];
   DiagnosticoCp diagnosticoCp = new DiagnosticoCp();
   MainAxisAlignment portr;
-  
 
   @override
   void initState() {
@@ -143,10 +142,8 @@ class RegisterPageState extends State<RegisterPage> {
           ),
         ),
         formItemsDesign(
-          
             Icons.picture_in_picture_alt_outlined,
             Container(
-              
               child: Column(
                 children: [
                   Wrap(
@@ -247,39 +244,45 @@ class RegisterPageState extends State<RegisterPage> {
             )),
         formItemsDesign(
             Icons.dry_outlined,
-            FindDropdown(
-              label: "Escriba el código",
-              onFind: (String filter) async {
-                _apiResponseDgn = await dgndao.getDiagnosticos(filter);
-                List<String> datos = [];
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                child: FindDropdown(
+                  label: "Escriba el código",
+                  onFind: (String filter) async {
+                    _apiResponseDgn = await dgndao.getDiagnosticos(filter);
+                    List<String> datos = [];
 
-                int valor;
-                if (_apiResponseDgn.data == null) {
-                  valor = 0;
-                } else {
-                  valor = _apiResponseDgn.data.length;
-                }
+                    int valor;
+                    if (_apiResponseDgn.data == null) {
+                      valor = 0;
+                    } else {
+                      valor = _apiResponseDgn.data.length;
+                    }
 
-                for (var i = 0; i < valor; i++) {
-                  String doctor;
+                    for (var i = 0; i < valor; i++) {
+                      String doctor;
 
-                  doctor = utf8.decode(
-                      latin1.encode(
-                          _apiResponseDgn.data.elementAt(i).codigoCuatro +
-                              " " +
-                              _apiResponseDgn.data
-                                  .elementAt(i)
-                                  .nombreCuatroCaracteres),
-                      allowMalformed: true);
+                      doctor = utf8.decode(
+                          latin1.encode(
+                              _apiResponseDgn.data.elementAt(i).codigoCuatro +
+                                  " " +
+                                  _apiResponseDgn.data
+                                      .elementAt(i)
+                                      .nombreCuatroCaracteres),
+                          allowMalformed: true);
 
-                  datos.add(doctor);
-                }
-                return datos;
-              },
-              onChanged: (data) {
-                diagnosticoCp.nombreCuatroCaracteres = data.toString();
-                setState(() => enfermedad.text = data);
-              },
+                      datos.add(doctor);
+                    }
+                    return datos;
+                  },
+                  onChanged: (data) {
+                    diagnosticoCp.nombreCuatroCaracteres = data.toString();
+                    setState(() => enfermedad.text = data);
+                  },
+                ),
+              ),
             )),
         formItemsDesign(
             Icons.coronavirus,

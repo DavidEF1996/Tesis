@@ -14,7 +14,6 @@ class DiagnosticoDao {
   Future<APIResponse<List<Diagnostico>>> getDiagnosticos(codigo) async {
     return http.get(Uri.parse(URL + servicio_filtro + '/$codigo'),
         headers: {"Content-Type": "application/json"}).then((data) {
-      //log('La respuesta obtenida es -----------: ' + data.body);
       if (data.statusCode == 200) {
         final jsonData = json.decode(data.body);
         final doctorL = <Diagnostico>[];

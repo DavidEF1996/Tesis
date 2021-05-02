@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:qr_flutter/preferences/preferences.dart';
 import 'package:qr_flutter/src/homebotones.dart';
 import 'package:qr_flutter/src/login.dart';
+import 'package:qr_flutter/utils/fechas_tabla.dart';
 
 class UsuarioLogueado {
   final _preferences = new Preferences();
@@ -26,6 +27,7 @@ class UsuarioLogueado {
         // PersonaDAO.eliminarPersona(widget.persona.getID);
         final _preferences = new Preferences();
         _preferences.id = "";
+
         final route = MaterialPageRoute(builder: (context) {
           return LoginPage();
         });

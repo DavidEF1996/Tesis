@@ -114,7 +114,6 @@ class popupRegistroUsuario {
               child: Text('Confirmar'),
               onPressed: () async {
                 String decodePassword = d.password;
-                print(d.password + "contrase;a");
                 await DoctorDao.crearDoctor(jsonEncode(d.toJson()));
                 final String outputUser = utf8.decode(
                     latin1.encode(DoctorDao.d.user),

@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:qr_flutter/dao/cirujiaDao.dart';
-import 'package:qr_flutter/model/registro_cirujias_modelo.dart';
-import 'package:qr_flutter/src/login.dart';
-import 'package:qr_flutter/src/registro_cirujias.dart';
+import 'package:qr_flutter/utils/fechas_tabla.dart' as FECHA;
 
 import 'package:qr_flutter/utils/responsive.dart';
 import 'package:qr_flutter/validations/cabecera.dart';
@@ -48,7 +46,10 @@ class _Horarios extends State<Horarios> {
     super.initState();
     setState(() {
       isloading = true;
-      cirujiaDao.obtenerCirujias();
+      DateTime fechaActual = DateTime.now();
+      List<DateTime> fechas = FECHA.cargarFechasTabla(fechaActual, 0);
+
+      cirujiaDao.obtenerCirujias(fechas[4], fechas[0]);
 
       Future.delayed(const Duration(milliseconds: 3000), () {
         print('Hello, world');
@@ -450,6 +451,7 @@ class _Horarios extends State<Horarios> {
                 valorNombreDoctor.text =
                     CirujiaDAO.recibir[0].doctores[0].nombres;
                 nombreDoctorConNegrita.text = "Dr: ";
+                indices.add(index);
               } else {
                 valorNombreDoctor.text = "";
                 nombreDoctorConNegrita.text = "";

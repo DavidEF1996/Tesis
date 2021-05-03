@@ -9,6 +9,7 @@ import 'package:qr_flutter/services/user_services.dart';
 import 'package:qr_flutter/src/cambioContrasena.dart';
 import 'package:qr_flutter/src/homebotones.dart';
 import 'package:qr_flutter/src/registro_usuarios.dart';
+import 'package:qr_flutter/utils/fechas_tabla.dart';
 import 'package:qr_flutter/utils/responsive.dart';
 import 'package:qr_flutter/utils/utils.dart';
 import 'package:qr_flutter/utils/utils.dart' as utl;
@@ -20,9 +21,11 @@ class Vista_Celular_Loguin {
       BuildContext context,
       TextEditingController nameController,
       TextEditingController passwordController,
+
       UserService httpServicio,
       Responsive responsive) {
     print("LLegue a portrait");
+
     return Container(
       width: MediaQuery.of(context).size.width,
       child: Column(
@@ -247,28 +250,44 @@ class Vista_Celular_Loguin {
     final result = await httpServicio.loginUsuario(
         usuario, utl.encode(passwordController.text));
 
-    print(result);
+    //print(result);
 
     print((result['acceso']));
-    if (result['acceso']) {
-      if (result['bandera'] == 0) {
-        final route = MaterialPageRoute(builder: (context) {
-          return CambioContrasena(result['idDoctor']);
-        });
-        Navigator.push(context, route);
-      } else {
-        //print(result['idDoctor']);
-
-        final _preferences = new Preferences();
-        _preferences.id = result['idDoctor'];
-        _preferences.nombres = UserService.usuariologueado;
-        final route = MaterialPageRoute(builder: (context) {
-          return Botones();
-        });
-        Navigator.push(context, route);
-      }
+    if (result == null) {
+      mostrarAlerta(context, "Error para acceder al servidor!");
     } else {
-      mostrarAlerta(context, "Error de usuario");
+      if (result['acceso']) {
+        if (result['bandera'] == 0) {
+          final route = MaterialPageRoute(builder: (context) {
+            return CambioContrasena(result['idDoctor']);
+          });
+          Navigator.push(context, route);
+        } else {
+          final _preferences = new Preferences();
+          _preferences.id = result['idDoctor'];
+          _preferences.nombres = UserService.usuariologueado;
+
+          List<dynamic> datos = result['cirujias'];
+
+          List<Cirujias> _cirujias = [];
+          for (var i = 0; i < datos.length; i++) {
+            Cirujias cirujia = new Cirujias();
+            cirujia.idCirujia = datos.elementAt(i)['idCirujia'];
+            cirujia.fechaCirujia = datos.elementAt(i)['fechaCirujia'];
+            cirujia.paciente = datos.elementAt(i)['paciente'];
+            print(cirujia.toString());
+            print("==================");
+            _cirujias.add(cirujia);
+          }
+          print(_cirujias.length);
+          final route = MaterialPageRoute(builder: (context) {
+            return Botones();
+          });
+          Navigator.push(context, route);
+        }
+      } else {
+        mostrarAlerta(context, "Error de usuario");
+      }
     }
 
     //
@@ -278,7 +297,10 @@ class Vista_Celular_Loguin {
     //print(usu.user);
   }
 
-  cargarCirujia() async {
-    apiResponse = await cirujia.obtenerCirujias();
-  }
+  /*cargarCirujia() async {
+    DateTime fechaActual = DateTime.now();
+    List<DateTime> fechas = cargarFechasTabla(fechaActual, 0);
+
+    apiResponse = await cirujia.obtenerCirujias(fechas[0], fechas[4]);
+  }*/
 }

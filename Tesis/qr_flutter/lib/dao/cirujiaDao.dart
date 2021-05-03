@@ -58,12 +58,12 @@ class CirujiaDAO {
     return cirujia;
   }
 
-  Future<APIResponse<List<Cirujias>>> obtenerCirujias() {
-    return http.get(Uri.parse(URL + servicio_listar),
+  Future<APIResponse<List<Cirujias>>> obtenerCirujias(
+      DateTime lunes, DateTime viernes) {
+    return http.get(Uri.parse(URL + servicio_listar + '/$lunes,$viernes'),
         headers: {"Content-Type": "application/json"}).then((data) {
       //log('La respuesta obtenida es -----------: ' + data.body);
       print(data.statusCode);
-      print("ANTES DEL IF");
       if (data.statusCode == 200) {
         final jsonData = json.decode(data.body);
 

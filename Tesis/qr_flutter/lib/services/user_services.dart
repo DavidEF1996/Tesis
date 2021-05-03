@@ -19,20 +19,20 @@ class UserService {
 
     if (respuesta.statusCode == 200) {
       final decodedata = json.decode(respuesta.body);
-      print(respuesta.body);
-      print(decodedata);
-      print(decodedata['nombres'] + "el nombre");
+      //print(respuesta.body);
+      //print(decodedata);
+      //print(decodedata['nombres'] + "el nombre");
       //Map<String, dynamic> user = jsonDecodeS(decodedata);
 
       nombreUsuariologueado = decodedata['nombres'];
       apellidoUsuarioLogueado = decodedata['apellidos'];
-      print(nombreUsuariologueado);
-      print(apellidoUsuarioLogueado);
+
       usuariologueado = nombreUsuariologueado.split(" ")[0] +
           " " +
           apellidoUsuarioLogueado.split(" ")[0];
       return decodedata;
     } else {
+      print(respuesta.statusCode);
       return null;
     }
   }

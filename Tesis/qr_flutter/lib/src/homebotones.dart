@@ -8,7 +8,6 @@ import 'package:qr_flutter/validations/cabecera.dart';
 import 'package:qr_flutter/validations/usuarioLogueado.dart';
 
 import 'package:qr_flutter/vistas/vistaCelularHomeBotones.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class Botones extends StatefulWidget {
   //final String nombre;

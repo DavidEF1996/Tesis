@@ -3,6 +3,7 @@ import 'package:qr_flutter/dao/cirujiaDao.dart';
 import 'package:qr_flutter/preferences/preferences.dart';
 import 'package:qr_flutter/src/horarios.dart';
 import 'package:qr_flutter/src/login.dart';
+import 'package:qr_flutter/utils/fechas_tabla.dart';
 import 'package:qr_flutter/utils/responsive.dart';
 
 class Vista_celular {
@@ -74,9 +75,10 @@ class Vista_celular {
                     style: TextStyle(fontSize: 20),
                   ),
                   icon: Icon(Icons.crop_square),
-                  onPressed: () {
+                  onPressed: () async {
                     final _preferences = new Preferences();
                     _preferences.id = "";
+
                     final route = MaterialPageRoute(builder: (context) {
                       return LoginPage();
                     });
@@ -140,7 +142,10 @@ class Vista_celular {
                     ),
                     icon: Icon(Icons.crop_square),
                     onPressed: () {
-                      cirujiaDao.obtenerCirujias();
+                      DateTime fechaActual = DateTime.now();
+                      List<DateTime> fechas = cargarFechasTabla(fechaActual, 0);
+
+                      cirujiaDao.obtenerCirujias(fechas[4], fechas[0]);
                       final route = MaterialPageRoute(builder: (context) {
                         return Horarios();
                       });
@@ -163,6 +168,7 @@ class Vista_celular {
                     onPressed: () {
                       final _preferences = new Preferences();
                       _preferences.id = "";
+
                       final route = MaterialPageRoute(builder: (context) {
                         return LoginPage();
                       });

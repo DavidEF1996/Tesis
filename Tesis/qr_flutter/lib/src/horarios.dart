@@ -273,7 +273,7 @@ class _Horarios extends State<Horarios> {
         valor.text == "Viernes") {
       return Text(
         valor.text,
-        style: TextStyle(fontSize: responsive.diagonalPorcentaje(2.8)),
+        style: TextStyle(fontSize: responsive.diagonalPorcentaje(2.5)),
       );
     } else {
       return Text(
@@ -299,20 +299,24 @@ class _Horarios extends State<Horarios> {
     );
   }
 
-  int cont1 = 0;
+  int cont1 = 1;
   String cargarFechasTabla(DateTime fechaActual, int index) {
+    //La fecha que entra es la actual
     DateTime fechaAuxiliar;
     int contauxi = 1;
 
     do {
       fechaAuxiliar = new DateTime(
           fechaActual.year, fechaActual.month, fechaActual.day - contauxi);
+      //Se disminuye en un dia mientras la fecha sea diferente de Lunes
       contauxi = contauxi + 1;
-      //print("La fecha es: " + fechaAuxiliar.toString());
+
       fechaConNegrita.text = "";
-    } while (DateFormat('EEEE').format(fechaAuxiliar).toString() != "Monday");
+    } while (DateFormat('EEEE').format(fechaAuxiliar).toString() != "Sunday");
 
     if (index > 4) {
+      //Cuando el indice sea mayor a 4 empieza cargar las fechas y de la fecha que
+      //quedo en memoria en el anterior paso se aumenta en un dia
       var fechaFinal = new DateTime(
           fechaAuxiliar.year, fechaAuxiliar.month, fechaAuxiliar.day + cont1);
 
@@ -321,8 +325,10 @@ class _Horarios extends State<Horarios> {
       fechaConNegrita.text = "Fecha: ";
 
       cont1++;
-      if (cont1 == 5) {
-        cont1 = 0;
+      if (cont1 == 6) {
+        //Cuando llega a 5 dias el contador regresa a 0 para que repita este proceso en todo
+        //el calendario
+        cont1 = 1;
       }
       return dateString;
     }
@@ -486,11 +492,10 @@ class _Horarios extends State<Horarios> {
               }
 
               if (colorBase == Colors.red) {
+                indices.add(index);
                 valorNombreDoctor.text =
                     CirujiaDAO.recibir[0].doctores[0].nombres;
                 nombreDoctorConNegrita.text = "Dr: ";
-
-                indices.add(index);
               } else {
                 valorNombreDoctor.text = "";
                 nombreDoctorConNegrita.text = "";

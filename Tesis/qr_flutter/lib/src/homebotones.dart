@@ -59,7 +59,7 @@ class _BotonesState extends State<Botones> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Cabecera(),
-              Text("  "),
+              Text(" "),
               usuariologueado.botonSalir(context),
             ],
           ),

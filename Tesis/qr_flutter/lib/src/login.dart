@@ -36,18 +36,18 @@ class _State extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     final Responsive responsive = Responsive.of(context);
-    return Scaffold(
-        body: OrientationBuilder(builder: (_, Orientation orientation) {
-      if (orientation == Orientation.portrait) {
-        print("Llegue al if de portrait ");
+    final data = MediaQuery.of(context);
 
-        return vista.vistaPortraitCelular(
-            context, nameController, passwordController, httpServicio);
-      } else {
-        print("Llegue al if de landscape ");
-        return vista.vistaLandScapeCelular(responsive, context, nameController,
-            passwordController, httpServicio);
-      }
-    }));
+    if (data.orientation == Orientation.portrait) {
+      return Scaffold(
+          body: SingleChildScrollView(
+        child: vista.vistaPortraitCelular(context, nameController,
+            passwordController, httpServicio, responsive),
+      ));
+    } else {
+      return Scaffold(
+          body: vista.vistaLandScapeCelular(responsive, context, nameController,
+              passwordController, httpServicio));
+    }
   }
 }

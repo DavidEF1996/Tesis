@@ -72,7 +72,7 @@ class CirujiaDAO {
           log(item.toString());
           cirujiaL.add(Cirujias.fromJson(item));
         }
-        print(data.body);
+        //print(data.body);
 
         print(cirujiaL.length);
         recibir = cirujiaL;

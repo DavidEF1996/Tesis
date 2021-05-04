@@ -85,6 +85,7 @@ class _State extends State<CambioContrasena> {
                       color: Colors.blue,
                       child: Text('Enviar'),
                       onPressed: () {
+                        print(_id);
                         enviar(context, _id, repNuevaContrasena.text);
                       },
                     )),
@@ -110,7 +111,7 @@ class _State extends State<CambioContrasena> {
     if (nuevaContrasena.text != repNuevaContrasena.text) {
       popRegUsuario.handleClickMe(context, 'Las contraseñas no coinciden');
     } else if (nuevaContrasena.text == repNuevaContrasena.text) {
-      print(id);
+      print(id + "print id");
       Changepass c = Changepass();
       c.idDoctor = id;
       c.password = encode(pass);
@@ -119,7 +120,7 @@ class _State extends State<CambioContrasena> {
       print(resultado.toString());
       if (resultado) {
         final _preferences = new Preferences();
-        _preferences.id = null;
+        _preferences.id = id;
         final route = MaterialPageRoute(builder: (context) {
           return LoginPage();
         });

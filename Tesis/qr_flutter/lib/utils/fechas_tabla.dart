@@ -1,6 +1,6 @@
 import 'package:intl/intl.dart';
 
-int cont1;
+int cont1 = 1;
 
 List<DateTime> cargarFechasTabla(DateTime fechaActual, int index) {
   //print(fechaActual);
@@ -16,7 +16,7 @@ List<DateTime> cargarFechasTabla(DateTime fechaActual, int index) {
     //print("La fecha es: " + fechaAuxiliar.toString());
     // fechaConNegrita.text = "";
     fechas.add(fechaAuxiliar);
-  } while (DateFormat('EEEE').format(fechaAuxiliar).toString() != "Monday");
+  } while (DateFormat('EEEE').format(fechaAuxiliar).toString() != "Sunday");
   print(fechas);
   print('lunes: ' + fechas[4].toString());
   print('viernes: ' + fechas[0].toString());

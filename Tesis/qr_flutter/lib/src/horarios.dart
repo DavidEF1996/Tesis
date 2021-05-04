@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:qr_flutter/dao/cirujiaDao.dart';
-import 'package:qr_flutter/utils/fechas_tabla.dart' as FECHA;
+import 'package:qr_flutter/utils/fechas_tabla.dart';
 
 import 'package:qr_flutter/utils/responsive.dart';
 import 'package:qr_flutter/validations/cabecera.dart';
@@ -37,6 +37,9 @@ class _Horarios extends State<Horarios> {
   CirujiaDAO cirujiaDao = new CirujiaDAO();
   List indices = [];
   bool isloading = false;
+ List<DateTime> fechas =[];
+Fecha_Tabla fecha_tabla  = new Fecha_Tabla();
+
   @override
   void initState() {
     SystemChrome.setPreferredOrientations([
@@ -46,10 +49,12 @@ class _Horarios extends State<Horarios> {
     super.initState();
     setState(() {
       isloading = true;
-      DateTime fechaActual = DateTime.now();
-      List<DateTime> fechas = FECHA.cargarFechasTabla(fechaActual, 0);
+      fechas = fecha_tabla.obtenerFechasSemana(fechaActual);
+      for (var i = 0; i < fechas.length; i++) {
+        print(i.toString()+"----------"+fechas[i].toString() );
+      }
 
-      cirujiaDao.obtenerCirujias(fechas[4], fechas[0]);
+      cirujiaDao.obtenerCirujias(fechas[0], fechas[4]);
 
       Future.delayed(const Duration(milliseconds: 3000), () {
         print('Hello, world');

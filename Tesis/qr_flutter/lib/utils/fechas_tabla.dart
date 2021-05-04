@@ -1,12 +1,14 @@
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-int cont1;
-
-List<DateTime> cargarFechasTabla(DateTime fechaActual, int index) {
+class Fecha_Tabla{
+  
+int cont1 = 0;
+List<DateTime>obtenerFechasSemana(DateTime fechaActual) {
   //print(fechaActual);
   //print(index);
   DateTime fechaAuxiliar;
-  int contauxi = 1;
+  int contauxi = 0;
   List<DateTime> fechas = [];
 
   do {
@@ -15,9 +17,21 @@ List<DateTime> cargarFechasTabla(DateTime fechaActual, int index) {
     contauxi = contauxi + 1;
     //print("La fecha es: " + fechaAuxiliar.toString());
     // fechaConNegrita.text = "";
-    fechas.add(fechaAuxiliar);
+  
   } while (DateFormat('EEEE').format(fechaAuxiliar).toString() != "Monday");
-  print('lunes: ' + fechas[4].toString());
-  print('viernes: ' + fechas[0].toString());
+
+  while (cont1 < 5) {
+    var fechaFinal = new DateTime(
+        fechaAuxiliar.year, fechaAuxiliar.month, fechaAuxiliar.day + cont1);
+    fechas.add(fechaFinal);
+    cont1++;
+  }
+  //print('lunes: ' + fechas[4].toString());
+  //print('viernes: ' + fechas[0].toString());
+  print(fechas.length);
   return fechas;
 }
+
+
+}
+

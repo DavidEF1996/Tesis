@@ -8,6 +8,7 @@ import 'package:qr_flutter/utils/responsive.dart';
 
 class Vista_celular {
   CirujiaDAO cirujiaDao = new CirujiaDAO();
+  Fecha_Tabla fecha_tabla = new Fecha_Tabla();
   Container vistaPortraitCelular(Responsive responsive, BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width,
@@ -55,11 +56,14 @@ class Vista_celular {
                   ),
                   icon: Icon(Icons.crop_square),
                   onPressed: () {
-                    /*final route = MaterialPageRoute(builder: (context) {
-                      return Horarios();
-                    });
-                    Navigator.pushReplacement(context, route);*/
-                    _cargarQuirofanos(context);
+                  DateTime fechaActual = DateTime.now();
+                      List<DateTime> fechas = fecha_tabla.obtenerFechasSemana(fechaActual);
+
+                      cirujiaDao.obtenerCirujias(fechas[0], fechas[4]);
+                      final route = MaterialPageRoute(builder: (context) {
+                        return Horarios();
+                      });
+                      Navigator.pushReplacement(context, route);
                   },
                 ),
               ),
@@ -143,9 +147,9 @@ class Vista_celular {
                     icon: Icon(Icons.crop_square),
                     onPressed: () {
                       DateTime fechaActual = DateTime.now();
-                      List<DateTime> fechas = cargarFechasTabla(fechaActual, 0);
+                      List<DateTime> fechas = fecha_tabla.obtenerFechasSemana(fechaActual);
 
-                      cirujiaDao.obtenerCirujias(fechas[4], fechas[0]);
+                      cirujiaDao.obtenerCirujias(fechas[0], fechas[4]);
                       final route = MaterialPageRoute(builder: (context) {
                         return Horarios();
                       });

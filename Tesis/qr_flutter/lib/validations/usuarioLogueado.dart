@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:qr_flutter/preferences/preferences.dart';
-import 'package:qr_flutter/src/homebotones.dart';
 import 'package:qr_flutter/src/login.dart';
-import 'package:qr_flutter/utils/fechas_tabla.dart';
 
 class UsuarioLogueado {
   final _preferences = new Preferences();

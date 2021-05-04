@@ -807,33 +807,46 @@ class RegisterPageState extends State<RegisterPage> {
   int age = 0;
   int meses = 0;
   calcularEdad(DateTime value) {
-    List<int> intArr = [1, 2, 3, 4, 5];
-    print(intArr);
     DateTime currentDate = DateTime.now();
-    //print("actual" + currentDate.year.toString());
     age = currentDate.year - value.year;
     int month1 = currentDate.month;
     int month2 = value.month;
-
     if (month2 > month1) {
-      print("mes de nacimiento mayor al actual");
-      meses = 12 - (month2 - month1);
       age--;
+      print("Mes de cumple mayor a mes actual");
+      print(meses);
+      int diaActual = currentDate.day;
+      int diaCumpleanos = value.day;
+
+      if (diaActual >= diaCumpleanos) {
+        //meses = value.month - currentDate.month;
+        meses = 12 - (value.month - currentDate.month);
+      } else if (diaActual < diaCumpleanos) {
+        //meses = (value.month - currentDate.month) - 1;
+        meses = (12 - (value.month - currentDate.month) - 1);
+      }
     } else if (month2 < month1) {
-      print("mes de nacimiento menor al actual");
-      meses = month1 - month2;
+      print("Mes de cumple menor a mes actual");
+      int diaActual = currentDate.day;
+      int diaCumpleanos = value.day;
+      if (diaActual >= diaCumpleanos) {
+        //meses = value.month - currentDate.month;
+        meses = currentDate.month - value.month;
+      } else if (diaActual < diaCumpleanos) {
+        //meses = (value.month - currentDate.month) - 1;
+        meses = (currentDate.month - value.month) - 1;
+      }
     } else if (month1 == month2) {
+      print("meses iguales");
       int day1 = currentDate.day;
       int day2 = value.day;
-      if (day2 > day1) {
+      if (day2 >= day1) {
         meses = 11;
         age--;
-      } else if (day2 <= day1) {
+      } else if (day2 < day1) {
         meses = 0;
       }
     }
-
-    // print('La edad es' + age.toString() + 'y los meses' + meses.toString());
     return age;
   }
 

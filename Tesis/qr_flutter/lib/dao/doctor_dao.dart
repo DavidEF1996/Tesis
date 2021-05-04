@@ -52,7 +52,7 @@ class DoctorDao {
   static Future<bool> changePass(json) async {
     http.Response response = await http.post(Uri.parse(URL + servicio_change),
         body: json, headers: headers, encoding: Encoding.getByName("utf-8"));
-    //print(response.body);
+    print(response.body);
     if (response.body.contains('true')) {
       return true;
     } else {

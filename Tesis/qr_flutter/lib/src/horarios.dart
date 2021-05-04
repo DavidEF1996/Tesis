@@ -37,8 +37,8 @@ class _Horarios extends State<Horarios> {
   CirujiaDAO cirujiaDao = new CirujiaDAO();
   List indices = [];
   bool isloading = false;
- List<DateTime> fechas =[];
-Fecha_Tabla fecha_tabla  = new Fecha_Tabla();
+  List<DateTime> fechas = [];
+  Fecha_Tabla fecha_tabla = new Fecha_Tabla();
 
   @override
   void initState() {
@@ -51,7 +51,7 @@ Fecha_Tabla fecha_tabla  = new Fecha_Tabla();
       isloading = true;
       fechas = fecha_tabla.obtenerFechasSemana(fechaActual);
       for (var i = 0; i < fechas.length; i++) {
-        print(i.toString()+"----------"+fechas[i].toString() );
+        print(i.toString() + "----------" + fechas[i].toString());
       }
 
       cirujiaDao.obtenerCirujias(fechas[0], fechas[4]);
@@ -409,8 +409,9 @@ Fecha_Tabla fecha_tabla  = new Fecha_Tabla();
 
             String horaParaUso = horaInicio.replaceAll(":00", "");
             int horaParaUsoInt = int.parse(horaParaUso);
+            print(CirujiaDAO.recibir[i].doctores[0].nombres + "ide del doctor");
 
-            for (var i = 0; i < horaIntermediaAuxiliar; i++) {
+            for (var j = 0; j < horaIntermediaAuxiliar; j++) {
               if (fecha == dateString && hora == horaInicio.trim() ||
                   fecha == dateString && hora == horaFin.trim()) {
                 colorBase = Colors.red;
@@ -422,8 +423,10 @@ Fecha_Tabla fecha_tabla  = new Fecha_Tabla();
               }
 
               if (colorBase == Colors.red) {
+                indices.add(index);
+                // print(CirujiaDAO.recibir[i]);
                 valorNombreDoctor.text =
-                    CirujiaDAO.recibir[0].doctores[0].nombres;
+                    CirujiaDAO.recibir[i].doctores[0].nombres;
                 nombreDoctorConNegrita.text = "Dr: ";
               } else {
                 valorNombreDoctor.text = "";
@@ -447,7 +450,7 @@ Fecha_Tabla fecha_tabla  = new Fecha_Tabla();
             String horaParaUso = horaInicio.replaceAll(":00", "");
             int horaParaUsoInt = int.parse(horaParaUso);
 
-            for (var i = 0; i < horaIntermediaAuxiliar; i++) {
+            for (var j = 0; j < horaIntermediaAuxiliar; j++) {
               if (fecha == dateString && hora == horaInicio.trim() ||
                   fecha == dateString && hora == horaFin.trim()) {
                 colorBase = Colors.red;
@@ -459,8 +462,9 @@ Fecha_Tabla fecha_tabla  = new Fecha_Tabla();
               }
 
               if (colorBase == Colors.red) {
+                indices.add(index);
                 valorNombreDoctor.text =
-                    CirujiaDAO.recibir[0].doctores[0].nombres;
+                    CirujiaDAO.recibir[i].doctores[0].nombres;
                 nombreDoctorConNegrita.text = "Dr: ";
                 indices.add(index);
               } else {
@@ -485,7 +489,7 @@ Fecha_Tabla fecha_tabla  = new Fecha_Tabla();
             String horaParaUso = horaInicio.replaceAll(":00", "");
             int horaParaUsoInt = int.parse(horaParaUso);
 
-            for (var i = 0; i < horaIntermediaAuxiliar; i++) {
+            for (var j = 0; j < horaIntermediaAuxiliar; j++) {
               if (fecha == dateString && hora == horaInicio.trim() ||
                   fecha == dateString && hora == horaFin.trim()) {
                 colorBase = Colors.red;
@@ -499,7 +503,7 @@ Fecha_Tabla fecha_tabla  = new Fecha_Tabla();
               if (colorBase == Colors.red) {
                 indices.add(index);
                 valorNombreDoctor.text =
-                    CirujiaDAO.recibir[0].doctores[0].nombres;
+                    CirujiaDAO.recibir[i].doctores[0].nombres;
                 nombreDoctorConNegrita.text = "Dr: ";
               } else {
                 valorNombreDoctor.text = "";

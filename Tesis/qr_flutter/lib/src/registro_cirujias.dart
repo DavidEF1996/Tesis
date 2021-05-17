@@ -562,7 +562,6 @@ class RegisterPageState extends State<RegisterPage> {
               decoration: new InputDecoration(
                 labelText: 'Observaciones',
               ),
-              validator: val.validateEmail,
             )),
         GestureDetector(
           onTap: () {

@@ -9,7 +9,6 @@ import 'package:qr_flutter/services/user_services.dart';
 import 'package:qr_flutter/src/cambioContrasena.dart';
 import 'package:qr_flutter/src/homebotones.dart';
 import 'package:qr_flutter/src/registro_usuarios.dart';
-import 'package:qr_flutter/utils/fechas_tabla.dart';
 import 'package:qr_flutter/utils/responsive.dart';
 import 'package:qr_flutter/utils/utils.dart';
 import 'package:qr_flutter/utils/utils.dart' as utl;
@@ -247,7 +246,7 @@ class Vista_Celular_Loguin {
     final String usuario = nameController.text;
     final String contrasena = passwordController.text;
 
-    final result = await httpServicio.loginUsuario(
+    final result =  await httpServicio.loginUsuario(
         usuario, utl.encode(passwordController.text));
 
     //print(result);

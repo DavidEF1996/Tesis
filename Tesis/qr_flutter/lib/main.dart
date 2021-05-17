@@ -6,6 +6,7 @@ import 'package:qr_flutter/src/homebotones.dart';
 import 'package:qr_flutter/src/login.dart';
 
 import 'package:qr_flutter/utils/rutas.dart';
+import 'package:qr_flutter/vistas/principalHorarios.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

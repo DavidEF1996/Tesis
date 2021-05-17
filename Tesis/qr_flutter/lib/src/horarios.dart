@@ -172,16 +172,16 @@ class _Horarios extends State<Horarios> {
                           right: responsive.diagonalPorcentaje(1),
                           top: responsive.diagonalPorcentaje(1)),
 
-                      crossAxisCount: 5,
+                      crossAxisCount: 7,
                       childAspectRatio:
-                          responsive.diagonalPorcentaje(0.2), // alto de widget
+                          responsive.diagonalPorcentaje(0.13), // alto de widget
                       mainAxisSpacing: responsive
                           .diagonalPorcentaje(0.2), //alto en distancia
 
-                      crossAxisSpacing: responsive.diagonalPorcentaje(0.2),
+                      crossAxisSpacing: responsive.diagonalPorcentaje(0.18),
 
                       //Código de la lista de widgets para la grilla
-                      children: List.generate(55, (index) {
+                      children: List.generate(91, (index) {
                         setState(() {
                           cabeceraTabla(index);
                           valorFecha.text =
@@ -192,53 +192,51 @@ class _Horarios extends State<Horarios> {
                         });
                         return Container(
                             child: RaisedButton(
-                          child: Container(
-                            child: Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    Text(
-                                      fechaConNegrita.text,
-                                      style: TextStyle(
-                                          fontSize: responsive
-                                              .diagonalPorcentaje(1.2),
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    textosConFecha(
-                                        index, valorFecha, responsive),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Text(
-                                      horaConNegrita.text,
-                                      style: TextStyle(
-                                          fontSize: responsive
-                                              .diagonalPorcentaje(1.2),
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    textoConHora(index, valorHora, responsive),
-                                  ],
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      nombreDoctorConNegrita.text,
-                                      style: TextStyle(
-                                          fontSize: responsive
-                                              .diagonalPorcentaje(1.2),
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    textoConNombreDoctor(
-                                        index, valorNombreDoctor, responsive),
-                                  ],
-                                ),
-                              ],
-                            ),
+                          child: Column(
+                            children: [
+                              Column(
+                                children: [
+                                  Text(
+                                    fechaConNegrita.text,
+                                    style: TextStyle(
+                                        fontSize:
+                                            responsive.diagonalPorcentaje(1.2),
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  textosConFecha(index, valorFecha, responsive),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    horaConNegrita.text,
+                                    style: TextStyle(
+                                        fontSize:
+                                            responsive.diagonalPorcentaje(1.2),
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  textoConHora(index, valorHora, responsive),
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    nombreDoctorConNegrita.text,
+                                    style: TextStyle(
+                                        fontSize:
+                                            responsive.diagonalPorcentaje(1.2),
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  textoConNombreDoctor(
+                                      index, valorNombreDoctor, responsive),
+                                ],
+                              ),
+                            ],
                           ),
                           color: colorBase,
                           onPressed: () {
+                            print(index);
                             for (var i = 0; i < indices.length; i++) {
                               if (indices[i] == index) {
                                 print("Ocupado");
@@ -275,10 +273,12 @@ class _Horarios extends State<Horarios> {
         valor.text == "Martes" ||
         valor.text == "Miercoles" ||
         valor.text == "Jueves" ||
-        valor.text == "Viernes") {
+        valor.text == "Viernes" ||
+        valor.text == "Sabado" ||
+        valor.text == "Domingo") {
       return Text(
         valor.text,
-        style: TextStyle(fontSize: responsive.diagonalPorcentaje(2.5)),
+        style: TextStyle(fontSize: responsive.diagonalPorcentaje(1.8)),
       );
     } else {
       return Text(
@@ -319,7 +319,7 @@ class _Horarios extends State<Horarios> {
       fechaConNegrita.text = "";
     } while (DateFormat('EEEE').format(fechaAuxiliar).toString() != "Sunday");
 
-    if (index > 4) {
+    if (index > 6) {
       //Cuando el indice sea mayor a 4 empieza cargar las fechas y de la fecha que
       //quedo en memoria en el anterior paso se aumenta en un dia
       var fechaFinal = new DateTime(
@@ -330,7 +330,7 @@ class _Horarios extends State<Horarios> {
       fechaConNegrita.text = "Fecha: ";
 
       cont1++;
-      if (cont1 == 6) {
+      if (cont1 == 8) {
         //Cuando llega a 5 dias el contador regresa a 0 para que repita este proceso en todo
         //el calendario
         cont1 = 1;
@@ -340,25 +340,25 @@ class _Horarios extends State<Horarios> {
   }
 
   int cont = 0;
-  int val = 8;
+  int val = 7; // hora en que inicia el calendario
 
   String cargarHorasTabla(int index) {
     String enviarHoraFinal;
-    if (index <= 4) {
+    if (index <= 6) {
       valorHora.text = "";
       horaConNegrita.text = "";
-    } else if (index >= 5 && cont <= 4) {
+    } else if (index >= 7 && cont <= 6) { // en esta parte se controla que valla cargando las horas solo de lunes a domingo
       enviarHoraFinal = (val).toString() + ":00";
       horaConNegrita.text = "Hora: ";
       cont++;
 
-      if (cont == 5) {
+      if (cont == 7) { // cuando el contador de dias de la semana llega a 7 este se reinicia y el valor de la hora se eincrementa en 1
         cont = 0;
         val = val + 1;
       }
 
-      if (val == 18) {
-        val = 8;
+      if (val == 19) {
+        val = 7;
       }
       return enviarHoraFinal;
     }
@@ -379,6 +379,12 @@ class _Horarios extends State<Horarios> {
       valorFecha.text = "Jueves";
     } else if (index == 4) {
       valorFecha.text = "Viernes";
+      colorBase = Colors.blue[400];
+    } else if (index == 5) {
+      valorFecha.text = "Sabado";
+      colorBase = Colors.blue[400];
+    } else if (index == 6) {
+      valorFecha.text = "Domingo";
       colorBase = Colors.blue[400];
     } else {
       valorFecha.text = "";

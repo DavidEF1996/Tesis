@@ -840,12 +840,11 @@ class RegisterPageState extends State<RegisterPage> {
       print("meses iguales");
       int day1 = currentDate.day;
       int day2 = value.day;
-      if (day2 > day1) {
+      if (day2 >= day1) {
         meses = 11;
         age--;
-      } else if (day2 <= day1) {
+      } else if (day2 < day1) {
         meses = 0;
-        
       }
     }
     return age;

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/preferences/preferences.dart';
 import 'package:qr_flutter/utils/responsive.dart';
@@ -21,7 +23,8 @@ class Cabecera extends StatelessWidget {
                 fontWeight: FontWeight.bold),
             children: <InlineSpan>[
               TextSpan(
-                  text: _preferences.nombres,
+                  text: utf8.decode(latin1.encode(_preferences.nombres),
+                      allowMalformed: true),
                   style:
                       TextStyle(fontSize: responsive.diagonalPorcentaje(2.2)))
             ]),
@@ -36,7 +39,8 @@ class Cabecera extends StatelessWidget {
                 fontWeight: FontWeight.bold),
             children: <InlineSpan>[
               TextSpan(
-                  text: _preferences.nombres,
+                  text: utf8.decode(latin1.encode(_preferences.nombres),
+                      allowMalformed: true),
                   style: TextStyle(fontSize: responsive.diagonalPorcentaje(3)))
             ]),
       ));

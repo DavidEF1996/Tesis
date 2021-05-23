@@ -59,8 +59,8 @@ class CirujiaDAO {
   }
 
   Future<APIResponse<List<Cirujias>>> obtenerCirujias(
-      DateTime lunes, DateTime viernes) {
-    return http.get(Uri.parse(URL + servicio_listar + '/$lunes,$viernes'),
+      DateTime lunes, DateTime viernes) async {
+    return await http.get(Uri.parse(URL + servicio_listar + '/$lunes,$viernes'),
         headers: {"Content-Type": "application/json"}).then((data) {
       //log('La respuesta obtenida es -----------: ' + data.body);
       print(data.statusCode);

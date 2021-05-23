@@ -5,6 +5,7 @@ import 'package:qr_flutter/src/horarios.dart';
 import 'package:qr_flutter/src/login.dart';
 import 'package:qr_flutter/utils/fechas_tabla.dart';
 import 'package:qr_flutter/utils/responsive.dart';
+import 'package:qr_flutter/vistas/principalHorarios.dart';
 
 class Vista_celular {
   CirujiaDAO cirujiaDao = new CirujiaDAO();
@@ -56,14 +57,15 @@ class Vista_celular {
                   ),
                   icon: Icon(Icons.crop_square),
                   onPressed: () {
-                  DateTime fechaActual = DateTime.now();
-                      List<DateTime> fechas = fecha_tabla.obtenerFechasSemana(fechaActual);
+                    /*DateTime fechaActual = DateTime.now();
+                    List<DateTime> fechas =
+                        fecha_tabla.obtenerFechasSemana(fechaActual);
 
-                      cirujiaDao.obtenerCirujias(fechas[0], fechas[4]);
-                      final route = MaterialPageRoute(builder: (context) {
-                        return Horarios();
-                      });
-                      Navigator.pushReplacement(context, route);
+                    cirujiaDao.obtenerCirujias(fechas[0], fechas[4]);*/
+                    final route = MaterialPageRoute(builder: (context) {
+                      return PrincipalHorarios();
+                    });
+                    Navigator.pushReplacement(context, route);
                   },
                 ),
               ),
@@ -147,7 +149,8 @@ class Vista_celular {
                     icon: Icon(Icons.crop_square),
                     onPressed: () {
                       DateTime fechaActual = DateTime.now();
-                      List<DateTime> fechas = fecha_tabla.obtenerFechasSemana(fechaActual);
+                      List<DateTime> fechas =
+                          fecha_tabla.obtenerFechasSemana(fechaActual);
 
                       cirujiaDao.obtenerCirujias(fechas[0], fechas[4]);
                       final route = MaterialPageRoute(builder: (context) {

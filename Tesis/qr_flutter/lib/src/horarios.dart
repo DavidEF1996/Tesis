@@ -36,7 +36,7 @@ class _Horarios extends State<Horarios> {
   int nombreQuiro;
   CirujiaDAO cirujiaDao = new CirujiaDAO();
   List indices = [];
-  bool isloading = false;
+  //bool isloading = false;
   List<DateTime> fechas = [];
   Fecha_Tabla fecha_tabla = new Fecha_Tabla();
 
@@ -48,20 +48,20 @@ class _Horarios extends State<Horarios> {
     ]);
     super.initState();
     setState(() {
-      isloading = true;
-      fechas = fecha_tabla.obtenerFechasSemana(fechaActual);
+      // isloading = true;
+      /* fechas = fecha_tabla.obtenerFechasSemana(fechaActual);
       for (var i = 0; i < fechas.length; i++) {
         print(i.toString() + "----------" + fechas[i].toString());
       }
 
-      cirujiaDao.obtenerCirujias(fechas[0], fechas[4]);
+      cirujiaDao.obtenerCirujias(fechas[0], fechas[4]);*/
 
-      Future.delayed(const Duration(milliseconds: 3000), () {
+      /* Future.delayed(const Duration(milliseconds: 3000), () {
         print('Hello, world');
         setState(() {
           isloading = false;
         });
-      });
+      });*/
     });
 
     int index = 1;
@@ -92,170 +92,167 @@ class _Horarios extends State<Horarios> {
             ),
           ),
         ),
-        body: isloading
-            ? CircularProgressIndicator()
-            : Column(
+        body: // isloading
+            //  ? CircularProgressIndicator()
+            //:
+            Column(
+          children: [
+            Container(
+              width: MediaQuery.of(context).size.width,
+              child: Row(
                 children: [
                   Container(
-                    width: MediaQuery.of(context).size.width,
-                    child: Row(
-                      children: [
-                        Container(
-                            //padding: EdgeInsets.all(responsive.diagonalPorcentaje(1)),
-                            alignment: Alignment.bottomCenter,
-                            child: Row(
-                              children: [
-                                RaisedButton(
-                                  color: colorBotonQuirofano1,
-                                  child: Container(
-                                    child: Column(
-                                      children: [
-                                        Text("Quirófano 1"),
-                                      ],
-                                    ),
-                                  ),
-                                  onPressed: () {
-                                    nombreQuiro = 1;
-                                    cargarQuirofano(nombreQuiro, context);
-                                  },
-                                ),
-                                RaisedButton(
-                                  color: colorBotonQuirofano2,
-                                  child: Container(
-                                    child: Column(
-                                      children: [
-                                        Text("Quirófano 2"),
-                                      ],
-                                    ),
-                                  ),
-                                  onPressed: () {
-                                    nombreQuiro = 2;
-                                    cargarQuirofano(nombreQuiro, context);
-                                  },
-                                ),
-                                RaisedButton(
-                                  color: colorBotonQuirofano3,
-                                  child: Container(
-                                    child: Column(
-                                      children: [
-                                        Text("Quirófano 3"),
-                                      ],
-                                    ),
-                                  ),
-                                  onPressed: () {
-                                    nombreQuiro = 3;
-                                    cargarQuirofano(nombreQuiro, context);
-                                  },
-                                ),
-                                Text("     Oupado:   "),
-                                Container(
-                                  color: Colors.red,
-                                  height: responsive.diagonalPorcentaje(3),
-                                  width: responsive.diagonalPorcentaje(5),
-                                ),
-                                Text("  Libre:  "),
-                                Container(
-                                  color: Colors.blue[50],
-                                  height: responsive.diagonalPorcentaje(3),
-                                  width: responsive.diagonalPorcentaje(5),
-                                ),
-                              ],
-                            )),
-                      ],
-                    ),
-                  ),
-                  new Expanded(
-                    child: GridView.count(
-                      //Codigo para la ubicación y tamaños de la grilla
-                      padding: EdgeInsets.only(
-                          left: responsive.diagonalPorcentaje(1),
-                          right: responsive.diagonalPorcentaje(1),
-                          top: responsive.diagonalPorcentaje(1)),
-
-                      crossAxisCount: 7,
-                      childAspectRatio:
-                          responsive.diagonalPorcentaje(0.13), // alto de widget
-                      mainAxisSpacing: responsive
-                          .diagonalPorcentaje(0.2), //alto en distancia
-
-                      crossAxisSpacing: responsive.diagonalPorcentaje(0.18),
-
-                      //Código de la lista de widgets para la grilla
-                      children: List.generate(91, (index) {
-                        setState(() {
-                          cabeceraTabla(index);
-                          valorFecha.text =
-                              cargarFechasTabla(fechaActual, index);
-                          valorHora.text = cargarHorasTabla(index);
-                          pintarQuirofanosOcupados(index, valorFecha.text,
-                              valorHora.text, nombreQuiro);
-                        });
-                        return Container(
-                            child: RaisedButton(
-                          child: Column(
-                            children: [
-                              Column(
+                      //padding: EdgeInsets.all(responsive.diagonalPorcentaje(1)),
+                      alignment: Alignment.bottomCenter,
+                      child: Row(
+                        children: [
+                          RaisedButton(
+                            color: colorBotonQuirofano1,
+                            child: Container(
+                              child: Column(
                                 children: [
-                                  Text(
-                                    fechaConNegrita.text,
-                                    style: TextStyle(
-                                        fontSize:
-                                            responsive.diagonalPorcentaje(1.2),
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  textosConFecha(index, valorFecha, responsive),
+                                  Text("Quirófano 1"),
                                 ],
                               ),
-                              Row(
-                                children: [
-                                  Text(
-                                    horaConNegrita.text,
-                                    style: TextStyle(
-                                        fontSize:
-                                            responsive.diagonalPorcentaje(1.2),
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  textoConHora(index, valorHora, responsive),
-                                ],
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    nombreDoctorConNegrita.text,
-                                    style: TextStyle(
-                                        fontSize:
-                                            responsive.diagonalPorcentaje(1.2),
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  textoConNombreDoctor(
-                                      index, valorNombreDoctor, responsive),
-                                ],
-                              ),
-                            ],
+                            ),
+                            onPressed: () {
+                              nombreQuiro = 1;
+                              cargarQuirofano(nombreQuiro, context);
+                            },
                           ),
-                          color: colorBase,
-                          onPressed: () {
-                            print(index);
-                            for (var i = 0; i < indices.length; i++) {
-                              if (indices[i] == index) {
-                                print("Ocupado");
-
-                                break;
-                              } else if (indices[i] != index) {
-                                print("Libre");
-
-                                Navigator.of(context).pushNamed('/tabla');
-                                break;
-                              }
-                            }
-                          },
-                        ));
-                      }),
-                    ),
-                  ),
+                          RaisedButton(
+                            color: colorBotonQuirofano2,
+                            child: Container(
+                              child: Column(
+                                children: [
+                                  Text("Quirófano 2"),
+                                ],
+                              ),
+                            ),
+                            onPressed: () {
+                              nombreQuiro = 2;
+                              cargarQuirofano(nombreQuiro, context);
+                            },
+                          ),
+                          RaisedButton(
+                            color: colorBotonQuirofano3,
+                            child: Container(
+                              child: Column(
+                                children: [
+                                  Text("Quirófano 3"),
+                                ],
+                              ),
+                            ),
+                            onPressed: () {
+                              nombreQuiro = 3;
+                              cargarQuirofano(nombreQuiro, context);
+                            },
+                          ),
+                          Text("     Oupado:   "),
+                          Container(
+                            color: Colors.red,
+                            height: responsive.diagonalPorcentaje(3),
+                            width: responsive.diagonalPorcentaje(5),
+                          ),
+                          Text("  Libre:  "),
+                          Container(
+                            color: Colors.blue[50],
+                            height: responsive.diagonalPorcentaje(3),
+                            width: responsive.diagonalPorcentaje(5),
+                          ),
+                        ],
+                      )),
                 ],
               ),
+            ),
+            new Expanded(
+              child: GridView.count(
+                //Codigo para la ubicación y tamaños de la grilla
+                padding: EdgeInsets.only(
+                    left: responsive.diagonalPorcentaje(1),
+                    right: responsive.diagonalPorcentaje(1),
+                    top: responsive.diagonalPorcentaje(1)),
+
+                crossAxisCount: 7,
+                childAspectRatio:
+                    responsive.diagonalPorcentaje(0.13), // alto de widget
+                mainAxisSpacing:
+                    responsive.diagonalPorcentaje(0.2), //alto en distancia
+
+                crossAxisSpacing: responsive.diagonalPorcentaje(0.18),
+
+                //Código de la lista de widgets para la grilla
+                children: List.generate(91, (index) {
+                  setState(() {
+                    cabeceraTabla(index);
+                    valorFecha.text = cargarFechasTabla(fechaActual, index);
+                    valorHora.text = cargarHorasTabla(index);
+                    pintarQuirofanosOcupados(
+                        index, valorFecha.text, valorHora.text, nombreQuiro);
+                  });
+                  return Container(
+                      child: RaisedButton(
+                    child: Column(
+                      children: [
+                        Column(
+                          children: [
+                            Text(
+                              fechaConNegrita.text,
+                              style: TextStyle(
+                                  fontSize: responsive.diagonalPorcentaje(1.2),
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            textosConFecha(index, valorFecha, responsive),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              horaConNegrita.text,
+                              style: TextStyle(
+                                  fontSize: responsive.diagonalPorcentaje(1.2),
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            textoConHora(index, valorHora, responsive),
+                          ],
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              nombreDoctorConNegrita.text,
+                              style: TextStyle(
+                                  fontSize: responsive.diagonalPorcentaje(1.2),
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            textoConNombreDoctor(
+                                index, valorNombreDoctor, responsive),
+                          ],
+                        ),
+                      ],
+                    ),
+                    color: colorBase,
+                    onPressed: () {
+                      print(index);
+                      for (var i = 0; i < indices.length; i++) {
+                        if (indices[i] == index) {
+                          print("Ocupado");
+
+                          break;
+                        } else if (indices[i] != index) {
+                          print("Libre");
+
+                          Navigator.of(context).pushNamed('/tabla');
+                          break;
+                        }
+                      }
+                    },
+                  ));
+                }),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -347,12 +344,14 @@ class _Horarios extends State<Horarios> {
     if (index <= 6) {
       valorHora.text = "";
       horaConNegrita.text = "";
-    } else if (index >= 7 && cont <= 6) { // en esta parte se controla que valla cargando las horas solo de lunes a domingo
+    } else if (index >= 7 && cont <= 6) {
+      // en esta parte se controla que valla cargando las horas solo de lunes a domingo
       enviarHoraFinal = (val).toString() + ":00";
       horaConNegrita.text = "Hora: ";
       cont++;
 
-      if (cont == 7) { // cuando el contador de dias de la semana llega a 7 este se reinicia y el valor de la hora se eincrementa en 1
+      if (cont == 7) {
+        // cuando el contador de dias de la semana llega a 7 este se reinicia y el valor de la hora se eincrementa en 1
         cont = 0;
         val = val + 1;
       }

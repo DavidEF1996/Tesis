@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:qr_flutter/dao/cirujiaDao.dart';
+import 'package:qr_flutter/model/modeloDatosCirujia.dart';
+import 'package:qr_flutter/preferences/preferences.dart';
+import 'package:qr_flutter/services/user_services.dart';
+import 'package:qr_flutter/src/registro_cirujias.dart';
 import 'package:qr_flutter/utils/fechas_tabla.dart';
 
 import 'package:qr_flutter/utils/responsive.dart';
@@ -36,9 +40,11 @@ class _Horarios extends State<Horarios> {
   int nombreQuiro;
   CirujiaDAO cirujiaDao = new CirujiaDAO();
   List indices = [];
+  List<DatosCirujia> datosCirujia = [];
   //bool isloading = false;
   List<DateTime> fechas = [];
   Fecha_Tabla fecha_tabla = new Fecha_Tabla();
+  Preferences preferences = new Preferences();
 
   @override
   void initState() {
@@ -227,18 +233,75 @@ class _Horarios extends State<Horarios> {
                         child: InkWell(
                             onTap: () {
                               print(index);
-                              for (var i = 0; i < indices.length; i++) {
+                              /* for (var i = 0; i < datosCirujia.length; i++) {
+                                print("Los datos son: " +
+                                    datosCirujia[i].indice.toString() +
+                                    " " +
+                                    datosCirujia[i].numeroQuirofano.toString() +
+                                    " " +
+                                    datosCirujia[i].nombreCirujano.toString() +
+                                    " " +
+                                    datosCirujia[i].fechaCirujia.toString() +
+                                    " " +
+                                    datosCirujia[i].horaInicio.toString() +
+                                    " " +
+                                    datosCirujia[i].estado.toString());
+                              }*/
+
+                              /*for (var i = 0; i < datosCirujia.length; i++) {
+                                if (datosCirujia[i].estado == "Ocupado") {
+                                  print("Ocupado");
+                                  break;
+                                } else {
+                                  print("Libre");
+                                  break;
+                                }
+                              }*/
+
+                              if (datosCirujia[index].estado == "Ocupado") {
+                                print("Ocupado");
+                              } else {
+                                print("Libre");
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            RegisterPage(
+                                              numeroQuirofano:
+                                                  datosCirujia[index]
+                                                      .numeroQuirofano,
+                                              nombreCirujano: UserService
+                                                  .nombreCompletoUsuarioLogueado,
+                                              fechaCirujia: datosCirujia[index]
+                                                  .fechaCirujia,
+                                              horaInicio: datosCirujia[index]
+                                                  .horaInicio,
+                                            )));
+                              }
+                              // print(index);
+                              /*for (var i = 0; i < indices.length; i++) {
                                 if (indices[i] == index) {
                                   print("Ocupado");
 
                                   break;
                                 } else if (indices[i] != index) {
                                   print("Libre");
-
-                                  Navigator.of(context).pushNamed('/tabla');
+                                  Preferences preferences = new Preferences();
+                                  // Navigator.of(context).pushNamed('/tabla');
+                                  Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (BuildContext context) =>
+                                              RegisterPage(
+                                                numeroQuirofano: nombreQuiro,
+                                                nombreCirujano:
+                                                    preferences.nombres,
+                                                fechaCirujia: indices[1],
+                                                horaInicio: 2,
+                                              )));
                                   break;
                                 }
-                              }
+                              }*/
                             },
                             child: Card(
                               child: Column(
@@ -450,6 +513,14 @@ class _Horarios extends State<Horarios> {
 
   void pintarQuirofanosOcupados(
       int index, String fecha, String hora, int numeroQuirofano) {
+    DatosCirujia datosCiru = new DatosCirujia();
+    datosCiru.indice = index;
+    datosCiru.numeroQuirofano = null;
+    datosCiru.nombreCirujano = "No Asignado";
+    datosCiru.fechaCirujia = fecha;
+    datosCiru.horaInicio = hora;
+    datosCiru.estado = "Libre";
+    datosCirujia.add(datosCiru);
     String horaInicio;
     String horaFin;
     int horaIntermediaAuxiliar;
@@ -457,6 +528,7 @@ class _Horarios extends State<Horarios> {
     try {
       if (numeroQuirofano == 1) {
         for (var i = 0; i < CirujiaDAO.recibir.length; i++) {
+          datosCirujia[index].numeroQuirofano = numeroQuirofano;
           if (CirujiaDAO.recibir[i].quirofano == 1) {
             horaInicio = CirujiaDAO.recibir[i].horaInicio;
             horaFin = CirujiaDAO.recibir[i].horaFin;
@@ -483,12 +555,14 @@ class _Horarios extends State<Horarios> {
               }
 
               if (colorBase == Colors.red) {
-                indices.add(index);
-                // print(CirujiaDAO.recibir[i]);
+                datosCirujia[index].estado = "Ocupado";
                 valorNombreDoctor.text =
                     CirujiaDAO.recibir[i].doctores[0].nombres;
+                datosCirujia[index].nombreCirujano = valorNombreDoctor.text +
+                    CirujiaDAO.recibir[i].doctores[0].apellidos;
                 nombreDoctorConNegrita.text = "Dr: ";
               } else {
+                datosCirujia[index].estado = "Libre";
                 valorNombreDoctor.text = "";
                 nombreDoctorConNegrita.text = "";
               }
@@ -497,6 +571,7 @@ class _Horarios extends State<Horarios> {
         }
       } else if (numeroQuirofano == 2) {
         for (var i = 0; i < CirujiaDAO.recibir.length; i++) {
+          datosCirujia[index].numeroQuirofano = numeroQuirofano;
           if (CirujiaDAO.recibir[i].quirofano == 2) {
             horaInicio = CirujiaDAO.recibir[i].horaInicio;
             horaFin = CirujiaDAO.recibir[i].horaFin;
@@ -522,12 +597,13 @@ class _Horarios extends State<Horarios> {
               }
 
               if (colorBase == Colors.red) {
-                indices.add(index);
+                datosCirujia[index].estado = "Ocupado";
                 valorNombreDoctor.text =
                     CirujiaDAO.recibir[i].doctores[0].nombres;
                 nombreDoctorConNegrita.text = "Dr: ";
                 indices.add(index);
               } else {
+                datosCirujia[index].estado = "Libre";
                 valorNombreDoctor.text = "";
                 nombreDoctorConNegrita.text = "";
               }
@@ -536,6 +612,7 @@ class _Horarios extends State<Horarios> {
         }
       } else if (numeroQuirofano == 3) {
         for (var i = 0; i < CirujiaDAO.recibir.length; i++) {
+          datosCirujia[index].numeroQuirofano = numeroQuirofano;
           if (CirujiaDAO.recibir[i].quirofano == 3) {
             horaInicio = CirujiaDAO.recibir[i].horaInicio;
             horaFin = CirujiaDAO.recibir[i].horaFin;
@@ -561,11 +638,12 @@ class _Horarios extends State<Horarios> {
               }
 
               if (colorBase == Colors.red) {
-                indices.add(index);
+                datosCirujia[index].estado = "Ocupado";
                 valorNombreDoctor.text =
                     CirujiaDAO.recibir[i].doctores[0].nombres;
                 nombreDoctorConNegrita.text = "Dr: ";
               } else {
+                datosCirujia[index].estado = "Libre";
                 valorNombreDoctor.text = "";
                 nombreDoctorConNegrita.text = "";
               }

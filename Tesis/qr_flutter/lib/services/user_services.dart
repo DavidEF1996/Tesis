@@ -6,6 +6,7 @@ class UserService {
   static var nombreUsuariologueado = "";
   static var apellidoUsuarioLogueado = "";
   static var usuariologueado = "";
+  static var nombreCompletoUsuarioLogueado = "";
   static const URL = Conn.URL;
 
   static const headers = {"Content-type": " application/json"};
@@ -30,6 +31,9 @@ class UserService {
       usuariologueado = nombreUsuariologueado.split(" ")[0] +
           " " +
           apellidoUsuarioLogueado.split(" ")[0];
+
+      nombreCompletoUsuarioLogueado =
+          nombreUsuariologueado + " " + apellidoUsuarioLogueado;
       return decodedata;
     } else {
       print(respuesta.statusCode);

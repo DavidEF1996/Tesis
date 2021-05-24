@@ -18,6 +18,19 @@ import 'package:find_dropdown/find_dropdown.dart';
 import 'package:numberpicker/numberpicker.dart';
 
 class RegisterPage extends StatefulWidget {
+  final int numeroQuirofano;
+  final String nombreCirujano;
+  final String fechaCirujia;
+  final String horaInicio;
+
+  const RegisterPage(
+      {Key key,
+      this.numeroQuirofano,
+      this.nombreCirujano,
+      this.fechaCirujia,
+      this.horaInicio})
+      : super(key: key);
+
   @override
   RegisterPageState createState() => RegisterPageState();
 }
@@ -67,13 +80,23 @@ class RegisterPageState extends State<RegisterPage> {
   void initState() {
     //cargarDoctores("a");
     super.initState();
+    nombres_parametro =
+        (widget.nombreCirujano == "") ? "" : widget.nombreCirujano;
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeLeft,
       DeviceOrientation.landscapeRight,
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
-    nombres_parametro = "a";
+
+    print("-------------");
+    print(widget.numeroQuirofano);
+    print(widget.nombreCirujano);
+    print(widget.fechaCirujia);
+    print(widget.horaInicio);
+    print("____________");
+
+    //print("El nombre del Cirujano que entra es: " + nombres_parametro);
   }
 
   cargarDoctores(String nombres) async {

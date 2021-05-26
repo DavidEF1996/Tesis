@@ -76,6 +76,15 @@ class CirujiaDAO {
 
         print(cirujiaL.length);
         recibir = cirujiaL;
+        for (var i = 0; i < recibir.length; i++) {
+          print(recibir[i].fechaCirujia);
+          var date =
+              DateTime.fromMillisecondsSinceEpoch(recibir[i].fechaCirujia);
+          var format = new DateFormat("yyyy/MM/dd");
+          var dateString = format.format(date);
+          print(dateString);
+        }
+
         return APIResponse<List<Cirujias>>(data: cirujiaL);
       }
       return APIResponse<List<Cirujias>>(error: true, mensajeError: "Error");

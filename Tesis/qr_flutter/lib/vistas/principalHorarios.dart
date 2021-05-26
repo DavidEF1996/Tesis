@@ -35,7 +35,9 @@ class _PrincipalHorariosState extends State<PrincipalHorarios> {
     });
     CirujiaDAO cirujia = new CirujiaDAO();
     fechas = fecha_tabla.obtenerFechasSemana(fechaActual);
+
     _apiResponse = await cirujia.obtenerCirujias(fechas[0], fechas[4]);
+
     setState(() {
       _isLoading = false;
       print("Acabo de cargar");

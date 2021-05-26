@@ -517,10 +517,13 @@ class _Horarios extends State<Horarios> {
     datosCiru.indice = index;
     datosCiru.numeroQuirofano = null;
     datosCiru.nombreCirujano = "No Asignado";
-    datosCiru.fechaCirujia = fecha;
-    datosCiru.horaInicio = hora;
+    String fechaParseada = fecha.replaceAll("/", "-");
+    datosCiru.fechaCirujia = DateTime.parse(fechaParseada);
+    String horaFormulario = hora.replaceAll(":00", "");
+    datosCiru.horaInicio = horaFormulario;
     datosCiru.estado = "Libre";
     datosCirujia.add(datosCiru);
+
     String horaInicio;
     String horaFin;
     int horaIntermediaAuxiliar;
@@ -537,6 +540,7 @@ class _Horarios extends State<Horarios> {
 
             var format = new DateFormat("yyyy/MM/dd");
             var dateString = format.format(auxFecha);
+
             horaIntermediaAuxiliar = int.parse(CirujiaDAO.recibir[i].duracion);
 
             String horaParaUso = horaInicio.replaceAll(":00", "");

@@ -21,7 +21,7 @@ class DatosCirujia {
   int indice;
   int numeroQuirofano;
   String nombreCirujano;
-  String fechaCirujia;
+  DateTime fechaCirujia;
   String horaInicio;
   String estado;
 
@@ -29,7 +29,7 @@ class DatosCirujia {
       indice: json["indice"],
       numeroQuirofano: json["numeroQuirofano"],
       nombreCirujano: json["nombreCirujano"],
-      fechaCirujia: json["fechaCirujia"],
+      fechaCirujia: DateTime.parse(json["fechaCirujia"]),
       horaInicio: json["horaInicio"],
       estado: json["estado"]);
 
@@ -37,7 +37,8 @@ class DatosCirujia {
         "indice": indice,
         "numeroQuirofano": numeroQuirofano,
         "nombreCirujano": nombreCirujano,
-        "fechaCirujia": fechaCirujia,
+        "fechaCirujia":
+            "${fechaCirujia.year.toString().padLeft(4, '0')}-${fechaCirujia.month.toString().padLeft(2, '0')}-${fechaCirujia.day.toString().padLeft(2, '0')}",
         "horaInicio": horaInicio,
         "estado": estado
       };

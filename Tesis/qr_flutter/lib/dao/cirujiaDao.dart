@@ -59,8 +59,8 @@ class CirujiaDAO {
   }
 
   Future<APIResponse<List<Cirujias>>> obtenerCirujias(
-      DateTime lunes, DateTime viernes) {
-    return http.get(Uri.parse(URL + servicio_listar + '/$lunes,$viernes'),
+      DateTime lunes, DateTime viernes) async {
+    return await http.get(Uri.parse(URL + servicio_listar + '/$lunes,$viernes'),
         headers: {"Content-Type": "application/json"}).then((data) {
       //log('La respuesta obtenida es -----------: ' + data.body);
       print(data.statusCode);
@@ -76,6 +76,15 @@ class CirujiaDAO {
 
         print(cirujiaL.length);
         recibir = cirujiaL;
+        for (var i = 0; i < recibir.length; i++) {
+          print(recibir[i].fechaCirujia);
+          var date =
+              DateTime.fromMillisecondsSinceEpoch(recibir[i].fechaCirujia);
+          var format = new DateFormat("yyyy/MM/dd");
+          var dateString = format.format(date);
+          print(dateString);
+        }
+
         return APIResponse<List<Cirujias>>(data: cirujiaL);
       }
       return APIResponse<List<Cirujias>>(error: true, mensajeError: "Error");

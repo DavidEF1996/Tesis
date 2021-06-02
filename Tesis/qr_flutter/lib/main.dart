@@ -1,17 +1,23 @@
 import "package:flutter/material.dart";
+import 'package:get_it/get_it.dart';
 import 'package:qr_flutter/dao/cirujiaDao.dart';
 import 'package:qr_flutter/preferences/preferences.dart';
-
+import 'package:qr_flutter/dao/cirujiaDao.dart';
 import 'package:qr_flutter/src/homebotones.dart';
 import 'package:qr_flutter/src/login.dart';
 
 import 'package:qr_flutter/utils/rutas.dart';
+import 'package:qr_flutter/vistas/principalHorarios.dart';
+
+void setupLocator() {
+  GetIt.instance.registerLazySingleton(() => CirujiaDAO());
+}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final _preferences = new Preferences();
   await _preferences.initPreferences();
-
+  setupLocator();
   runApp(MyApp());
 }
 

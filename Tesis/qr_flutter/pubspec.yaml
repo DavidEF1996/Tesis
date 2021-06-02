@@ -35,10 +35,9 @@ dependencies:
   dropdown_search: ^0.4.9
   dio: ^4.0.0-beta4
   intl: ^0.17.0
+  get_it: ^3.0.1
 
   #
-  
- 
 
   shared_preferences:
 

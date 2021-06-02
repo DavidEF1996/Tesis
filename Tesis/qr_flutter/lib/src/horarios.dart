@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:qr_flutter/dao/cirujiaDao.dart';
+import 'package:qr_flutter/model/modeloDatosCirujia.dart';
+import 'package:qr_flutter/preferences/preferences.dart';
+import 'package:qr_flutter/services/user_services.dart';
+import 'package:qr_flutter/src/registro_cirujias.dart';
 import 'package:qr_flutter/utils/fechas_tabla.dart';
 
 import 'package:qr_flutter/utils/responsive.dart';
@@ -36,9 +40,11 @@ class _Horarios extends State<Horarios> {
   int nombreQuiro;
   CirujiaDAO cirujiaDao = new CirujiaDAO();
   List indices = [];
-  bool isloading = false;
+  List<DatosCirujia> datosCirujia = [];
+  //bool isloading = false;
   List<DateTime> fechas = [];
   Fecha_Tabla fecha_tabla = new Fecha_Tabla();
+  Preferences preferences = new Preferences();
 
   @override
   void initState() {
@@ -48,20 +54,20 @@ class _Horarios extends State<Horarios> {
     ]);
     super.initState();
     setState(() {
-      isloading = true;
-      fechas = fecha_tabla.obtenerFechasSemana(fechaActual);
+      // isloading = true;
+      /* fechas = fecha_tabla.obtenerFechasSemana(fechaActual);
       for (var i = 0; i < fechas.length; i++) {
         print(i.toString() + "----------" + fechas[i].toString());
       }
 
-      cirujiaDao.obtenerCirujias(fechas[0], fechas[4]);
+      cirujiaDao.obtenerCirujias(fechas[0], fechas[4]);*/
 
-      Future.delayed(const Duration(milliseconds: 3000), () {
+      /* Future.delayed(const Duration(milliseconds: 3000), () {
         print('Hello, world');
         setState(() {
           isloading = false;
         });
-      });
+      });*/
     });
 
     int index = 1;
@@ -92,172 +98,280 @@ class _Horarios extends State<Horarios> {
             ),
           ),
         ),
-        body: isloading
-            ? CircularProgressIndicator()
-            : Column(
-                children: [
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    child: Row(
-                      children: [
-                        Container(
-                            //padding: EdgeInsets.all(responsive.diagonalPorcentaje(1)),
-                            alignment: Alignment.bottomCenter,
-                            child: Row(
-                              children: [
-                                RaisedButton(
-                                  color: colorBotonQuirofano1,
-                                  child: Container(
-                                    child: Column(
-                                      children: [
-                                        Text("Quirófano 1"),
-                                      ],
-                                    ),
-                                  ),
-                                  onPressed: () {
-                                    nombreQuiro = 1;
-                                    cargarQuirofano(nombreQuiro, context);
-                                  },
+        body: // isloading
+            //  ? CircularProgressIndicator()
+            //:
+            Container(
+          padding: EdgeInsets.zero,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                width: MediaQuery.of(context).size.width,
+                child: Row(
+                  children: [
+                    Container(
+                        //padding: EdgeInsets.all(responsive.diagonalPorcentaje(1)),
+                        alignment: Alignment.bottomCenter,
+                        child: Row(
+                          children: [
+                            RaisedButton(
+                              color: colorBotonQuirofano1,
+                              child: Container(
+                                child: Column(
+                                  children: [
+                                    Text("Quirófano 1"),
+                                  ],
                                 ),
-                                RaisedButton(
-                                  color: colorBotonQuirofano2,
-                                  child: Container(
-                                    child: Column(
-                                      children: [
-                                        Text("Quirófano 2"),
-                                      ],
-                                    ),
-                                  ),
-                                  onPressed: () {
-                                    nombreQuiro = 2;
-                                    cargarQuirofano(nombreQuiro, context);
-                                  },
+                              ),
+                              onPressed: () {
+                                nombreQuiro = 1;
+                                cargarQuirofano(nombreQuiro, context);
+                              },
+                            ),
+                            RaisedButton(
+                              color: colorBotonQuirofano2,
+                              child: Container(
+                                child: Column(
+                                  children: [
+                                    Text("Quirófano 2"),
+                                  ],
                                 ),
-                                RaisedButton(
-                                  color: colorBotonQuirofano3,
-                                  child: Container(
-                                    child: Column(
-                                      children: [
-                                        Text("Quirófano 3"),
-                                      ],
-                                    ),
-                                  ),
-                                  onPressed: () {
-                                    nombreQuiro = 3;
-                                    cargarQuirofano(nombreQuiro, context);
-                                  },
+                              ),
+                              onPressed: () {
+                                nombreQuiro = 2;
+                                cargarQuirofano(nombreQuiro, context);
+                              },
+                            ),
+                            RaisedButton(
+                              color: colorBotonQuirofano3,
+                              child: Container(
+                                child: Column(
+                                  children: [
+                                    Text("Quirófano 3"),
+                                  ],
                                 ),
-                                Text("     Oupado:   "),
-                                Container(
-                                  color: Colors.red,
-                                  height: responsive.diagonalPorcentaje(3),
-                                  width: responsive.diagonalPorcentaje(5),
-                                ),
-                                Text("  Libre:  "),
-                                Container(
-                                  color: Colors.blue[50],
-                                  height: responsive.diagonalPorcentaje(3),
-                                  width: responsive.diagonalPorcentaje(5),
-                                ),
-                              ],
-                            )),
-                      ],
-                    ),
-                  ),
-                  new Expanded(
-                    child: GridView.count(
-                      //Codigo para la ubicación y tamaños de la grilla
-                      padding: EdgeInsets.only(
-                          left: responsive.diagonalPorcentaje(1),
-                          right: responsive.diagonalPorcentaje(1),
-                          top: responsive.diagonalPorcentaje(1)),
-
-                      crossAxisCount: 5,
+                              ),
+                              onPressed: () {
+                                nombreQuiro = 3;
+                                cargarQuirofano(nombreQuiro, context);
+                              },
+                            ),
+                            Text("     Oupado:   "),
+                            Container(
+                              color: Colors.red,
+                              height: responsive.diagonalPorcentaje(3),
+                              width: responsive.diagonalPorcentaje(5),
+                            ),
+                            Text("  Libre:  "),
+                            Container(
+                              color: Colors.blue[50],
+                              height: responsive.diagonalPorcentaje(3),
+                              width: responsive.diagonalPorcentaje(5),
+                            ),
+                          ],
+                        )),
+                  ],
+                ),
+              ),
+              Container(
+                  height: responsive.diagonalPorcentaje(7),
+                  child: GridView.count(
+                      shrinkWrap: true,
+                      crossAxisCount: 7,
                       childAspectRatio:
-                          responsive.diagonalPorcentaje(0.2), // alto de widget
-                      mainAxisSpacing: responsive
-                          .diagonalPorcentaje(0.2), //alto en distancia
+                          responsive.diagonalPorcentaje(0.25), // alto de widget
+                      //alto en distancia
 
-                      crossAxisSpacing: responsive.diagonalPorcentaje(0.2),
-
-                      //Código de la lista de widgets para la grilla
-                      children: List.generate(55, (index) {
+                      crossAxisSpacing: responsive.diagonalPorcentaje(0.01),
+                      children: List.generate(7, (index2) {
                         setState(() {
-                          cabeceraTabla(index);
-                          valorFecha.text =
-                              cargarFechasTabla(fechaActual, index);
-                          valorHora.text = cargarHorasTabla(index);
-                          pintarQuirofanosOcupados(index, valorFecha.text,
-                              valorHora.text, nombreQuiro);
+                          diasSemana(index2);
                         });
-                        return Container(
-                            child: RaisedButton(
-                          child: Container(
-                            child: Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    Text(
-                                      fechaConNegrita.text,
-                                      style: TextStyle(
-                                          fontSize: responsive
-                                              .diagonalPorcentaje(1.2),
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    textosConFecha(
-                                        index, valorFecha, responsive),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Text(
-                                      horaConNegrita.text,
-                                      style: TextStyle(
-                                          fontSize: responsive
-                                              .diagonalPorcentaje(1.2),
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    textoConHora(index, valorHora, responsive),
-                                  ],
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      nombreDoctorConNegrita.text,
-                                      style: TextStyle(
-                                          fontSize: responsive
-                                              .diagonalPorcentaje(1.2),
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    textoConNombreDoctor(
-                                        index, valorNombreDoctor, responsive),
-                                  ],
-                                ),
-                              ],
+                        return //Container(
+                            // width: MediaQuery.of(context).size.width,
+                            //child:
+                            InkWell(
+                          child: Card(
+                            color: Colors.blue[400],
+                            child: Center(
+                              child: tamanoLetraDiasSemana(
+                                  index2, valorFecha, responsive),
                             ),
                           ),
-                          color: colorBase,
-                          onPressed: () {
-                            for (var i = 0; i < indices.length; i++) {
-                              if (indices[i] == index) {
+                        );
+                        //
+                        // );
+                      }))),
+              Expanded(
+                child: GridView.count(
+                  //Codigo para la ubicación y tamaños de la grilla
+
+                  crossAxisCount: 7,
+                  childAspectRatio:
+                      responsive.diagonalPorcentaje(0.15), // alto de widget
+                  mainAxisSpacing:
+                      responsive.diagonalPorcentaje(0.50), //alto en distancia
+
+                  crossAxisSpacing: responsive.diagonalPorcentaje(0.15),
+
+                  //Código de la lista de widgets para la grilla
+                  children: List.generate(84, (index) {
+                    setState(() {
+                      colorBaseQuirofanosVacios(index);
+                      valorFecha.text = cargarFechasTabla(fechaActual, index);
+                      valorHora.text = cargarHorasTabla(index);
+                      pintarQuirofanosOcupados(
+                          index, valorFecha.text, valorHora.text, nombreQuiro);
+                    });
+                    return SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Container(
+                        margin: EdgeInsets.all(0),
+                        width: responsive.diagonalPorcentaje(12.5),
+                        child: InkWell(
+                            onTap: () {
+                              print(index);
+                              /* for (var i = 0; i < datosCirujia.length; i++) {
+                                print("Los datos son: " +
+                                    datosCirujia[i].indice.toString() +
+                                    " " +
+                                    datosCirujia[i].numeroQuirofano.toString() +
+                                    " " +
+                                    datosCirujia[i].nombreCirujano.toString() +
+                                    " " +
+                                    datosCirujia[i].fechaCirujia.toString() +
+                                    " " +
+                                    datosCirujia[i].horaInicio.toString() +
+                                    " " +
+                                    datosCirujia[i].estado.toString());
+                              }*/
+
+                              /*for (var i = 0; i < datosCirujia.length; i++) {
+                                if (datosCirujia[i].estado == "Ocupado") {
+                                  print("Ocupado");
+                                  break;
+                                } else {
+                                  print("Libre");
+                                  break;
+                                }
+                              }*/
+
+                              if (datosCirujia[index].estado == "Ocupado") {
                                 print("Ocupado");
-
-                                break;
-                              } else if (indices[i] != index) {
+                              } else {
                                 print("Libre");
-
-                                Navigator.of(context).pushNamed('/tabla');
-                                break;
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            RegisterPage(
+                                              numeroQuirofano:
+                                                  datosCirujia[index]
+                                                      .numeroQuirofano,
+                                              nombreCirujano: UserService
+                                                  .nombreCompletoUsuarioLogueado,
+                                              fechaCirujia: datosCirujia[index]
+                                                  .fechaCirujia,
+                                              horaInicio: datosCirujia[index]
+                                                  .horaInicio,
+                                            )));
                               }
-                            }
-                          },
-                        ));
-                      }),
-                    ),
-                  ),
-                ],
+                              // print(index);
+                              /*for (var i = 0; i < indices.length; i++) {
+                                if (indices[i] == index) {
+                                  print("Ocupado");
+
+                                  break;
+                                } else if (indices[i] != index) {
+                                  print("Libre");
+                                  Preferences preferences = new Preferences();
+                                  // Navigator.of(context).pushNamed('/tabla');
+                                  Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (BuildContext context) =>
+                                              RegisterPage(
+                                                numeroQuirofano: nombreQuiro,
+                                                nombreCirujano:
+                                                    preferences.nombres,
+                                                fechaCirujia: indices[1],
+                                                horaInicio: 2,
+                                              )));
+                                  break;
+                                }
+                              }*/
+                            },
+                            child: Card(
+                              child: Column(
+                                children: [
+                                  Container(
+                                    padding: EdgeInsets.all(
+                                        responsive.diagonalPorcentaje(0.5)),
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                          fechaConNegrita.text,
+                                          style: TextStyle(
+                                              fontSize: responsive
+                                                  .diagonalPorcentaje(1.2),
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        textosConFecha(
+                                            index, valorFecha, responsive),
+                                      ],
+                                    ),
+                                  ),
+                                  Container(
+                                    padding: EdgeInsets.all(
+                                        responsive.diagonalPorcentaje(0.5)),
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                          horaConNegrita.text,
+                                          style: TextStyle(
+                                              fontSize: responsive
+                                                  .diagonalPorcentaje(1.2),
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        textoConHora(
+                                            index, valorHora, responsive),
+                                      ],
+                                    ),
+                                  ),
+                                  SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    child: Container(
+                                      padding: EdgeInsets.all(
+                                          responsive.diagonalPorcentaje(0.5)),
+                                      child: Row(
+                                        children: [
+                                          Text(
+                                            nombreDoctorConNegrita.text,
+                                            style: TextStyle(
+                                                fontSize: responsive
+                                                    .diagonalPorcentaje(1.3),
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          textoConNombreDoctor(index,
+                                              valorNombreDoctor, responsive),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              color: colorBase,
+                            )),
+                      ),
+                    );
+                  }),
+                ),
               ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -271,19 +385,26 @@ class _Horarios extends State<Horarios> {
 
   Text textosConFecha(
       int index, TextEditingController valor, Responsive responsive) {
+    return Text(
+      valor.text,
+      style: TextStyle(fontSize: responsive.diagonalPorcentaje(1.2)),
+    );
+  }
+
+  Text tamanoLetraDiasSemana(
+      int index, TextEditingController valor, Responsive responsive) {
     if (valor.text == "Lunes" ||
         valor.text == "Martes" ||
         valor.text == "Miercoles" ||
         valor.text == "Jueves" ||
-        valor.text == "Viernes") {
+        valor.text == "Viernes" ||
+        valor.text == "Sabado" ||
+        valor.text == "Domingo") {
       return Text(
         valor.text,
-        style: TextStyle(fontSize: responsive.diagonalPorcentaje(2.5)),
-      );
-    } else {
-      return Text(
-        valor.text,
-        style: TextStyle(fontSize: responsive.diagonalPorcentaje(1.2)),
+        style: TextStyle(
+            fontSize: responsive.diagonalPorcentaje(2.2),
+            fontWeight: FontWeight.bold),
       );
     }
   }
@@ -300,7 +421,7 @@ class _Horarios extends State<Horarios> {
       int index, TextEditingController valor, Responsive responsive) {
     return Text(
       valor.text,
-      style: TextStyle(fontSize: responsive.diagonalPorcentaje(1.2)),
+      style: TextStyle(fontSize: responsive.diagonalPorcentaje(1.3)),
     );
   }
 
@@ -319,52 +440,53 @@ class _Horarios extends State<Horarios> {
       fechaConNegrita.text = "";
     } while (DateFormat('EEEE').format(fechaAuxiliar).toString() != "Sunday");
 
-    if (index > 4) {
-      //Cuando el indice sea mayor a 4 empieza cargar las fechas y de la fecha que
-      //quedo en memoria en el anterior paso se aumenta en un dia
-      var fechaFinal = new DateTime(
-          fechaAuxiliar.year, fechaAuxiliar.month, fechaAuxiliar.day + cont1);
+    var fechaFinal = new DateTime(
+        fechaAuxiliar.year, fechaAuxiliar.month, fechaAuxiliar.day + cont1);
 
-      var format = new DateFormat("yyyy/MM/dd");
-      var dateString = format.format(fechaFinal);
-      fechaConNegrita.text = "Fecha: ";
+    var format = new DateFormat("yyyy/MM/dd");
+    var dateString = format.format(fechaFinal);
+    fechaConNegrita.text = "Fecha: ";
 
-      cont1++;
-      if (cont1 == 6) {
-        //Cuando llega a 5 dias el contador regresa a 0 para que repita este proceso en todo
-        //el calendario
-        cont1 = 1;
-      }
-      return dateString;
+    cont1++;
+    if (cont1 == 8) {
+      //Cuando llega a 5 dias el contador regresa a 0 para que repita este proceso en todo
+      //el calendario
+      cont1 = 1;
     }
+    return dateString;
   }
 
   int cont = 0;
-  int val = 8;
+  int val = 7; // hora en que inicia el calendario
 
   String cargarHorasTabla(int index) {
     String enviarHoraFinal;
-    if (index <= 4) {
-      valorHora.text = "";
-      horaConNegrita.text = "";
-    } else if (index >= 5 && cont <= 4) {
-      enviarHoraFinal = (val).toString() + ":00";
-      horaConNegrita.text = "Hora: ";
-      cont++;
 
-      if (cont == 5) {
-        cont = 0;
-        val = val + 1;
-      }
+    // en esta parte se controla que valla cargando las horas solo de lunes a domingo
+    enviarHoraFinal = (val).toString() + ":00";
+    horaConNegrita.text = "Hora: ";
+    cont++;
 
-      if (val == 18) {
-        val = 8;
-      }
-      return enviarHoraFinal;
+    if (cont == 7) {
+      // cuando el contador de dias de la semana llega a 7 este se reinicia y el valor de la hora se eincrementa en 1
+      cont = 0;
+      val = val + 1;
     }
+
+    if (val == 19) {
+      val = 7;
+    }
+    return enviarHoraFinal;
   }
 
-  TextEditingController cabeceraTabla(int index) {
+  TextEditingController colorBaseQuirofanosVacios(int index) {
+    valorFecha.text = "";
+    colorBase = Colors.blue[50];
+
+    return valorFecha;
+  }
+
+  void diasSemana(int index) {
     if (index == 0) {
       valorFecha.text = "Lunes";
       colorBase = Colors.blue[400];
@@ -380,16 +502,28 @@ class _Horarios extends State<Horarios> {
     } else if (index == 4) {
       valorFecha.text = "Viernes";
       colorBase = Colors.blue[400];
-    } else {
-      valorFecha.text = "";
-      colorBase = Colors.blue[50];
+    } else if (index == 5) {
+      valorFecha.text = "Sabado";
+      colorBase = Colors.blue[400];
+    } else if (index == 6) {
+      valorFecha.text = "Domingo";
+      colorBase = Colors.blue[400];
     }
-
-    return valorFecha;
   }
 
   void pintarQuirofanosOcupados(
       int index, String fecha, String hora, int numeroQuirofano) {
+    DatosCirujia datosCiru = new DatosCirujia();
+    datosCiru.indice = index;
+    datosCiru.numeroQuirofano = null;
+    datosCiru.nombreCirujano = "No Asignado";
+    String fechaParseada = fecha.replaceAll("/", "-");
+    datosCiru.fechaCirujia = DateTime.parse(fechaParseada);
+    String horaFormulario = hora.replaceAll(":00", "");
+    datosCiru.horaInicio = horaFormulario;
+    datosCiru.estado = "Libre";
+    datosCirujia.add(datosCiru);
+
     String horaInicio;
     String horaFin;
     int horaIntermediaAuxiliar;
@@ -397,6 +531,7 @@ class _Horarios extends State<Horarios> {
     try {
       if (numeroQuirofano == 1) {
         for (var i = 0; i < CirujiaDAO.recibir.length; i++) {
+          datosCirujia[index].numeroQuirofano = numeroQuirofano;
           if (CirujiaDAO.recibir[i].quirofano == 1) {
             horaInicio = CirujiaDAO.recibir[i].horaInicio;
             horaFin = CirujiaDAO.recibir[i].horaFin;
@@ -405,6 +540,7 @@ class _Horarios extends State<Horarios> {
 
             var format = new DateFormat("yyyy/MM/dd");
             var dateString = format.format(auxFecha);
+
             horaIntermediaAuxiliar = int.parse(CirujiaDAO.recibir[i].duracion);
 
             String horaParaUso = horaInicio.replaceAll(":00", "");
@@ -423,12 +559,14 @@ class _Horarios extends State<Horarios> {
               }
 
               if (colorBase == Colors.red) {
-                indices.add(index);
-                // print(CirujiaDAO.recibir[i]);
+                datosCirujia[index].estado = "Ocupado";
                 valorNombreDoctor.text =
                     CirujiaDAO.recibir[i].doctores[0].nombres;
+                datosCirujia[index].nombreCirujano = valorNombreDoctor.text +
+                    CirujiaDAO.recibir[i].doctores[0].apellidos;
                 nombreDoctorConNegrita.text = "Dr: ";
               } else {
+                datosCirujia[index].estado = "Libre";
                 valorNombreDoctor.text = "";
                 nombreDoctorConNegrita.text = "";
               }
@@ -437,6 +575,7 @@ class _Horarios extends State<Horarios> {
         }
       } else if (numeroQuirofano == 2) {
         for (var i = 0; i < CirujiaDAO.recibir.length; i++) {
+          datosCirujia[index].numeroQuirofano = numeroQuirofano;
           if (CirujiaDAO.recibir[i].quirofano == 2) {
             horaInicio = CirujiaDAO.recibir[i].horaInicio;
             horaFin = CirujiaDAO.recibir[i].horaFin;
@@ -462,12 +601,13 @@ class _Horarios extends State<Horarios> {
               }
 
               if (colorBase == Colors.red) {
-                indices.add(index);
+                datosCirujia[index].estado = "Ocupado";
                 valorNombreDoctor.text =
                     CirujiaDAO.recibir[i].doctores[0].nombres;
                 nombreDoctorConNegrita.text = "Dr: ";
                 indices.add(index);
               } else {
+                datosCirujia[index].estado = "Libre";
                 valorNombreDoctor.text = "";
                 nombreDoctorConNegrita.text = "";
               }
@@ -476,6 +616,7 @@ class _Horarios extends State<Horarios> {
         }
       } else if (numeroQuirofano == 3) {
         for (var i = 0; i < CirujiaDAO.recibir.length; i++) {
+          datosCirujia[index].numeroQuirofano = numeroQuirofano;
           if (CirujiaDAO.recibir[i].quirofano == 3) {
             horaInicio = CirujiaDAO.recibir[i].horaInicio;
             horaFin = CirujiaDAO.recibir[i].horaFin;
@@ -501,11 +642,12 @@ class _Horarios extends State<Horarios> {
               }
 
               if (colorBase == Colors.red) {
-                indices.add(index);
+                datosCirujia[index].estado = "Ocupado";
                 valorNombreDoctor.text =
                     CirujiaDAO.recibir[i].doctores[0].nombres;
                 nombreDoctorConNegrita.text = "Dr: ";
               } else {
+                datosCirujia[index].estado = "Libre";
                 valorNombreDoctor.text = "";
                 nombreDoctorConNegrita.text = "";
               }

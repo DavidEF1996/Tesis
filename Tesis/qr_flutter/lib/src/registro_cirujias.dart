@@ -7,6 +7,7 @@ import 'package:qr_flutter/dao/doctor_dao.dart';
 import 'package:qr_flutter/model/api_response.dart';
 import 'package:qr_flutter/model/cirujiasPrincipal.dart';
 import 'package:qr_flutter/model/diagnostico.dart';
+import 'package:qr_flutter/model/modeloOpcionesQuirofano.dart';
 import 'package:qr_flutter/model/modelo_doctor.dart';
 import 'package:qr_flutter/src/homebotones.dart';
 import 'package:qr_flutter/utils/responsive.dart';
@@ -18,6 +19,19 @@ import 'package:find_dropdown/find_dropdown.dart';
 import 'package:numberpicker/numberpicker.dart';
 
 class RegisterPage extends StatefulWidget {
+  final int numeroQuirofano;
+  final String nombreCirujano;
+  final DateTime fechaCirujia;
+  final String horaInicio;
+
+  const RegisterPage(
+      {Key key,
+      this.numeroQuirofano,
+      this.nombreCirujano,
+      this.fechaCirujia,
+      this.horaInicio})
+      : super(key: key);
+
   @override
   RegisterPageState createState() => RegisterPageState();
 }
@@ -37,8 +51,8 @@ class RegisterPageState extends State<RegisterPage> {
   TextEditingController repeatPassCtrl = new TextEditingController();
   TextEditingController enfermedad = new TextEditingController();
   TextEditingController duracion = new TextEditingController();
-  int _horasInicio = 3;
-  int _minutosInicio = 10;
+  int _horasInicio;
+  int _minutosInicio = 1;
   final focus = FocusNode();
   int _horasFin = 3;
   int _minutosFin = 10;
@@ -59,21 +73,52 @@ class RegisterPageState extends State<RegisterPage> {
   DoctorDao ddao = new DoctorDao();
   DiagnosticoDao dgndao = new DiagnosticoDao();
   String nombres_parametro;
+  String numeroQuirofanoAux = "";
+  String numeroQuirofanoPalAux = "";
   List<Doctore> doctores = [];
   DiagnosticoCp diagnosticoCp = new DiagnosticoCp();
   MainAxisAlignment portr;
 
+  String eleccion_default = "Uno";
+  int indice_default;
+  List<EleccionQuirofano> lista = [
+    EleccionQuirofano(indice: 1, eleccion: 'Quirofano 1'),
+    EleccionQuirofano(indice: 2, eleccion: 'Quirofano 2'),
+    EleccionQuirofano(indice: 3, eleccion: 'Quirofano 3'),
+  ];
+  DateTime fechaProcedimiento;
+
   @override
   void initState() {
-    //cargarDoctores("a");
     super.initState();
+    nombres_parametro =
+        (widget.nombreCirujano == "") ? "" : widget.nombreCirujano;
+
+    indice_default =
+        (widget.numeroQuirofano == null) ? 1 : widget.numeroQuirofano;
+
+    fechaProcedimiento =
+        (widget.fechaCirujia == null) ? DateTime.now() : widget.fechaCirujia;
+
+    _horasInicio = (int.parse(widget.horaInicio) == null)
+        ? 8
+        : int.parse(widget.horaInicio);
+
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeLeft,
       DeviceOrientation.landscapeRight,
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
-    nombres_parametro = "a";
+
+    print("-------------");
+    print(widget.numeroQuirofano);
+    print(widget.nombreCirujano);
+    print(widget.fechaCirujia);
+    print(widget.horaInicio);
+    print("____________");
+
+    //print("El nombre del Cirujano que entra es: " + nombres_parametro);
   }
 
   cargarDoctores(String nombres) async {
@@ -143,25 +188,26 @@ class RegisterPageState extends State<RegisterPage> {
         ),
         formItemsDesign(
             Icons.picture_in_picture_alt_outlined,
-            Container(
-              child: Column(
-                children: [
-                  Wrap(
-                    children: [
-                      Container(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            elegirQuirofano('1', 'Uno'),
-                            elegirQuirofano('2', 'Dos'),
-                            elegirQuirofano('3', 'Tres'),
-                          ],
-                        ),
-                      )
-                    ],
+            Wrap(
+              children: [
+                Container(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: lista
+                        .map((e) => RadioListTile(
+                            title: Text('${e.eleccion}'),
+                            value: e.indice,
+                            groupValue: indice_default,
+                            onChanged: (value) {
+                              setState(() {
+                                eleccion_default = e.eleccion;
+                                indice_default = e.indice;
+                              });
+                            }))
+                        .toList(),
                   ),
-                ],
-              ),
+                )
+              ],
             )),
         formItemsDesign(
             Icons.person,
@@ -650,30 +696,6 @@ class RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  Container elegirQuirofano(String value, String text) {
-    return Container(
-      width: 80,
-      child: Row(
-        children: [
-          Radio(
-            value: value,
-            groupValue: numeroQuirofano,
-            onChanged: (value) {
-              setState(() {
-                numeroQuirofano = value;
-                eleccionNumeroQuirofano = value;
-              });
-            },
-          ),
-          Text(
-            text,
-            style: TextStyle(fontSize: 14),
-          )
-        ],
-      ),
-    );
-  }
-
   Container necesidadSangre(String value, String text, Responsive responsive) {
     return Container(
       child: Row(
@@ -801,8 +823,6 @@ class RegisterPageState extends State<RegisterPage> {
 
   DateTime currentDate = DateTime.now();
 
-  DateTime fechaProcedimiento = DateTime.now();
-
   int age = 0;
   int meses = 0;
   calcularEdad(DateTime value) {
@@ -878,7 +898,7 @@ class RegisterPageState extends State<RegisterPage> {
 
   save() {
     Cirujias r = Cirujias();
-    r.quirofano = int.parse(eleccionNumeroQuirofano);
+    r.quirofano = indice_default;
     r.paciente = nameCtrl.text;
     r.fechaNacimiento = currentDate.microsecondsSinceEpoch;
     r.anios = age;
@@ -889,7 +909,7 @@ class RegisterPageState extends State<RegisterPage> {
     //var date = DateTime.fromMillisecondsSinceEpoch( * 1000);
     r.fechaCirujia = fechaProcedimiento.millisecondsSinceEpoch;
 
-    r.horaInicio = _horasInicio.toString();
+    r.horaInicio = _horasInicio.toString() + ":00";
     var auxDuracion = int.parse(duracion.text);
     if (_minutosInicio != 0) {
       auxDuracion += 1;
@@ -897,7 +917,7 @@ class RegisterPageState extends State<RegisterPage> {
 
     r.duracion = auxDuracion.toString();
     _horasFin = _horasInicio + auxDuracion;
-    r.horaFin = _horasFin.toString();
+    r.horaFin = _horasFin.toString() + ":00";
 
     r.necesidadSangre = eleccionNecesidadDeSangre;
     r.examenSangre = eleccionExamenesSangre;

@@ -5,4 +5,6 @@ class Conn {
   static const String URL =
       'http://$IP:$PORT/operatingRoomRs/ws/operatingRoomServices';
   // 'http://$IP:$PORT/TesisOP/ws/operatingRoomServices';
+
+  static const String URL_PYTHON = "http://localhost:5000";
 }

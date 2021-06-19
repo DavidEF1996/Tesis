@@ -7,6 +7,7 @@ import 'package:qr_flutter/src/homebotones.dart';
 import 'package:qr_flutter/src/login.dart';
 
 import 'package:qr_flutter/utils/rutas.dart';
+import 'package:qr_flutter/vistas/PrincipalTarjetasCirujia.dart';
 import 'package:qr_flutter/vistas/principalHorarios.dart';
 
 void setupLocator() {
@@ -30,7 +31,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(primarySwatch: Colors.blue),
-        home: (_preferences.id == "") ? LoginPage() : Botones(),
+        home: (_preferences.id == "") ? LoginPage() : PrincipalTarCirujias(),
         routes: builAppRoutes());
   }
 }

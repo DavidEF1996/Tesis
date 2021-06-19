@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 import 'package:qr_flutter/dao/cirujiaDao.dart';
 import 'package:qr_flutter/model/api_response.dart';
@@ -9,6 +10,8 @@ import 'package:qr_flutter/utils/fechas_tabla.dart';
 import 'package:qr_flutter/utils/responsive.dart';
 
 class PrincipalHorarios extends StatefulWidget {
+  int parametroCreacion;
+
   @override
   _PrincipalHorariosState createState() => _PrincipalHorariosState();
 }
@@ -25,6 +28,10 @@ class _PrincipalHorariosState extends State<PrincipalHorarios> {
   @override
   void initState() {
     cargarHijos();
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeRight,
+      DeviceOrientation.landscapeLeft,
+    ]);
     super.initState();
   }
 
@@ -35,7 +42,6 @@ class _PrincipalHorariosState extends State<PrincipalHorarios> {
     });
     CirujiaDAO cirujia = new CirujiaDAO();
     fechas = fecha_tabla.obtenerFechasSemana(fechaActual);
-
     _apiResponse = await cirujia.obtenerCirujias(fechas[0], fechas[4]);
 
     setState(() {

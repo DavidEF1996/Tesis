@@ -60,6 +60,8 @@ class CirujiaDAO {
 
   Future<APIResponse<List<Cirujias>>> obtenerCirujias(
       DateTime lunes, DateTime viernes) async {
+    int horaFin;
+    int horaTope = 18;
     return await http.get(Uri.parse(URL + servicio_listar + '/$lunes,$viernes'),
         headers: {"Content-Type": "application/json"}).then((data) {
       //log('La respuesta obtenida es -----------: ' + data.body);
@@ -74,22 +76,43 @@ class CirujiaDAO {
         }
         //print(data.body);
 
-        print(cirujiaL.length);
         recibir = cirujiaL;
-        for (var i = 0; i < recibir.length; i++) {
-          print(recibir[i].fechaCirujia);
-          var date =
-              DateTime.fromMillisecondsSinceEpoch(recibir[i].fechaCirujia);
-          var format = new DateFormat("yyyy/MM/dd");
-          var dateString = format.format(date);
-          print(dateString);
-        }
+        /*for (var i = 0; i < recibir.length; i++) {
+          horaFin = int.parse(recibir[i].horaFin.replaceAll(":00", ""));
 
+          int guardarCaso1 = 0;
+
+          if (horaFin > horaTope) {
+            guardarCaso1 = horaFin - horaTope;
+            parametroCreacionCalendario = 84 + (guardarCaso1 * 7);
+            print(parametroCreacionCalendario);
+          } else {}
+        }*/
         return APIResponse<List<Cirujias>>(data: cirujiaL);
       }
       return APIResponse<List<Cirujias>>(error: true, mensajeError: "Error");
     }).catchError(
         (_) => APIResponse<List<Cirujias>>(error: true, mensajeError: "Error"));
+  }
+
+  Future<List<Cirujias>> getCirujiasTarjetas(
+      DateTime lunes, DateTime viernes) async {
+    final response =
+        await http.get(Uri.parse(URL + servicio_listar + '/$lunes,$viernes'));
+    if (response.statusCode == 200) {
+      print(response.body);
+      return _listaNoticias(response.body).toList();
+    } else if (response.statusCode == 404) {
+      print(response.statusCode);
+      return null;
+    } else {
+      throw Exception("Error del servidor!!");
+    }
+  }
+
+  static List<Cirujias> _listaNoticias(String responseBody) {
+    final parsed = json.decode(responseBody).cast<Map<String, dynamic>>();
+    return parsed.map<Cirujias>((json) => Cirujias.fromJson(json)).toList();
   }
 
   String readTimestamp(int timestamp) {

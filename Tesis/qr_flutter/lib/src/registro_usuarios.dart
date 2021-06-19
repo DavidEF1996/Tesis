@@ -122,7 +122,10 @@ class insertar extends State<insertar_usuarios> {
               ),
 
               // Text("Edad: "+ ),
-            ])),
+            ]
+            )
+            
+            ),
         formItemsDesign(
             Icons.medical_services_rounded,
             TextFormField(

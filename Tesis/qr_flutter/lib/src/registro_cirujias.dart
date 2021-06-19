@@ -17,6 +17,7 @@ import 'package:qr_flutter/validations/usuarioLogueado.dart';
 import 'package:qr_flutter/validations/validacionesRegistro.dart';
 import 'package:find_dropdown/find_dropdown.dart';
 import 'package:numberpicker/numberpicker.dart';
+import 'package:qr_flutter/vistas/PrincipalTarjetasCirujia.dart';
 
 class RegisterPage extends StatefulWidget {
   final int numeroQuirofano;
@@ -635,7 +636,7 @@ class RegisterPageState extends State<RegisterPage> {
         GestureDetector(
             onTap: () {
               final route = MaterialPageRoute(builder: (context) {
-                return Botones();
+                return PrincipalTarCirujias();
               });
               Navigator.pushReplacement(context, route);
             },

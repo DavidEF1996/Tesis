@@ -6,6 +6,7 @@ import 'package:qr_flutter/model/api_response.dart';
 import 'package:qr_flutter/model/cirujiasPrincipal.dart';
 import 'package:qr_flutter/services/user_services.dart';
 import 'package:qr_flutter/src/horarios.dart';
+import 'package:qr_flutter/src/horariosPortrait.dart';
 import 'package:qr_flutter/utils/fechas_tabla.dart';
 import 'package:qr_flutter/utils/responsive.dart';
 
@@ -27,10 +28,11 @@ class _PrincipalHorariosState extends State<PrincipalHorarios> {
 
   @override
   void initState() {
+    WidgetsFlutterBinding.ensureInitialized();
     cargarHijos();
     SystemChrome.setPreferredOrientations([
-      DeviceOrientation.landscapeRight,
       DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
     ]);
     super.initState();
   }
@@ -51,32 +53,34 @@ class _PrincipalHorariosState extends State<PrincipalHorarios> {
   }
 
   Widget build(BuildContext context) {
-    final Responsive responsive = Responsive.of(context);
-    return Scaffold(
+    final data = MediaQuery.of(context);
 
-        // drawer: MenuLateral(),
-        body: Builder(
-      builder: (_) {
-        if (_isLoading) {
-          return Center(child: CircularProgressIndicator());
-        } else {
-          return Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment(
-                    0.7, 0), // 10% of the width, so there are ten blinds.
-                colors: [
-                  const Color.fromRGBO(28, 26, 24, 1),
-                  const Color.fromRGBO(28, 26, 24, 1),
-                ], // red to yellow
-                tileMode:
-                    TileMode.repeated, // repeats the gradient over the canvas
+    if (data.orientation == Orientation.portrait) {
+      return Scaffold(
+
+          // drawer: MenuLateral(),
+          body: Builder(
+        builder: (_) {
+          if (_isLoading) {
+            return Center(child: CircularProgressIndicator());
+          } else {
+            return Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment(
+                      0.7, 0), // 10% of the width, so there are ten blinds.
+                  colors: [
+                    const Color.fromRGBO(28, 26, 24, 1),
+                    const Color.fromRGBO(28, 26, 24, 1),
+                  ], // red to yellow
+                  tileMode:
+                      TileMode.repeated, // repeats the gradient over the canvas
+                ),
               ),
-            ),
-            child: Column(
-              children: [
-                /*Container(
+              child: Column(
+                children: [
+                  /*Container(
                   child: Text(
                     "Noticias",
                     style: TextStyle(
@@ -85,15 +89,59 @@ class _PrincipalHorariosState extends State<PrincipalHorarios> {
                         fontWeight: FontWeight.bold),
                   ),
                 ),*/
-                Expanded(
-                  child: Horarios(),
-                )
-              ],
-            ),
-          );
-        }
-      },
-    ));
+                  Expanded(
+                    child: HorariosPortrait(),
+                  )
+                ],
+              ),
+            );
+          }
+        },
+      ));
+    } else {
+      return Scaffold(
+
+          // drawer: MenuLateral(),
+          body: Builder(
+        builder: (_) {
+          if (_isLoading) {
+            return Center(child: CircularProgressIndicator());
+          } else {
+            return Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment(
+                      0.7, 0), // 10% of the width, so there are ten blinds.
+                  colors: [
+                    const Color.fromRGBO(28, 26, 24, 1),
+                    const Color.fromRGBO(28, 26, 24, 1),
+                  ], // red to yellow
+                  tileMode:
+                      TileMode.repeated, // repeats the gradient over the canvas
+                ),
+              ),
+              child: Column(
+                children: [
+                  /*Container(
+                  child: Text(
+                    "Noticias",
+                    style: TextStyle(
+                        fontSize: responsive.diagonalPorcentaje(5),
+                        color: Color.fromRGBO(255, 226, 199, 1),
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),*/
+                  Expanded(
+                    child: Horarios(),
+                  )
+                ],
+              ),
+            );
+          }
+        },
+      ));
+    }
   }
 }
 

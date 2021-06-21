@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:qr_flutter/dao/cirujiaDao.dart';
 import 'package:qr_flutter/model/cirujiasPrincipal.dart';
 import 'package:qr_flutter/model/modeloDatosCirujia.dart';
@@ -30,6 +31,13 @@ class _PrincipalTarCirujiasState extends State<PrincipalTarCirujias> {
 
   @override
   initState() {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+
     cargarNoticias();
     super.initState();
   }

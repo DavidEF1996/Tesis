@@ -50,6 +50,7 @@ class _Horarios extends State<Horarios> {
   int indiceParaCalendario;
   @override
   void initState() {
+    WidgetsFlutterBinding.ensureInitialized();
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeRight,
       DeviceOrientation.landscapeLeft,
@@ -296,13 +297,13 @@ class _Horarios extends State<Horarios> {
                                   Container(
                                     padding: EdgeInsets.all(
                                         responsive.diagonalPorcentaje(0.5)),
-                                    child: Row(
+                                    child: Column(
                                       children: [
                                         Text(
                                           fechaConNegrita.text,
                                           style: TextStyle(
                                               fontSize: responsive
-                                                  .diagonalPorcentaje(1.2),
+                                                  .diagonalPorcentaje(1.3),
                                               fontWeight: FontWeight.bold),
                                         ),
                                         textosConFecha(
@@ -314,12 +315,14 @@ class _Horarios extends State<Horarios> {
                                     padding: EdgeInsets.all(
                                         responsive.diagonalPorcentaje(0.5)),
                                     child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
                                         Text(
                                           horaConNegrita.text,
                                           style: TextStyle(
                                               fontSize: responsive
-                                                  .diagonalPorcentaje(1.2),
+                                                  .diagonalPorcentaje(1.3),
                                               fontWeight: FontWeight.bold),
                                         ),
                                         textoConHora(
@@ -374,7 +377,7 @@ class _Horarios extends State<Horarios> {
       int index, TextEditingController valor, Responsive responsive) {
     return Text(
       valor.text,
-      style: TextStyle(fontSize: responsive.diagonalPorcentaje(1.2)),
+      style: TextStyle(fontSize: responsive.diagonalPorcentaje(1.3)),
     );
   }
 
@@ -400,7 +403,7 @@ class _Horarios extends State<Horarios> {
       int index, TextEditingController valor, Responsive responsive) {
     return Text(
       valor.text,
-      style: TextStyle(fontSize: responsive.diagonalPorcentaje(1.2)),
+      style: TextStyle(fontSize: responsive.diagonalPorcentaje(1.3)),
     );
   }
 

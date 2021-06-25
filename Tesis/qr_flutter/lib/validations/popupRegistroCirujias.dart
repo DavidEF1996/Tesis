@@ -7,6 +7,7 @@ import 'package:qr_flutter/src/homebotones.dart';
 import 'package:qr_flutter/src/login.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:qr_flutter/dao/doctor_dao.dart';
+import 'package:qr_flutter/vistas/PrincipalTarjetasCirujia.dart';
 
 class popupRegistroCirujias {
   Future<void> handleClickMe(BuildContext context, String mensaje) async {
@@ -112,10 +113,11 @@ class popupRegistroCirujias {
                 Row(
                   children: [
                     Text(
-                      'Fecha del Procedimiento: ',
+                      'F. Pro: ',
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    Text(r.fechaCirujia.toString().substring(0, 7)), //.text),
+                    Text(DateTime.fromMillisecondsSinceEpoch(r.fechaCirujia)
+                        .toString()), //.text),
                   ],
                 ),
                 Row(
@@ -211,7 +213,8 @@ class popupRegistroCirujias {
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                        builder: (BuildContext context) => Botones()));
+                        builder: (BuildContext context) =>
+                            PrincipalTarCirujias()));
 
                 //enviarDatos(context);
               },

@@ -42,8 +42,8 @@ class UsuarioLogueado {
       onPressed: () {
         // PersonaDAO.eliminarPersona(widget.persona.getID);
         final _preferences = new Preferences();
-        _preferences.id = "";
-        Navigator.of(context).pushNamed('/botones');
+        //  _preferences.id = "";
+        Navigator.of(context).pushNamed('/principalTarjeta');
       },
     );
   }

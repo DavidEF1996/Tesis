@@ -12,6 +12,7 @@ import 'package:qr_flutter/src/registro_usuarios.dart';
 import 'package:qr_flutter/utils/responsive.dart';
 import 'package:qr_flutter/utils/utils.dart';
 import 'package:qr_flutter/utils/utils.dart' as utl;
+import 'package:qr_flutter/vistas/PrincipalTarjetasCirujia.dart';
 
 class Vista_Celular_Loguin {
   CirujiaDAO cirujia = new CirujiaDAO();
@@ -20,7 +21,6 @@ class Vista_Celular_Loguin {
       BuildContext context,
       TextEditingController nameController,
       TextEditingController passwordController,
-
       UserService httpServicio,
       Responsive responsive) {
     print("LLegue a portrait");
@@ -246,7 +246,7 @@ class Vista_Celular_Loguin {
     final String usuario = nameController.text;
     final String contrasena = passwordController.text;
 
-    final result =  await httpServicio.loginUsuario(
+    final result = await httpServicio.loginUsuario(
         usuario, utl.encode(passwordController.text));
 
     //print(result);
@@ -280,7 +280,7 @@ class Vista_Celular_Loguin {
           }
           print(_cirujias.length);
           final route = MaterialPageRoute(builder: (context) {
-            return Botones();
+            return PrincipalTarCirujias();
           });
           Navigator.push(context, route);
         }

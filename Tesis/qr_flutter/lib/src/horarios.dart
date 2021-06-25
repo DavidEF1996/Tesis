@@ -12,6 +12,7 @@ import 'package:qr_flutter/src/registro_cirujias.dart';
 import 'package:qr_flutter/utils/fechas_tabla.dart';
 
 import 'package:qr_flutter/utils/responsive.dart';
+import 'package:qr_flutter/validations/IndiceCreadorCalendario.dart';
 import 'package:qr_flutter/validations/cabecera.dart';
 import 'dart:core';
 import 'package:qr_flutter/validations/usuarioLogueado.dart';
@@ -49,35 +50,22 @@ class _Horarios extends State<Horarios> {
   List<DateTime> fechas = [];
   Fecha_Tabla fecha_tabla = new Fecha_Tabla();
   Preferences preferences = new Preferences();
-
+  IndiceCreador inCreador = new IndiceCreador();
+  int indiceParaCalendario;
   @override
   void initState() {
+    WidgetsFlutterBinding.ensureInitialized();
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeRight,
       DeviceOrientation.landscapeLeft,
     ]);
     super.initState();
-    setState(() {
-      // isloading = true;
-      /* fechas = fecha_tabla.obtenerFechasSemana(fechaActual);
-      for (var i = 0; i < fechas.length; i++) {
-        print(i.toString() + "----------" + fechas[i].toString());
-      }
-
-      cirujiaDao.obtenerCirujias(fechas[0], fechas[4]);*/
-
-      /* Future.delayed(const Duration(milliseconds: 3000), () {
-        print('Hello, world');
-        setState(() {
-          isloading = false;
-        });
-      });*/
-    });
 
     int index = 1;
     nombreQuiro = (widget.nombreQuirofano);
     nombreQuiro = (widget.nombreQuirofano == 1) ? 1 : widget.nombreQuirofano;
-
+    indiceParaCalendario = inCreador.indiceCreadorCalendario(nombreQuiro);
+    print("Esta vez es" + indiceParaCalendario.toString());
     cambiarColorBotonQuirofano(nombreQuiro);
   }
 
@@ -221,7 +209,7 @@ class _Horarios extends State<Horarios> {
                   crossAxisSpacing: responsive.diagonalPorcentaje(0.15),
 
                   //Código de la lista de widgets para la grilla
-                  children: List.generate(84, (index) {
+                  children: List.generate(indiceParaCalendario, (index) {
                     setState(() {
                       colorBaseQuirofanosVacios(index);
                       valorFecha.text = cargarFechasTabla(fechaActual, index);
@@ -321,13 +309,13 @@ class _Horarios extends State<Horarios> {
                                   Container(
                                     padding: EdgeInsets.all(
                                         responsive.diagonalPorcentaje(0.5)),
-                                    child: Row(
+                                    child: Column(
                                       children: [
                                         Text(
                                           fechaConNegrita.text,
                                           style: TextStyle(
                                               fontSize: responsive
-                                                  .diagonalPorcentaje(1.2),
+                                                  .diagonalPorcentaje(1.3),
                                               fontWeight: FontWeight.bold),
                                         ),
                                         textosConFecha(
@@ -339,12 +327,14 @@ class _Horarios extends State<Horarios> {
                                     padding: EdgeInsets.all(
                                         responsive.diagonalPorcentaje(0.5)),
                                     child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
                                         Text(
                                           horaConNegrita.text,
                                           style: TextStyle(
                                               fontSize: responsive
-                                                  .diagonalPorcentaje(1.2),
+                                                  .diagonalPorcentaje(1.3),
                                               fontWeight: FontWeight.bold),
                                         ),
                                         textoConHora(
@@ -399,7 +389,7 @@ class _Horarios extends State<Horarios> {
       int index, TextEditingController valor, Responsive responsive) {
     return Text(
       valor.text,
-      style: TextStyle(fontSize: responsive.diagonalPorcentaje(1.2)),
+      style: TextStyle(fontSize: responsive.diagonalPorcentaje(1.3)),
     );
   }
 
@@ -425,7 +415,7 @@ class _Horarios extends State<Horarios> {
       int index, TextEditingController valor, Responsive responsive) {
     return Text(
       valor.text,
-      style: TextStyle(fontSize: responsive.diagonalPorcentaje(1.2)),
+      style: TextStyle(fontSize: responsive.diagonalPorcentaje(1.3)),
     );
   }
 
@@ -485,9 +475,6 @@ class _Horarios extends State<Horarios> {
       val = val + 1;
     }
 
-    if (val == 19) {
-      val = 7;
-    }
     return enviarHoraFinal;
   }
 
@@ -550,6 +537,8 @@ class _Horarios extends State<Horarios> {
             auxFecha = new DateTime.fromMillisecondsSinceEpoch(
                 CirujiaDAO.recibir[i].fechaCirujia);
 
+            //print(CirujiaDAO.recibir[i].fechaCirujia);
+
             var format = new DateFormat("yyyy/MM/dd");
             var dateString = format.format(auxFecha);
 
@@ -557,9 +546,12 @@ class _Horarios extends State<Horarios> {
 
             String horaParaUso = horaInicio.replaceAll(":00", "");
             int horaParaUsoInt = int.parse(horaParaUso);
-            print(CirujiaDAO.recibir[i].doctores[0].nombres + "ide del doctor");
-
+            // print(CirujiaDAO.recibir[i].doctores[0].nombres + "ide del doctor");
+            // print(auxFecha);
             for (var j = 0; j < horaIntermediaAuxiliar; j++) {
+              //print("Variable Fecha: " + fecha); //variable que contiene los dias de la semana
+              //print("Variable dateString: " +
+              // dateString); // variable que contiene los dias de la base
               if (fecha == dateString && hora == horaInicio.trim() ||
                   fecha == dateString && hora == horaFin.trim()) {
                 colorBase = Colors.red;
@@ -673,7 +665,7 @@ class _Horarios extends State<Horarios> {
   void cargarQuirofano(int nombreQuirofano, BuildContext context) {
     if (nombreQuirofano == 1) {
       //cargarCirujia();
-      print("Llego al quiro 1");
+      print("Llego al quiro:" + nombreQuirofano.toString());
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(

@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:qr_flutter/dao/cirujiaDao.dart';
+import 'package:qr_flutter/dao/reglas.dart';
+import 'package:qr_flutter/model/hrs_fecha_reglas.dart';
 import 'package:qr_flutter/model/modeloDatosCirujia.dart';
 import 'package:qr_flutter/preferences/preferences.dart';
 import 'package:qr_flutter/services/user_services.dart';
@@ -250,6 +254,14 @@ class _Horarios extends State<Horarios> {
                                 print("Ocupado");
                               } else {
                                 print("Libre");
+                                ReglasDao rdao = ReglasDao();
+                                HrsFechaReglas objRegla = new HrsFechaReglas();
+                                objRegla.fecha =
+                                    datosCirujia[index].fechaCirujia;
+                                objRegla.hora = datosCirujia[index].horaInicio;
+
+                                rdao.validarHoras(
+                                    jsonEncode(objRegla.toJson()));
                                 Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(

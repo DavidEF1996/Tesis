@@ -24,13 +24,15 @@ class RegisterPage extends StatefulWidget {
   final String nombreCirujano;
   final DateTime fechaCirujia;
   final String horaInicio;
+  final String minutosInicio;
 
   const RegisterPage(
       {Key key,
       this.numeroQuirofano,
       this.nombreCirujano,
       this.fechaCirujia,
-      this.horaInicio})
+      this.horaInicio,
+      this.minutosInicio})
       : super(key: key);
 
   @override
@@ -53,10 +55,10 @@ class RegisterPageState extends State<RegisterPage> {
   TextEditingController enfermedad = new TextEditingController();
   TextEditingController duracion = new TextEditingController();
   int _horasInicio;
-  int _minutosInicio = 1;
+  int _minutosInicio = 0;
   final focus = FocusNode();
-  int _horasFin = 3;
-  int _minutosFin = 10;
+  int _horasFin = 7;
+  int _minutosFin = 0;
   String codigoEnfermedad = "";
 
   String tipoCirujia = 'cirujia';
@@ -123,9 +125,8 @@ class RegisterPageState extends State<RegisterPage> {
   }
 
   cargarDoctores(String nombres) async {
-    print("llega al m[etodo");
     _apiResponse = await ddao.listarDoctores(nombres);
-    print("llega aca");
+
     print(_apiResponse.toString());
   }
 
@@ -680,6 +681,7 @@ class RegisterPageState extends State<RegisterPage> {
         children: [
           Radio(
             value: value,
+            toggleable: false,
             groupValue: tipoCirujia,
             onChanged: (value) {
               setState(() {

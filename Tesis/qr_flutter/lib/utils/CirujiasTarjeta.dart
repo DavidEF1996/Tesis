@@ -16,14 +16,11 @@ class CardCirujias extends StatelessWidget {
         margin: EdgeInsets.only(bottom: 10.0),
         decoration: BoxDecoration(
             border: Border.all(color: Colors.black),
-            color: Colors.red,
-            gradient: LinearGradient(
-              begin: Alignment.topRight,
-              end: Alignment.bottomLeft,
-              colors: [
-                Colors.blue[200],
-                Colors.white,
-              ],
+            image: DecorationImage(
+              image: AssetImage('assets/logoSinFondo.png'),
+              fit: BoxFit.cover,
+              colorFilter: new ColorFilter.mode(
+                  Colors.white.withOpacity(0.2), BlendMode.dstATop),
             )),
         height: 150,
         child: InkWell(

@@ -243,45 +243,41 @@ class Vista_Celular_Loguin {
     final String contrasena = passwordController.text;
 
     final result = await httpServicio.loginUsuario(
-        usuario, utl.encode(passwordController.text));
+        context, usuario, utl.encode(passwordController.text));
 
     //print(result);
 
     if (result == null) {
       mostrarAlerta(context, "Error para acceder al servidor!");
     } else {
-      if (result['acceso']) {
-        if (result['bandera'] == 0) {
-          final route = MaterialPageRoute(builder: (context) {
-            return CambioContrasena(result['idDoctor']);
-          });
-          Navigator.push(context, route);
-        } else {
-          final _preferences = new Preferences();
-          _preferences.id = result['idDoctor'];
-          _preferences.nombres = UserService.usuariologueado;
-
-          _preferences.nombresCompletos = UserService.nombres;
-
-          _preferences.apellidos = UserService.apellidos;
-
-          List<dynamic> datos = result['cirujias'];
-
-          List<Cirujias> _cirujias = [];
-          for (var i = 0; i < datos.length; i++) {
-            Cirujias cirujia = new Cirujias();
-            cirujia.idCirujia = datos.elementAt(i)['idCirujia'];
-            cirujia.fechaCirujia = datos.elementAt(i)['fechaCirujia'];
-            cirujia.paciente = datos.elementAt(i)['paciente'];
-            _cirujias.add(cirujia);
-          }
-          final route = MaterialPageRoute(builder: (context) {
-            return PrincipalTarCirujias();
-          });
-          Navigator.push(context, route);
-        }
+      if (result['bandera'] == 0) {
+        final route = MaterialPageRoute(builder: (context) {
+          return CambioContrasena(result['idDoctor']);
+        });
+        Navigator.push(context, route);
       } else {
-        mostrarAlerta(context, "Error de usuario");
+        final _preferences = new Preferences();
+        _preferences.id = result['idDoctor'];
+        _preferences.nombres = UserService.usuariologueado;
+
+        _preferences.nombresCompletos = UserService.nombres;
+
+        _preferences.apellidos = UserService.apellidos;
+
+        List<dynamic> datos = result['cirujias'];
+
+        List<Cirujias> _cirujias = [];
+        for (var i = 0; i < datos.length; i++) {
+          Cirujias cirujia = new Cirujias();
+          cirujia.idCirujia = datos.elementAt(i)['idCirujia'];
+          cirujia.fechaCirujia = datos.elementAt(i)['fechaCirujia'];
+          cirujia.paciente = datos.elementAt(i)['paciente'];
+          _cirujias.add(cirujia);
+        }
+        final route = MaterialPageRoute(builder: (context) {
+          return PrincipalTarCirujias();
+        });
+        Navigator.push(context, route);
       }
     }
 

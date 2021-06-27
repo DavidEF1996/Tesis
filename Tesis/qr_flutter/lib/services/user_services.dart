@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:qr_flutter/connections/urls.dart';
+import 'package:qr_flutter/utils/utils.dart';
 
 class UserService {
   static var nombreUsuariologueado = "";
@@ -13,7 +15,7 @@ class UserService {
 
   static const headers = {"Content-type": " application/json"};
 
-  Future loginUsuario(String correo, String contrasena) async {
+  Future loginUsuario(BuildContext context, correo, String contrasena) async {
     //print(correo + ' ' + contrasena);
     final body = {"user": correo, "password": contrasena};
     var body2 = jsonEncode(body);
@@ -22,22 +24,22 @@ class UserService {
 
     if (respuesta.statusCode == 200) {
       final decodedata = json.decode(respuesta.body);
-      //print(respuesta.body);
-      //print(decodedata);
-      print(decodedata['apellidos'] + " :el apellido");
-      //Map<String, dynamic> user = jsonDecodeS(decodedata);
-      nombres = decodedata['nombres'];
-      apellidos = decodedata['apellidos'];
-      nombreUsuariologueado = decodedata['nombres'];
-      apellidoUsuarioLogueado = decodedata['apellidos'];
+      if (decodedata['acceso']) {
+        nombres = decodedata['nombres'];
+        apellidos = decodedata['apellidos'];
+        nombreUsuariologueado = decodedata['nombres'];
+        apellidoUsuarioLogueado = decodedata['apellidos'];
 
-      usuariologueado = nombreUsuariologueado.split(" ")[0] +
-          " " +
-          apellidoUsuarioLogueado.split(" ")[0];
+        usuariologueado = nombreUsuariologueado.split(" ")[0] +
+            " " +
+            apellidoUsuarioLogueado.split(" ")[0];
 
-      nombreCompletoUsuarioLogueado =
-          nombreUsuariologueado + " " + apellidoUsuarioLogueado;
-      return decodedata;
+        nombreCompletoUsuarioLogueado =
+            nombreUsuariologueado + " " + apellidoUsuarioLogueado;
+        return decodedata;
+      } else {
+        return null;
+      }
     } else {
       return null;
     }

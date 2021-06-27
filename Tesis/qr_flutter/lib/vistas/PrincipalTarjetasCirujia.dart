@@ -1,9 +1,11 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:qr_flutter/dao/cirujiaDao.dart';
 import 'package:qr_flutter/model/cirujiasPrincipal.dart';
 import 'package:qr_flutter/model/modeloDatosCirujia.dart';
 import 'package:qr_flutter/model/api_response.dart';
+import 'package:qr_flutter/preferences/preferences.dart';
 import 'package:qr_flutter/services/user_services.dart';
 import 'package:qr_flutter/utils/ListaCirujiaTarjetas.dart';
 import 'package:qr_flutter/utils/fechas_tabla.dart';
@@ -47,8 +49,13 @@ class _PrincipalTarCirujiasState extends State<PrincipalTarCirujias> {
       _isLoading = true;
     });
     CirujiaDAO cirujia = new CirujiaDAO();
-    fechas = fecha_tabla.obtenerFechasSemana(fechaActual);
-    data = await cirujia.getCirujiasTarjetas(fechas[0], fechas[4]);
+    print(Preferences().nombresCompletos);
+    print(Preferences().apellidos);
+    data = await cirujia.getCirujiasTarjetas(
+        utf8.decode(latin1.encode(Preferences().nombresCompletos),
+            allowMalformed: true),
+        Preferences().apellidos,
+        Preferences().id);
 
     setState(() {
       _isLoading = false;
@@ -57,7 +64,7 @@ class _PrincipalTarCirujiasState extends State<PrincipalTarCirujias> {
 
   @override
   Widget build(BuildContext context) {
-    print(UserService.usuariologueado);
+    //print(UserService.usuariologueado);
     final Responsive responsive = Responsive.of(context);
     return Scaffold(
         appBar: new AppBar(

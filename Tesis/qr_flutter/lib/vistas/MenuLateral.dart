@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:qr_flutter/model/registro_cirujias_modelo.dart';
 import 'package:qr_flutter/preferences/preferences.dart';
 import 'package:qr_flutter/src/login.dart';
 import 'package:qr_flutter/src/registro_cirujias.dart';

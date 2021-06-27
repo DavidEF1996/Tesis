@@ -10,6 +10,7 @@ import 'package:qr_flutter/model/cirujiasPrincipal.dart';
 class CirujiaDAO {
   static const String servicio_listar = "/cirujias";
   static const String servicio_crear = "/insertarCirujia";
+  static const String servicio_cirujias_card = "/cirujiasTarjetas";
 
   static List<Cirujias> recibir = [];
 
@@ -31,29 +32,6 @@ class CirujiaDAO {
     final response = await http.get(Uri.parse(URL + servicio_listar),
         headers: {"Content-Type": "application/json"});
     List<dynamic> cirujia = jsonDecode(response.body);
-    //  print('lista');
-    //  print(cirujia);
-
-//    cirujia
-
-    /* List<Cirujias> listaCirujias;
-    for (var i = 0; i < cirujia.length; i++) {
-      Cirujias cirujiaP = new Cirujias();
-
-      cirujiaP.paciente = (cirujia.elementAt(i)['paciente']);
-
-      List<dynamic> numeroDoctores = cirujia.elementAt(i)['doctores'];
-
-      cirujiaP.doctores = [];
-      for (var j = 0; j < numeroDoctores.length; j++) {
-        Doctore doctor = new Doctore();
-        doctor.nombres = numeroDoctores.elementAt(j)['nombres'];
-
-        cirujiaP.doctores.add(doctor);
-      }
-
-      listaCirujias.add(cirujiaP);
-    }*/
 
     return cirujia;
   }
@@ -77,17 +55,34 @@ class CirujiaDAO {
         //print(data.body);
 
         recibir = cirujiaL;
-        /*for (var i = 0; i < recibir.length; i++) {
-          horaFin = int.parse(recibir[i].horaFin.replaceAll(":00", ""));
 
-          int guardarCaso1 = 0;
+        return APIResponse<List<Cirujias>>(data: cirujiaL);
+      }
+      return APIResponse<List<Cirujias>>(error: true, mensajeError: "Error");
+    }).catchError(
+        (_) => APIResponse<List<Cirujias>>(error: true, mensajeError: "Error"));
+  }
 
-          if (horaFin > horaTope) {
-            guardarCaso1 = horaFin - horaTope;
-            parametroCreacionCalendario = 84 + (guardarCaso1 * 7);
-            print(parametroCreacionCalendario);
-          } else {}
-        }*/
+  Future<APIResponse<List<Cirujias>>> getCirujiasCard(
+      String nombres, String apellidos, String dni) async {
+    // print(nombres + " " + apellidos + " " + dni + " CREDENCIALES");
+    return await http.post(
+        Uri.parse(URL + servicio_cirujias_card + '/$nombres,$apellidos,$dni'),
+        headers: {"Content-Type": "application/json"}).then((data) {
+      //log('La respuesta obtenida es -----------: ' + data.body);
+      print(data.statusCode);
+      if (data.statusCode == 200) {
+        final jsonData = json.decode(data.body);
+
+        final cirujiaL = <Cirujias>[];
+        for (var item in jsonData) {
+          log(item.toString());
+          cirujiaL.add(Cirujias.fromJson(item));
+        }
+        //print(data.body);
+
+        recibir = cirujiaL;
+
         return APIResponse<List<Cirujias>>(data: cirujiaL);
       }
       return APIResponse<List<Cirujias>>(error: true, mensajeError: "Error");
@@ -96,9 +91,13 @@ class CirujiaDAO {
   }
 
   Future<List<Cirujias>> getCirujiasTarjetas(
-      DateTime lunes, DateTime viernes) async {
-    final response =
-        await http.get(Uri.parse(URL + servicio_listar + '/$lunes,$viernes'));
+      String nombres, String apellidos, String dni) async {
+    print(apellidos + " " + " CRDENCIALES");
+    final response = await http.post(
+        Uri.parse(URL + servicio_cirujias_card + '/$nombres,$apellidos,$dni'));
+    print("---------------");
+    print(response.statusCode);
+    print("---------------");
     if (response.statusCode == 200) {
       print(response.body);
       return _listaNoticias(response.body).toList();

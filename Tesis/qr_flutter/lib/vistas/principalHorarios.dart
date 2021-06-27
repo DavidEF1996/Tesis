@@ -40,7 +40,6 @@ class _PrincipalHorariosState extends State<PrincipalHorarios> {
   cargarHijos() async {
     setState(() {
       _isLoading = true;
-      print("Cargando");
     });
     CirujiaDAO cirujia = new CirujiaDAO();
     fechas = fecha_tabla.obtenerFechasSemana(fechaActual);
@@ -48,7 +47,6 @@ class _PrincipalHorariosState extends State<PrincipalHorarios> {
 
     setState(() {
       _isLoading = false;
-      print("Acabo de cargar");
     });
   }
 

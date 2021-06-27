@@ -86,6 +86,7 @@ class _PrincipalTarCirujiasState extends State<PrincipalTarCirujias> {
             return Center(child: CircularProgressIndicator());
           } else {
             return Container(
+              decoration: BoxDecoration(color: Colors.blue[200]),
               child: Column(
                 children: [
                   SizedBox(

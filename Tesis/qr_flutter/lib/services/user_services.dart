@@ -7,6 +7,8 @@ class UserService {
   static var apellidoUsuarioLogueado = "";
   static var usuariologueado = "";
   static var nombreCompletoUsuarioLogueado = "";
+  static var nombres = "";
+  static var apellidos = "";
   static const URL = Conn.URL;
 
   static const headers = {"Content-type": " application/json"};
@@ -22,9 +24,10 @@ class UserService {
       final decodedata = json.decode(respuesta.body);
       //print(respuesta.body);
       //print(decodedata);
-      //print(decodedata['nombres'] + "el nombre");
+      print(decodedata['apellidos'] + " :el apellido");
       //Map<String, dynamic> user = jsonDecodeS(decodedata);
-
+      nombres = decodedata['nombres'];
+      apellidos = decodedata['apellidos'];
       nombreUsuariologueado = decodedata['nombres'];
       apellidoUsuarioLogueado = decodedata['apellidos'];
 
@@ -36,7 +39,6 @@ class UserService {
           nombreUsuariologueado + " " + apellidoUsuarioLogueado;
       return decodedata;
     } else {
-      print(respuesta.statusCode);
       return null;
     }
   }

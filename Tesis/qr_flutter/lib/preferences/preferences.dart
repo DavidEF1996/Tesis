@@ -33,4 +33,20 @@ class Preferences {
   set nombres(String nombres) {
     _prefs.setString('nombre', nombres);
   }
+
+  get nombresCompletos {
+    return _prefs.getString('nombres') ?? '';
+  }
+
+  set nombresCompletos(String nombres) {
+    _prefs.setString('nombres', nombres);
+  }
+
+  get apellidos {
+    return _prefs.getString('apellidos') ?? '';
+  }
+
+  set apellidos(String apellidos) {
+    _prefs.setString('apellidos', apellidos);
+  }
 }

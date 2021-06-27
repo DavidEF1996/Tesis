@@ -23,8 +23,6 @@ class Vista_Celular_Loguin {
       TextEditingController passwordController,
       UserService httpServicio,
       Responsive responsive) {
-    print("LLegue a portrait");
-
     return Container(
       width: MediaQuery.of(context).size.width,
       child: Column(
@@ -88,8 +86,6 @@ class Vista_Celular_Loguin {
                       TextStyle(fontSize: responsive.diagonalPorcentaje(2.75)),
                 ),
                 onPressed: () {
-                  print("LLegue a comenzar");
-
                   cargar(context, nameController, passwordController,
                       httpServicio);
                 },
@@ -251,7 +247,6 @@ class Vista_Celular_Loguin {
 
     //print(result);
 
-    print((result['acceso']));
     if (result == null) {
       mostrarAlerta(context, "Error para acceder al servidor!");
     } else {
@@ -266,6 +261,10 @@ class Vista_Celular_Loguin {
           _preferences.id = result['idDoctor'];
           _preferences.nombres = UserService.usuariologueado;
 
+          _preferences.nombresCompletos = UserService.nombres;
+
+          _preferences.apellidos = UserService.apellidos;
+
           List<dynamic> datos = result['cirujias'];
 
           List<Cirujias> _cirujias = [];
@@ -274,11 +273,8 @@ class Vista_Celular_Loguin {
             cirujia.idCirujia = datos.elementAt(i)['idCirujia'];
             cirujia.fechaCirujia = datos.elementAt(i)['fechaCirujia'];
             cirujia.paciente = datos.elementAt(i)['paciente'];
-            print(cirujia.toString());
-            print("==================");
             _cirujias.add(cirujia);
           }
-          print(_cirujias.length);
           final route = MaterialPageRoute(builder: (context) {
             return PrincipalTarCirujias();
           });

@@ -62,6 +62,7 @@ class RegisterPageState extends State<RegisterPage> {
   String codigoEnfermedad = "";
 
   String tipoCirujia = 'cirujia';
+  String tipoCirujia2 = 'cirujia';
   String numeroQuirofano = '';
   String grupoNecesidadSangre = 'necSangre';
   String grupoExamenesSangre = 'exaSangre';
@@ -276,16 +277,17 @@ class RegisterPageState extends State<RegisterPage> {
         formItemsDesign(
             Icons.picture_in_picture_alt_outlined,
             Container(
-              child: Column(
+              child: Row(
                 children: [
-                  Wrap(
-                    children: [
-                      crearRadio('emergencia', 'Emergencia'),
-                      crearRadio('emergenciaDiferible', 'E. Diferible'),
-                      crearRadio('electiva', 'Electiva'),
-                      crearRadio('privada', 'Privada'),
-                      crearRadio('rpis', 'RPIS'),
-                    ],
+                  mostrarOcultar(),
+                  Container(
+                    child: Column(
+                      children: [
+                        crearRadio2('emergencia', 'Emergencia'),
+                        crearRadio2('emergenciaDiferible', 'E. Diferible'),
+                        crearRadio2('electiva', 'Electiva'),
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -665,6 +667,7 @@ class RegisterPageState extends State<RegisterPage> {
 
 //Variables Globales -------------------------
   var eleccionRadioButton;
+  var eleccionRadioButton2;
   String eleccionNumeroQuirofano;
   var eleccionExamenesSangre;
   var eleccionNecesidadDeSangre;
@@ -687,6 +690,31 @@ class RegisterPageState extends State<RegisterPage> {
               setState(() {
                 tipoCirujia = value;
                 eleccionRadioButton = value;
+              });
+            },
+          ),
+          Text(
+            text,
+            style: TextStyle(fontSize: 14),
+          )
+        ],
+      ),
+    );
+  }
+
+  Container crearRadio2(String value, String text) {
+    return Container(
+      width: 145,
+      child: Row(
+        children: [
+          Radio(
+            value: value,
+            toggleable: false,
+            groupValue: tipoCirujia2,
+            onChanged: (value) {
+              setState(() {
+                tipoCirujia2 = value;
+                eleccionRadioButton2 = value;
               });
             },
           ),
@@ -899,8 +927,30 @@ class RegisterPageState extends State<RegisterPage> {
       });
   }
 
+  Container mostrarOcultar() {
+    if (2 == 2) {
+      return Container(
+        child: Column(
+          children: [
+            crearRadio('privada', 'Privada'),
+            crearRadio('rpis', 'RPIS'),
+          ],
+        ),
+      );
+    } else {
+      return Container(
+        child: Column(
+          children: [
+            crearRadio('privada', 'Privada'),
+            crearRadio('rpis', 'RPIS'),
+          ],
+        ),
+      );
+    }
+  }
+
   save() {
-    Cirujias r = Cirujias();
+    /* Cirujias r = Cirujias();
     r.quirofano = indice_default;
     r.paciente = nameCtrl.text;
     r.fechaNacimiento = currentDate.microsecondsSinceEpoch;
@@ -930,8 +980,11 @@ class RegisterPageState extends State<RegisterPage> {
     r.doctores = doctores;
     r.observaciones = observaciones.text;
     r.materiales = equipoMaterial.text;
-    r.edadPaciente = age;
-    if (keyForm.currentState.validate()) {
+    r.edadPaciente = age;*/
+
+    print("El tipo de cirujia es" + tipoCirujia.toString());
+    print("El modo es: " + tipoCirujia2.toString());
+    /*if (keyForm.currentState.validate()) {
       if (keyForm.currentState.validate()) {
         if (age > 0) {
           popRegCirugias.menuConfirmacionDatos(r, context);
@@ -939,6 +992,6 @@ class RegisterPageState extends State<RegisterPage> {
           popRegCirugias.handleClickMe(context, 'Falta llenar algunos campos');
         }
       }
-    }
+    }*/
   }
 }

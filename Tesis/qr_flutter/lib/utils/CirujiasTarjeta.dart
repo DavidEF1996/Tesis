@@ -22,7 +22,7 @@ class CardCirujias extends StatelessWidget {
               colorFilter: new ColorFilter.mode(
                   Colors.white.withOpacity(0.2), BlendMode.dstATop),
             )),
-        height: 150,
+        height: responsive.diagonalPorcentaje(20),
         child: InkWell(
           onTap: () {},
           child: Card(

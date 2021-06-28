@@ -98,8 +98,7 @@ class RegisterPageState extends State<RegisterPage> {
     super.initState();
     final _preferences = new Preferences();
     autorizacion = _preferences.autorizacion;
-    print("la autorizacion es: ");
-    print(autorizacion);
+
     nombres_parametro =
         (widget.nombreCirujano == "") ? "" : widget.nombreCirujano;
 

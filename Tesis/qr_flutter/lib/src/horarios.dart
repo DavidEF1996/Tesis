@@ -239,8 +239,6 @@ class _Horarios extends State<Horarios> {
                                 await rdao.validarHoras(
                                     jsonEncode(objRegla.toJson()));
                                 final _preferences = new Preferences();
-                                print("en horarios es: ");
-                                print(_preferences.autorizacion);
 
                                 Navigator.pushReplacement(
                                     context,

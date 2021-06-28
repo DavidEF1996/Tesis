@@ -17,7 +17,7 @@ class CardCirujias extends StatelessWidget {
         decoration: BoxDecoration(
             border: Border.all(color: Colors.black),
             image: DecorationImage(
-              image: AssetImage('assets/logoSinFondo.png'),
+              image: AssetImage('./assets/logoSinFondo.png'),
               fit: BoxFit.cover,
               colorFilter: new ColorFilter.mode(
                   Colors.white.withOpacity(0.2), BlendMode.dstATop),

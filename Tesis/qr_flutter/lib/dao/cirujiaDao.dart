@@ -63,41 +63,11 @@ class CirujiaDAO {
         (_) => APIResponse<List<Cirujias>>(error: true, mensajeError: "Error"));
   }
 
-  Future<APIResponse<List<Cirujias>>> getCirujiasCard(
-      String nombres, String apellidos, String dni) async {
-    // print(nombres + " " + apellidos + " " + dni + " CREDENCIALES");
-    return await http.post(
-        Uri.parse(URL + servicio_cirujias_card + '/$nombres,$apellidos,$dni'),
-        headers: {"Content-Type": "application/json"}).then((data) {
-      //log('La respuesta obtenida es -----------: ' + data.body);
-      print(data.statusCode);
-      if (data.statusCode == 200) {
-        final jsonData = json.decode(data.body);
-
-        final cirujiaL = <Cirujias>[];
-        for (var item in jsonData) {
-          log(item.toString());
-          cirujiaL.add(Cirujias.fromJson(item));
-        }
-        //print(data.body);
-
-        recibir = cirujiaL;
-
-        return APIResponse<List<Cirujias>>(data: cirujiaL);
-      }
-      return APIResponse<List<Cirujias>>(error: true, mensajeError: "Error");
-    }).catchError(
-        (_) => APIResponse<List<Cirujias>>(error: true, mensajeError: "Error"));
-  }
-
   Future<List<Cirujias>> getCirujiasTarjetas(
       String nombres, String apellidos, String dni) async {
     print(apellidos + " " + " CRDENCIALES");
     final response = await http.post(
         Uri.parse(URL + servicio_cirujias_card + '/$nombres,$apellidos,$dni'));
-    print("---------------");
-    print(response.statusCode);
-    print("---------------");
     if (response.statusCode == 200) {
       print(response.body);
       return _listaNoticias(response.body).toList();

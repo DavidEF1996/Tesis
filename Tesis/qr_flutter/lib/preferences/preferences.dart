@@ -49,4 +49,12 @@ class Preferences {
   set apellidos(String apellidos) {
     _prefs.setString('apellidos', apellidos);
   }
+
+  get autorizacion {
+    return _prefs.getBool("autorizar" ?? '');
+  }
+
+  set autorizacion(bool autorizar){
+    _prefs.setBool("autorizar", autorizar);
+  }
 }

@@ -60,6 +60,7 @@ class _PrincipalTarCirujiasState extends State<PrincipalTarCirujias> {
 
     setState(() {
       _isLoading = false;
+      Preferences().autorizacion = true;
     });
   }
 

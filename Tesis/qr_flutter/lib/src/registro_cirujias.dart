@@ -9,6 +9,7 @@ import 'package:qr_flutter/model/cirujiasPrincipal.dart';
 import 'package:qr_flutter/model/diagnostico.dart';
 import 'package:qr_flutter/model/modeloOpcionesQuirofano.dart';
 import 'package:qr_flutter/model/modelo_doctor.dart';
+import 'package:qr_flutter/preferences/preferences.dart';
 import 'package:qr_flutter/src/homebotones.dart';
 import 'package:qr_flutter/utils/responsive.dart';
 import 'package:qr_flutter/validations/cabecera.dart';
@@ -90,10 +91,15 @@ class RegisterPageState extends State<RegisterPage> {
     EleccionQuirofano(indice: 3, eleccion: 'Quirofano 3'),
   ];
   DateTime fechaProcedimiento;
+  bool autorizacion = true;
 
   @override
   void initState() {
     super.initState();
+    final _preferences = new Preferences();
+    autorizacion = _preferences.autorizacion;
+    print("la autorizacion es: ");
+    print(autorizacion);
     nombres_parametro =
         (widget.nombreCirujano == "") ? "" : widget.nombreCirujano;
 

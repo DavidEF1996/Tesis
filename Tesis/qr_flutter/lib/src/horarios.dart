@@ -223,32 +223,8 @@ class _Horarios extends State<Horarios> {
                         margin: EdgeInsets.all(0),
                         width: responsive.diagonalPorcentaje(12.5),
                         child: InkWell(
-                            onTap: () {
+                            onTap: () async {
                               print(index);
-                              /* for (var i = 0; i < datosCirujia.length; i++) {
-                                print("Los datos son: " +
-                                    datosCirujia[i].indice.toString() +
-                                    " " +
-                                    datosCirujia[i].numeroQuirofano.toString() +
-                                    " " +
-                                    datosCirujia[i].nombreCirujano.toString() +
-                                    " " +
-                                    datosCirujia[i].fechaCirujia.toString() +
-                                    " " +
-                                    datosCirujia[i].horaInicio.toString() +
-                                    " " +
-                                    datosCirujia[i].estado.toString());
-                              }*/
-
-                              /*for (var i = 0; i < datosCirujia.length; i++) {
-                                if (datosCirujia[i].estado == "Ocupado") {
-                                  print("Ocupado");
-                                  break;
-                                } else {
-                                  print("Libre");
-                                  break;
-                                }
-                              }*/
 
                               if (datosCirujia[index].estado == "Ocupado") {
                                 print("Ocupado");
@@ -260,8 +236,12 @@ class _Horarios extends State<Horarios> {
                                     datosCirujia[index].fechaCirujia;
                                 objRegla.hora = datosCirujia[index].horaInicio;
 
-                                rdao.validarHoras(
+                                await rdao.validarHoras(
                                     jsonEncode(objRegla.toJson()));
+                                final _preferences = new Preferences();
+                                print("en horarios es: ");
+                                print(_preferences.autorizacion);
+
                                 Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
@@ -278,30 +258,6 @@ class _Horarios extends State<Horarios> {
                                                   .horaInicio,
                                             )));
                               }
-                              // print(index);
-                              /*for (var i = 0; i < indices.length; i++) {
-                                if (indices[i] == index) {
-                                  print("Ocupado");
-
-                                  break;
-                                } else if (indices[i] != index) {
-                                  print("Libre");
-                                  Preferences preferences = new Preferences();
-                                  // Navigator.of(context).pushNamed('/tabla');
-                                  Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (BuildContext context) =>
-                                              RegisterPage(
-                                                numeroQuirofano: nombreQuiro,
-                                                nombreCirujano:
-                                                    preferences.nombres,
-                                                fechaCirujia: indices[1],
-                                                horaInicio: 2,
-                                              )));
-                                  break;
-                                }
-                              }*/
                             },
                             child: Card(
                               child: Column(

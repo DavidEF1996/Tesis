@@ -54,7 +54,8 @@ class _PrincipalTarCirujiasState extends State<PrincipalTarCirujias> {
     data = await cirujia.getCirujiasTarjetas(
         utf8.decode(latin1.encode(Preferences().nombresCompletos),
             allowMalformed: true),
-        Preferences().apellidos,
+        utf8.decode(latin1.encode(Preferences().apellidos),
+            allowMalformed: true),
         Preferences().id);
 
     setState(() {

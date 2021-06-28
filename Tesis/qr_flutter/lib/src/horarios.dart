@@ -77,19 +77,6 @@ class _Horarios extends State<Horarios> {
       title: title,
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        appBar: new AppBar(
-          title: Container(
-            padding: EdgeInsets.all(responsive.diagonalPorcentaje(10)),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Cabecera(),
-                Text(" "),
-                usuariologueado.botonRegresar(context),
-              ],
-            ),
-          ),
-        ),
         body: // isloading
             //  ? CircularProgressIndicator()
             //:
@@ -99,6 +86,9 @@ class _Horarios extends State<Horarios> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              SizedBox(
+                height: responsive.diagonalPorcentaje(3),
+              ),
               Container(
                 width: MediaQuery.of(context).size.width,
                 child: Row(
@@ -202,7 +192,7 @@ class _Horarios extends State<Horarios> {
 
                   crossAxisCount: 7,
                   childAspectRatio:
-                      responsive.diagonalPorcentaje(0.15), // alto de widget
+                      responsive.diagonalPorcentaje(0.12), // alto de widget
                   mainAxisSpacing:
                       responsive.diagonalPorcentaje(0.50), //alto en distancia
 

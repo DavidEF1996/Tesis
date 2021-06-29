@@ -35,6 +35,7 @@ class Cirujias {
     this.anios,
     this.fechaNacimiento,
     this.meses,
+    this.redCirujia,
   });
 
   int idCirujia;
@@ -60,6 +61,7 @@ class Cirujias {
   int anios;
   int meses;
   int fechaNacimiento;
+  String redCirujia;
 
   factory Cirujias.fromJson(Map<String, dynamic> json) => Cirujias(
         idCirujia: json["idCirujia"],
@@ -86,6 +88,7 @@ class Cirujias {
         anios: json['anios'],
         meses: json['meses'],
         fechaNacimiento: json['fechaNacimiento'],
+        redCirujia: json['redCirujia'],
       );
 
   Map<String, dynamic> toJson() => {
@@ -112,6 +115,7 @@ class Cirujias {
         "anios": anios,
         "meses": meses,
         "fechaNacimiento": fechaNacimiento,
+        "redCirujia": redCirujia,
       };
 }
 

@@ -6,7 +6,6 @@ import 'package:qr_flutter/model/cirujiasPrincipal.dart';
 import 'package:qr_flutter/model/modeloDatosCirujia.dart';
 import 'package:qr_flutter/model/api_response.dart';
 import 'package:qr_flutter/preferences/preferences.dart';
-import 'package:qr_flutter/services/user_services.dart';
 import 'package:qr_flutter/utils/ListaCirujiaTarjetas.dart';
 import 'package:qr_flutter/utils/fechas_tabla.dart';
 import 'package:qr_flutter/utils/responsive.dart';

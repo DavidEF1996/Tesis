@@ -54,7 +54,41 @@ class Preferences {
     return _prefs.getBool("autorizar" ?? '');
   }
 
-  set autorizacion(bool autorizar){
+  set autorizacion(bool autorizar) {
     _prefs.setBool("autorizar", autorizar);
   }
+
+  get tipoCirujia {
+    return _prefs.getString("tipo_cirujia" ?? '');
+  }
+
+  set tipoCirujia(String tipo_cirujia) {
+    _prefs.setString("tipo_cirujia", tipo_cirujia);
+  }
+
+  get hora_inicio {
+    return _prefs.getInt("hora_inicio");
+  }
+
+  set hora_inicio(int hora_inicio) {
+    _prefs.setInt("hora_inicio", hora_inicio);
+  }
+
+get hora_fin {
+    return _prefs.getInt("hora_fin");
+  }
+
+  set hora_fin(int hora_fin) {
+    _prefs.setInt("hora_fin", hora_fin);
+  }
+
+
+get numero_dias {
+    return _prefs.getInt("numero_dias");
+  }
+
+  set numero_dias(int numero_dias) {
+    _prefs.setInt("numero_dias", numero_dias);
+  }
+
 }

@@ -35,11 +35,6 @@ class CardCirujias extends StatelessWidget {
                       fontSize: responsive.diagonalPorcentaje(2.5),
                       fontWeight: FontWeight.bold,
                     ))),
-                // Row(
-                // crossAxisAlignment: CrossAxisAlignment.start,
-                // children: [
-                //padding(Icon(Icons.check)),
-                //padding(Text(noticias.name, style: TextStyle(fontSize: 10))),
                 Column(
                   children: [
                     Container(

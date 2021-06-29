@@ -206,7 +206,7 @@ class _Horarios extends State<Horarios> {
                       child: Container(
                         width: responsive.diagonalPorcentaje(12.5),
                         child: InkWell(
-                            onTap: () {
+                            onTap: () async {
                               print(index);
 
                               if (datosCirujia[index].estado == "Ocupado") {
@@ -219,8 +219,10 @@ class _Horarios extends State<Horarios> {
                                     datosCirujia[index].fechaCirujia;
                                 objRegla.hora = datosCirujia[index].horaInicio;
 
-                                rdao.validarHoras(
+                                await rdao.validarHoras(
                                     jsonEncode(objRegla.toJson()));
+                                final _preferences = new Preferences();
+
                                 Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(

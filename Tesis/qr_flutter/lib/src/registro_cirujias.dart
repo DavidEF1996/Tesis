@@ -4,11 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:qr_flutter/dao/diagnostico_dao.dart';
 import 'package:qr_flutter/dao/doctor_dao.dart';
+import 'package:qr_flutter/dao/reglas.dart';
 import 'package:qr_flutter/model/api_response.dart';
 import 'package:qr_flutter/model/cirujiasPrincipal.dart';
 import 'package:qr_flutter/model/diagnostico.dart';
+import 'package:qr_flutter/model/hrs_fecha_reglas.dart';
 import 'package:qr_flutter/model/modeloOpcionesQuirofano.dart';
 import 'package:qr_flutter/model/modelo_doctor.dart';
+import 'package:qr_flutter/preferences/preferences.dart';
 import 'package:qr_flutter/src/homebotones.dart';
 import 'package:qr_flutter/utils/responsive.dart';
 import 'package:qr_flutter/validations/cabecera.dart';
@@ -91,10 +94,14 @@ class RegisterPageState extends State<RegisterPage> {
     EleccionQuirofano(indice: 3, eleccion: 'Quirofano 3'),
   ];
   DateTime fechaProcedimiento;
+  bool autorizacion = true;
 
   @override
   void initState() {
     super.initState();
+    final _preferences = new Preferences();
+    autorizacion = _preferences.autorizacion;
+
     nombres_parametro =
         (widget.nombreCirujano == "") ? "" : widget.nombreCirujano;
 
@@ -114,13 +121,6 @@ class RegisterPageState extends State<RegisterPage> {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
-
-    print("-------------");
-    print(widget.numeroQuirofano);
-    print(widget.nombreCirujano);
-    print(widget.fechaCirujia);
-    print(widget.horaInicio);
-    print("____________");
 
     //print("El nombre del Cirujano que entra es: " + nombres_parametro);
   }
@@ -687,9 +687,13 @@ class RegisterPageState extends State<RegisterPage> {
             toggleable: false,
             groupValue: tipoCirujia,
             onChanged: (value) {
-              setState(() {
+              setState(() async {
                 tipoCirujia = value;
                 eleccionRadioButton = value;
+                ReglasDao rdao = ReglasDao();
+                HrsFechaReglas data = new HrsFechaReglas();
+                data.tipo_cirujia = tipoCirujia;
+                await rdao.reglaTipoCirujia(jsonEncode(data.toJson()));
               });
             },
           ),
@@ -928,7 +932,7 @@ class RegisterPageState extends State<RegisterPage> {
   }
 
   Container mostrarOcultar() {
-    if (2 == 2) {
+    if (autorizacion) {
       return Container(
         child: Column(
           children: [
@@ -940,17 +944,14 @@ class RegisterPageState extends State<RegisterPage> {
     } else {
       return Container(
         child: Column(
-          children: [
-            crearRadio('privada', 'Privada'),
-            crearRadio('rpis', 'RPIS'),
-          ],
+          children: [crearRadio('privada', 'Privada')],
         ),
       );
     }
   }
 
   save() {
-    /* Cirujias r = Cirujias();
+    Cirujias r = Cirujias();
     r.quirofano = indice_default;
     r.paciente = nameCtrl.text;
     r.fechaNacimiento = currentDate.microsecondsSinceEpoch;
@@ -980,11 +981,9 @@ class RegisterPageState extends State<RegisterPage> {
     r.doctores = doctores;
     r.observaciones = observaciones.text;
     r.materiales = equipoMaterial.text;
-    r.edadPaciente = age;*/
+    r.edadPaciente = age;
 
-    print("El tipo de cirujia es" + tipoCirujia.toString());
-    print("El modo es: " + tipoCirujia2.toString());
-    /*if (keyForm.currentState.validate()) {
+    if (keyForm.currentState.validate()) {
       if (keyForm.currentState.validate()) {
         if (age > 0) {
           popRegCirugias.menuConfirmacionDatos(r, context);
@@ -992,6 +991,6 @@ class RegisterPageState extends State<RegisterPage> {
           popRegCirugias.handleClickMe(context, 'Falta llenar algunos campos');
         }
       }
-    }*/
+    }
   }
 }

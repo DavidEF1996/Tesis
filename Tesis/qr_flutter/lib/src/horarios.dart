@@ -480,6 +480,7 @@ class _Horarios extends State<Horarios> {
             var dateString = format.format(auxFecha);
 
             horaIntermediaAuxiliar = int.parse(CirujiaDAO.recibir[i].duracion);
+            String categoria = CirujiaDAO.recibir[i].redCirujia;
 
             String horaParaUso = horaInicio.replaceAll(":00", "");
             int horaParaUsoInt = int.parse(horaParaUso);
@@ -489,9 +490,24 @@ class _Horarios extends State<Horarios> {
               //print("Variable Fecha: " + fecha); //variable que contiene los dias de la semana
               //print("Variable dateString: " +
               // dateString); // variable que contiene los dias de la base
-              if (fecha == dateString && hora == horaInicio.trim() ||
-                  fecha == dateString && hora == horaFin.trim()) {
+              if (fecha == dateString &&
+                      hora == horaInicio.trim() &&
+                      categoria == "privada" ||
+                  fecha == dateString &&
+                      hora == horaFin.trim() &&
+                      categoria == "privada") {
                 colorBase = Colors.red;
+
+                horaParaUsoInt++;
+                horaInicio = horaParaUsoInt.toString() + ":00";
+              } else if (fecha == dateString &&
+                      hora == horaInicio.trim() &&
+                      categoria == "rpis" ||
+                  fecha == dateString &&
+                      hora == horaFin.trim() &&
+                      categoria == "rpis") {
+                colorBase = Colors.brown;
+
                 horaParaUsoInt++;
                 horaInicio = horaParaUsoInt.toString() + ":00";
               } else {

@@ -26,16 +26,17 @@ class ReglasDao {
     }
   }
 
-  Future<APIResponse> reglaTipoCirujia(json) async {
+  Future<APIResponse> reglaTipoCirujia(String tipo) async {
+    print("llega al swrvio");
     http.Response response = await http.post(
-        Uri.parse(URL + servicio_tipo_cirujia),
-        body: json,
+        Uri.parse(URL + servicio_tipo_cirujia + '/$tipo'),
         headers: headers);
     if (response.statusCode == 200) {
+      print(response.body);
       Map<String, dynamic> datos = jsonDecode(response.body);
-      _preferences.hora_inicio = datos['hora_inicio'];
-      _preferences.hora_fin = datos['hora_fin'];
-      _preferences.numero_dias = datos['numero_dias'];
+      _preferences.hora_inicio = datos['2']['hora_inicio'];
+      _preferences.hora_fin = datos['3']['hora_fin'];
+      _preferences.numero_dias = datos['4']['numero_dias'];
       print(response.body);
     } else {
       print(response.statusCode);

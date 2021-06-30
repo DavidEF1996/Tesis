@@ -687,13 +687,13 @@ class RegisterPageState extends State<RegisterPage> {
             toggleable: false,
             groupValue: tipoCirujia,
             onChanged: (value) {
-              setState(() async {
+              setState(() {
                 tipoCirujia = value;
                 eleccionRadioButton = value;
                 ReglasDao rdao = ReglasDao();
                 HrsFechaReglas data = new HrsFechaReglas();
-                data.tipo_cirujia = tipoCirujia;
-                await rdao.reglaTipoCirujia(jsonEncode(data.toJson()));
+                
+                rdao.reglaTipoCirujia(tipoCirujia);
               });
             },
           ),

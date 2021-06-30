@@ -81,10 +81,7 @@ class _Horarios extends State<Horarios> {
             //  ? CircularProgressIndicator()
             //:
             Container(
-          padding: EdgeInsets.zero,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(
                 height: responsive.diagonalPorcentaje(3),
@@ -157,46 +154,43 @@ class _Horarios extends State<Horarios> {
                   ],
                 ),
               ),
-              Container(
-                  height: responsive.diagonalPorcentaje(7),
-                  child: GridView.count(
-                      shrinkWrap: true,
-                      crossAxisCount: 7,
-                      childAspectRatio:
-                          responsive.diagonalPorcentaje(0.25), // alto de widget
-                      //alto en distancia
-
-                      crossAxisSpacing: responsive.diagonalPorcentaje(0.01),
-                      children: List.generate(7, (index2) {
-                        setState(() {
-                          diasSemana(index2);
-                        });
-                        return //Container(
-                            // width: MediaQuery.of(context).size.width,
-                            //child:
-                            InkWell(
-                          child: Card(
-                            color: Colors.blue[400],
-                            child: Center(
-                              child: tamanoLetraDiasSemana(
-                                  index2, valorFecha, responsive),
-                            ),
-                          ),
-                        );
-                        //
-                        // );
-                      }))),
+              GridView.count(
+                  shrinkWrap: true,
+                  crossAxisCount: 7,
+                  padding: EdgeInsets.all(4.0),
+                  childAspectRatio: 16.0 / 9.0,
+                  children: List.generate(7, (index2) {
+                    setState(() {
+                      diasSemana(index2);
+                    });
+                    return //Container(
+                        // width: MediaQuery.of(context).size.width,
+                        //child:
+                        InkWell(
+                      child: Card(
+                        color: Colors.blue[400],
+                        child: Center(
+                          child: tamanoLetraDiasSemana(
+                              index2, valorFecha, responsive),
+                        ),
+                      ),
+                    );
+                    //
+                    // );
+                  })),
               Expanded(
                 child: GridView.count(
                   //Codigo para la ubicación y tamaños de la grilla
 
                   crossAxisCount: 7,
-                  childAspectRatio:
-                      responsive.diagonalPorcentaje(0.12), // alto de widget
-                  mainAxisSpacing:
-                      responsive.diagonalPorcentaje(0.50), //alto en distancia
+                  padding: EdgeInsets.all(4.0),
+                  childAspectRatio: 8.0 / 9.0,
+                  // childAspectRatio:
+                  //     responsive.diagonalPorcentaje(0.12), // alto de widget
+                  //  mainAxisSpacing:
+                  //     responsive.diagonalPorcentaje(0.20), //alto en distancia
 
-                  crossAxisSpacing: responsive.diagonalPorcentaje(0.15),
+                  //  crossAxisSpacing: responsive.diagonalPorcentaje(0.15),
 
                   //Código de la lista de widgets para la grilla
                   children: List.generate(indiceParaCalendario, (index) {
@@ -210,7 +204,6 @@ class _Horarios extends State<Horarios> {
                     return SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Container(
-                        margin: EdgeInsets.all(0),
                         width: responsive.diagonalPorcentaje(12.5),
                         child: InkWell(
                             onTap: () async {
@@ -487,6 +480,7 @@ class _Horarios extends State<Horarios> {
             var dateString = format.format(auxFecha);
 
             horaIntermediaAuxiliar = int.parse(CirujiaDAO.recibir[i].duracion);
+            String categoria = CirujiaDAO.recibir[i].redCirujia;
 
             String horaParaUso = horaInicio.replaceAll(":00", "");
             int horaParaUsoInt = int.parse(horaParaUso);
@@ -496,9 +490,24 @@ class _Horarios extends State<Horarios> {
               //print("Variable Fecha: " + fecha); //variable que contiene los dias de la semana
               //print("Variable dateString: " +
               // dateString); // variable que contiene los dias de la base
-              if (fecha == dateString && hora == horaInicio.trim() ||
-                  fecha == dateString && hora == horaFin.trim()) {
+              if (fecha == dateString &&
+                      hora == horaInicio.trim() &&
+                      categoria == "privada" ||
+                  fecha == dateString &&
+                      hora == horaFin.trim() &&
+                      categoria == "privada") {
                 colorBase = Colors.red;
+
+                horaParaUsoInt++;
+                horaInicio = horaParaUsoInt.toString() + ":00";
+              } else if (fecha == dateString &&
+                      hora == horaInicio.trim() &&
+                      categoria == "rpis" ||
+                  fecha == dateString &&
+                      hora == horaFin.trim() &&
+                      categoria == "rpis") {
+                colorBase = Colors.brown;
+
                 horaParaUsoInt++;
                 horaInicio = horaParaUsoInt.toString() + ":00";
               } else {

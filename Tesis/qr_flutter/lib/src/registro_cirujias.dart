@@ -957,7 +957,8 @@ class RegisterPageState extends State<RegisterPage> {
     r.fechaNacimiento = currentDate.microsecondsSinceEpoch;
     r.anios = age;
     r.meses = meses;
-    r.tipoCirujia = tipoCirujia;
+    r.tipoCirujia = tipoCirujia2;
+    r.redCirujia = tipoCirujia;
     r.diagnostico = diagnosticoCp;
     r.procedimiento = procedimientoMedico.text;
     //var date = DateTime.fromMillisecondsSinceEpoch( * 1000);

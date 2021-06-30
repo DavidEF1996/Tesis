@@ -26,6 +26,7 @@ class RegistroCirujias {
     this.nombreAyudante,
     this.equipoMaterialNecesario,
     this.observaciones,
+    this.redCirujia,
   });
 
   String nombres;
@@ -47,6 +48,7 @@ class RegistroCirujias {
   String nombreAyudante;
   String equipoMaterialNecesario;
   String observaciones;
+  String redCirujia;
 
   factory RegistroCirujias.fromJson(Map<String, dynamic> json) =>
       RegistroCirujias(
@@ -69,6 +71,7 @@ class RegistroCirujias {
         nombreAyudante: json["nombreAyudante"],
         equipoMaterialNecesario: json["equipoMaterialNecesario"],
         observaciones: json["observaciones"],
+        redCirujia: json["redCirujia"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -93,5 +96,6 @@ class RegistroCirujias {
         "nombreAyudante": nombreAyudante,
         "equipoMaterialNecesario": equipoMaterialNecesario,
         "observaciones": observaciones,
+        "redCirujia": redCirujia,
       };
 }

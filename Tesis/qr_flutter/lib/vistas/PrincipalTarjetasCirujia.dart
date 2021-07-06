@@ -56,6 +56,7 @@ class _PrincipalTarCirujiasState extends State<PrincipalTarCirujias> {
         utf8.decode(latin1.encode(Preferences().apellidos),
             allowMalformed: true),
         Preferences().id);
+    Preferences().hora_fin = 0;
 
     setState(() {
       _isLoading = false;

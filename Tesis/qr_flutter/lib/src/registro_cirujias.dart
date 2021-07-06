@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:qr_flutter/dao/cirujiaDao.dart';
 import 'package:qr_flutter/dao/diagnostico_dao.dart';
 import 'package:qr_flutter/dao/doctor_dao.dart';
 import 'package:qr_flutter/dao/reglas.dart';
@@ -13,6 +14,8 @@ import 'package:qr_flutter/model/modeloOpcionesQuirofano.dart';
 import 'package:qr_flutter/model/modelo_doctor.dart';
 import 'package:qr_flutter/preferences/preferences.dart';
 import 'package:qr_flutter/src/homebotones.dart';
+import 'package:qr_flutter/utils/VariablesGlobales.dart';
+import 'package:qr_flutter/utils/comboBox.dart';
 import 'package:qr_flutter/utils/responsive.dart';
 import 'package:qr_flutter/validations/cabecera.dart';
 import 'package:qr_flutter/validations/popupRegistroCirujias.dart';
@@ -28,6 +31,7 @@ class RegisterPage extends StatefulWidget {
   final DateTime fechaCirujia;
   final String horaInicio;
   final String minutosInicio;
+  final int limite;
 
   const RegisterPage(
       {Key key,
@@ -35,7 +39,8 @@ class RegisterPage extends StatefulWidget {
       this.nombreCirujano,
       this.fechaCirujia,
       this.horaInicio,
-      this.minutosInicio})
+      this.minutosInicio,
+      this.limite})
       : super(key: key);
 
   @override
@@ -63,8 +68,9 @@ class RegisterPageState extends State<RegisterPage> {
   int _horasFin = 7;
   int _minutosFin = 0;
   String codigoEnfermedad = "";
+  static int valorMenorHoras = 21;
 
-  String tipoCirujia = 'cirujia';
+  String tipoCirujia = '';
   String tipoCirujia2 = 'cirujia';
   String numeroQuirofano = '';
   String grupoNecesidadSangre = 'necSangre';
@@ -100,6 +106,7 @@ class RegisterPageState extends State<RegisterPage> {
   void initState() {
     super.initState();
     final _preferences = new Preferences();
+    print("La acturizacion es: " + autorizacion.toString());
     autorizacion = _preferences.autorizacion;
 
     nombres_parametro =
@@ -225,8 +232,9 @@ class RegisterPageState extends State<RegisterPage> {
               validator: val.validateName,
             )),
         formItemsDesign(
-            Icons.mode_outlined,
-            Column(children: <Widget>[
+          Icons.mode_outlined,
+          Column(
+            children: [
               new ListTile(
                 title: const Text('Fecha de nacimiento'),
               ),
@@ -249,24 +257,9 @@ class RegisterPageState extends State<RegisterPage> {
                   ],
                 ),
               ),
-              Container(
-                alignment: Alignment.bottomLeft,
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text("Años: " + age.toString()),
-                        Text("   "),
-                        Text("Meses:" + meses.toString()),
-                      ],
-                    )
-                  ],
-                ),
-              )
-
-              // Text("Edad: "+ ),
-            ])),
+            ],
+          ),
+        ),
         Container(
           child: Column(
             children: [
@@ -275,23 +268,53 @@ class RegisterPageState extends State<RegisterPage> {
           ),
         ),
         formItemsDesign(
-            Icons.picture_in_picture_alt_outlined,
-            Container(
-              child: Row(
-                children: [
-                  mostrarOcultar(),
-                  Container(
-                    child: Column(
-                      children: [
-                        crearRadio2('emergencia', 'Emergencia'),
-                        crearRadio2('emergenciaDiferible', 'E. Diferible'),
-                        crearRadio2('electiva', 'Electiva'),
-                      ],
+          Icons.select_all,
+          Container(
+            width: responsive.diagonalPorcentaje(5),
+            padding: EdgeInsets.symmetric(horizontal: 25),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                new ListTile(
+                  title: const Text('Fecha del Procedimiento: '),
+                ),
+                Row(
+                  children: [
+                    Text(fechaProcedimiento.year.toString() +
+                        "/" +
+                        fechaProcedimiento.month.toString() +
+                        "/" +
+                        fechaProcedimiento.day.toString()),
+                    IconButton(
+                      onPressed: () => selectDateProcess(context),
+                      icon: Icon(Icons.date_range),
                     ),
-                  ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+        formItemsDesign(Icons.person, xa()),
+        formItemsDesign(
+          Icons.mode_outlined,
+          Container(
+            width: responsive.diagonalPorcentaje(5),
+            padding: EdgeInsets.symmetric(horizontal: 25),
+            child: Container(
+              child: Column(
+                children: [
+                  TextFormField(
+                    controller: duracion,
+                    decoration: new InputDecoration(
+                      labelText: 'Duración',
+                    ),
+                  )
                 ],
               ),
-            )),
+            ),
+          ),
+        ),
         formItemsDesign(
             Icons.dry_outlined,
             SingleChildScrollView(
@@ -345,92 +368,6 @@ class RegisterPageState extends State<RegisterPage> {
               //keyboardType: TextInputType.,
               maxLength: 255,
             )),
-        formItemsDesign(
-          Icons.mode_outlined,
-          Container(
-            width: responsive.diagonalPorcentaje(5),
-            padding: EdgeInsets.symmetric(horizontal: 25),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                new ListTile(
-                  title: const Text('Fecha del Procedimiento: '),
-                ),
-                Row(
-                  children: [
-                    Text(fechaProcedimiento.year.toString() +
-                        "/" +
-                        fechaProcedimiento.month.toString() +
-                        "/" +
-                        fechaProcedimiento.day.toString()),
-                    IconButton(
-                      onPressed: () => selectDateProcess(context),
-                      icon: Icon(Icons.date_range),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Text('Hora de Inicio:'),
-                    Container(
-                      width: 35,
-                      child: Column(
-                        children: [
-                          NumberPicker(
-                            itemHeight: 25,
-                            value: _horasInicio,
-                            minValue: 1,
-                            maxValue: 24,
-                            textStyle:
-                                TextStyle(fontSize: 15, color: Colors.black),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(0),
-                            ),
-                            onChanged: (value) =>
-                                setState(() => _horasInicio = value),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Text(':'),
-                    Container(
-                      width: responsive.diagonalPorcentaje(5),
-                      child: Column(
-                        children: [
-                          NumberPicker(
-                            itemHeight: 25,
-                            value: _minutosInicio,
-                            minValue: 0,
-                            maxValue: 60,
-                            textStyle:
-                                TextStyle(fontSize: 15, color: Colors.black),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(0),
-                            ),
-                            onChanged: (value) =>
-                                setState(() => _minutosInicio = value),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-                Container(
-                  child: Column(
-                    children: [
-                      TextFormField(
-                        controller: duracion,
-                        decoration: new InputDecoration(
-                          labelText: 'Duración',
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
         formItemsDesign(
             Icons.picture_in_picture_alt_outlined,
             Container(
@@ -690,10 +627,14 @@ class RegisterPageState extends State<RegisterPage> {
               setState(() {
                 tipoCirujia = value;
                 eleccionRadioButton = value;
+
                 ReglasDao rdao = ReglasDao();
                 HrsFechaReglas data = new HrsFechaReglas();
-                
                 rdao.reglaTipoCirujia(tipoCirujia);
+                final _preferences = new Preferences();
+                //valorMenorHoras = null;
+                // valorMenorHoras = CirujiaDAO.limiteRegistroCirujia;
+                print("El valor es: " + _preferences.hora_fin.toString());
               });
             },
           ),
@@ -704,6 +645,19 @@ class RegisterPageState extends State<RegisterPage> {
         ],
       ),
     );
+  }
+
+  FutureBuilder ContenedorFuture() {
+    ReglasDao rdao = ReglasDao();
+    return FutureBuilder(
+        future: rdao.reglaTipoCirujia(tipoCirujia),
+        builder: (context, snapshot) {
+          if (snapshot.data) {
+            return Container(child: Text("Datos"));
+          } else {
+            return CircularProgressIndicator();
+          }
+        });
   }
 
   Container crearRadio2(String value, String text) {
@@ -904,6 +858,14 @@ class RegisterPageState extends State<RegisterPage> {
     return age;
   }
 
+  Container xa() {
+    return Container(
+      child: ComboBox(
+        catgoria: tipoCirujia,
+      ),
+    );
+  }
+
   Future<void> selectDate(BuildContext context) async {
     final DateTime pickedDate = await showDatePicker(
         context: context,
@@ -957,8 +919,8 @@ class RegisterPageState extends State<RegisterPage> {
     r.fechaNacimiento = currentDate.microsecondsSinceEpoch;
     r.anios = age;
     r.meses = meses;
-    r.tipoCirujia = tipoCirujia2;
-    r.redCirujia = tipoCirujia;
+    r.tipoCirujia = VariablesGlobales.tipoCirujia;
+    r.redCirujia = VariablesGlobales.redCujia;
     r.diagnostico = diagnosticoCp;
     r.procedimiento = procedimientoMedico.text;
     //var date = DateTime.fromMillisecondsSinceEpoch( * 1000);
@@ -966,7 +928,7 @@ class RegisterPageState extends State<RegisterPage> {
 
     r.horaInicio = _horasInicio.toString() + ":00";
     var auxDuracion = int.parse(duracion.text);
-    if (_minutosInicio != 0) {
+    if (VariablesGlobales.minutosInicio != 0) {
       auxDuracion += 1;
     }
 

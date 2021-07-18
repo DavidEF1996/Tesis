@@ -74,7 +74,7 @@ class Preferences {
     _prefs.setInt("hora_inicio", hora_inicio);
   }
 
-get hora_fin {
+  get hora_fin {
     return _prefs.getInt("hora_fin");
   }
 
@@ -82,8 +82,7 @@ get hora_fin {
     _prefs.setInt("hora_fin", hora_fin);
   }
 
-
-get numero_dias {
+  get numero_dias {
     return _prefs.getInt("numero_dias");
   }
 
@@ -91,4 +90,11 @@ get numero_dias {
     _prefs.setInt("numero_dias", numero_dias);
   }
 
+  get incrementoDias {
+    return _prefs.getInt("incrementoDias");
+  }
+
+  set incrementoDias(int incrementoDias) {
+    _prefs.setInt("incrementoDias", incrementoDias);
+  }
 }

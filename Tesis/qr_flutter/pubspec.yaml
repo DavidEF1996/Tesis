@@ -36,6 +36,7 @@ dependencies:
   dio: ^4.0.0-beta4
   intl: ^0.17.0
   get_it: ^3.0.1
+  pull_to_refresh: ^2.0.0
 
   #
 

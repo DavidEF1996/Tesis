@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 import 'package:qr_flutter/dao/cirujiaDao.dart';
 import 'package:qr_flutter/model/api_response.dart';
 import 'package:qr_flutter/model/cirujiasPrincipal.dart';
+import 'package:qr_flutter/preferences/preferences.dart';
 import 'package:qr_flutter/services/user_services.dart';
 import 'package:qr_flutter/src/horarios.dart';
 import 'package:qr_flutter/src/horariosPortrait.dart';

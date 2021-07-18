@@ -107,43 +107,45 @@ class CardCirujias extends StatelessWidget {
                             ]),
                       ),
                     ),
-                    Container(
-                        padding: EdgeInsets.all(5),
-                        alignment: Alignment.centerLeft,
-                        child: Row(
-                          children: [
-                            Text.rich(
-                              TextSpan(
-                                  text: "Hora Inicio: ",
-                                  style: TextStyle(
-                                      fontSize:
-                                          responsive.diagonalPorcentaje(2),
-                                      fontWeight: FontWeight.bold),
-                                  children: <InlineSpan>[
-                                    TextSpan(
-                                        text: noticias.horaInicio,
-                                        style: TextStyle(
-                                            fontSize: responsive
-                                                .diagonalPorcentaje(1.8)))
-                                  ]),
-                            ),
-                            Text.rich(
-                              TextSpan(
-                                  text: "Hora Fin: ",
-                                  style: TextStyle(
-                                      fontSize:
-                                          responsive.diagonalPorcentaje(2),
-                                      fontWeight: FontWeight.bold),
-                                  children: <InlineSpan>[
-                                    TextSpan(
-                                        text: noticias.horaFin,
-                                        style: TextStyle(
-                                            fontSize: responsive
-                                                .diagonalPorcentaje(1.8)))
-                                  ]),
-                            ),
-                          ],
-                        ))
+                    SingleChildScrollView(
+                      child: Container(
+                          padding: EdgeInsets.all(2.5),
+                          alignment: Alignment.centerLeft,
+                          child: Row(
+                            children: [
+                              Text.rich(
+                                TextSpan(
+                                    text: "Hora Inicio: ",
+                                    style: TextStyle(
+                                        fontSize:
+                                            responsive.diagonalPorcentaje(2),
+                                        fontWeight: FontWeight.bold),
+                                    children: <InlineSpan>[
+                                      TextSpan(
+                                          text: noticias.horaInicio,
+                                          style: TextStyle(
+                                              fontSize: responsive
+                                                  .diagonalPorcentaje(1.8)))
+                                    ]),
+                              ),
+                              Text.rich(
+                                TextSpan(
+                                    text: "Hora Fin: ",
+                                    style: TextStyle(
+                                        fontSize:
+                                            responsive.diagonalPorcentaje(2),
+                                        fontWeight: FontWeight.bold),
+                                    children: <InlineSpan>[
+                                      TextSpan(
+                                          text: noticias.horaFin,
+                                          style: TextStyle(
+                                              fontSize: responsive
+                                                  .diagonalPorcentaje(1.8)))
+                                    ]),
+                              ),
+                            ],
+                          )),
+                    )
                   ],
                 )
                 //  ],

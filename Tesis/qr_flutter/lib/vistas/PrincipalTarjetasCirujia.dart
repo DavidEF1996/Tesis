@@ -41,6 +41,8 @@ class _PrincipalTarCirujiasState extends State<PrincipalTarCirujias> {
 
     cargarNoticias();
     super.initState();
+    final _preferences = new Preferences();
+    _preferences.incrementoDias = 0;
   }
 
   cargarNoticias() async {

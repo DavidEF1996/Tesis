@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:qr_flutter/admin/principalAdmi.dart';
 import 'package:qr_flutter/dao/cirujiaDao.dart';
 import 'package:qr_flutter/dao/reglas.dart';
 import 'package:qr_flutter/model/hrs_fecha_reglas.dart';
@@ -20,7 +21,9 @@ import 'package:intl/intl.dart';
 
 class Horarios extends StatefulWidget {
   final int nombreQuirofano;
-  const Horarios({Key key, this.nombreQuirofano = 1}) : super(key: key);
+  final DateTime fecha;
+  const Horarios({Key key, this.nombreQuirofano = 1, this.fecha})
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _Horarios();
@@ -31,6 +34,8 @@ bool isloaded = false;
 class _Horarios extends State<Horarios> {
   UsuarioLogueado usuariologueado = UsuarioLogueado();
   Color colorBase;
+  int cont;
+  int val;
   Color colorBotonQuirofano1;
   Color colorBotonQuirofano2;
   Color colorBotonQuirofano3;
@@ -41,7 +46,7 @@ class _Horarios extends State<Horarios> {
   TextEditingController fechaConNegrita = TextEditingController();
   TextEditingController horaConNegrita = TextEditingController();
   TextEditingController nombreDoctorConNegrita = TextEditingController();
-  DateTime fechaActual = DateTime.now();
+  DateTime fechaActual;
   int nombreQuiro;
   CirujiaDAO cirujiaDao = new CirujiaDAO();
   List indices = [];
@@ -60,11 +65,15 @@ class _Horarios extends State<Horarios> {
       DeviceOrientation.landscapeLeft,
     ]);
     super.initState();
-
+    cont = 0;
     int index = 1;
+    val = 7;
+    valorHora.text = "";
+
     nombreQuiro = (widget.nombreQuirofano);
     nombreQuiro = (widget.nombreQuirofano == 1) ? 1 : widget.nombreQuirofano;
     indiceParaCalendario = inCreador.indiceCreadorCalendario(nombreQuiro);
+    fechaActual = (widget.fecha == null) ? DateTime.now() : widget.fecha;
     print("Esta vez es" + indiceParaCalendario.toString());
     cambiarColorBotonQuirofano(nombreQuiro);
   }
@@ -89,68 +98,115 @@ class _Horarios extends State<Horarios> {
               Container(
                 width: MediaQuery.of(context).size.width,
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Container(
                         //padding: EdgeInsets.all(responsive.diagonalPorcentaje(1)),
-                        alignment: Alignment.bottomCenter,
+
+                        //alignment: Alignment.bottomLeft,
                         child: Row(
+                      children: [
+                        RaisedButton(
+                          color: colorBotonQuirofano1,
+                          child: Container(
+                            width: responsive.diagonalPorcentaje(10),
+                            child: Column(
+                              children: [
+                                Text(
+                                  "Quirófano 1",
+                                  style: TextStyle(
+                                      fontSize:
+                                          responsive.diagonalPorcentaje(1.8),
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            ),
+                          ),
+                          onPressed: () {
+                            nombreQuiro = 1;
+                            cargarQuirofano(nombreQuiro, context);
+                          },
+                        ),
+                        SizedBox(
+                          width: responsive.diagonalPorcentaje(1),
+                        ),
+                        RaisedButton(
+                          color: colorBotonQuirofano2,
+                          child: Container(
+                            width: responsive.diagonalPorcentaje(10),
+                            child: Column(
+                              children: [
+                                Text(
+                                  "Quirófano 2",
+                                  style: TextStyle(
+                                      fontSize:
+                                          responsive.diagonalPorcentaje(1.8),
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            ),
+                          ),
+                          onPressed: () {
+                            nombreQuiro = 2;
+                            cargarQuirofano(nombreQuiro, context);
+                          },
+                        ),
+                        SizedBox(
+                          width: responsive.diagonalPorcentaje(1),
+                        ),
+                        RaisedButton(
+                          color: colorBotonQuirofano3,
+                          child: Container(
+                            width: responsive.diagonalPorcentaje(10),
+                            child: Column(
+                              children: [
+                                Text(
+                                  "Quirófano 3",
+                                  style: TextStyle(
+                                      fontSize:
+                                          responsive.diagonalPorcentaje(1.8),
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            ),
+                          ),
+                          onPressed: () {
+                            nombreQuiro = 3;
+                            cargarQuirofano(nombreQuiro, context);
+                          },
+                        ),
+                        Column(
                           children: [
-                            RaisedButton(
-                              color: colorBotonQuirofano1,
-                              child: Container(
-                                child: Column(
-                                  children: [
-                                    Text("Quirófano 1"),
-                                  ],
-                                ),
-                              ),
-                              onPressed: () {
-                                nombreQuiro = 1;
-                                cargarQuirofano(nombreQuiro, context);
-                              },
+                            Text(
+                              "     Oupado:   ",
+                              style: TextStyle(
+                                  fontSize: responsive.diagonalPorcentaje(1.5)),
                             ),
-                            RaisedButton(
-                              color: colorBotonQuirofano2,
-                              child: Container(
-                                child: Column(
-                                  children: [
-                                    Text("Quirófano 2"),
-                                  ],
-                                ),
-                              ),
-                              onPressed: () {
-                                nombreQuiro = 2;
-                                cargarQuirofano(nombreQuiro, context);
-                              },
-                            ),
-                            RaisedButton(
-                              color: colorBotonQuirofano3,
-                              child: Container(
-                                child: Column(
-                                  children: [
-                                    Text("Quirófano 3"),
-                                  ],
-                                ),
-                              ),
-                              onPressed: () {
-                                nombreQuiro = 3;
-                                cargarQuirofano(nombreQuiro, context);
-                              },
-                            ),
-                            Text("     Oupado:   "),
                             Container(
-                              color: Colors.red,
-                              height: responsive.diagonalPorcentaje(3),
-                              width: responsive.diagonalPorcentaje(5),
+                              decoration: BoxDecoration(
+                                border: Border.all(width: 1),
+                                color: Colors.red,
+                              ),
+                              height: responsive.diagonalPorcentaje(2.5),
+                              width: responsive.diagonalPorcentaje(4),
                             ),
-                            Text("  Libre:  "),
+                            Text(
+                              "  Libre:  ",
+                              style: TextStyle(
+                                  fontSize: responsive.diagonalPorcentaje(1.5)),
+                            ),
                             Container(
-                              color: Colors.blue[50],
-                              height: responsive.diagonalPorcentaje(3),
-                              width: responsive.diagonalPorcentaje(5),
+                              decoration: BoxDecoration(
+                                border: Border.all(width: 1),
+                                color: Colors.blue[50],
+                              ),
+                              height: responsive.diagonalPorcentaje(2.5),
+                              width: responsive.diagonalPorcentaje(4),
                             ),
                           ],
-                        )),
+                        )
+                      ],
+                    )),
                   ],
                 ),
               ),
@@ -202,9 +258,7 @@ class _Horarios extends State<Horarios> {
                           index, valorFecha.text, valorHora.text, nombreQuiro);
                     });
                     return SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
                       child: Container(
-                        width: responsive.diagonalPorcentaje(12.5),
                         child: InkWell(
                             onTap: () async {
                               print(index);
@@ -252,7 +306,7 @@ class _Horarios extends State<Horarios> {
                                           fechaConNegrita.text,
                                           style: TextStyle(
                                               fontSize: responsive
-                                                  .diagonalPorcentaje(1.3),
+                                                  .diagonalPorcentaje(1.2),
                                               fontWeight: FontWeight.bold),
                                         ),
                                         textosConFecha(
@@ -260,23 +314,23 @@ class _Horarios extends State<Horarios> {
                                       ],
                                     ),
                                   ),
-                                  Container(
-                                    padding: EdgeInsets.all(
-                                        responsive.diagonalPorcentaje(0.5)),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          horaConNegrita.text,
-                                          style: TextStyle(
-                                              fontSize: responsive
-                                                  .diagonalPorcentaje(1.3),
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        textoConHora(
-                                            index, valorHora, responsive),
-                                      ],
+                                  SingleChildScrollView(
+                                    child: Container(
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            horaConNegrita.text,
+                                            style: TextStyle(
+                                                fontSize: responsive
+                                                    .diagonalPorcentaje(1.2),
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          textoConHora(
+                                              index, valorHora, responsive),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                   SingleChildScrollView(
@@ -290,7 +344,7 @@ class _Horarios extends State<Horarios> {
                                             nombreDoctorConNegrita.text,
                                             style: TextStyle(
                                                 fontSize: responsive
-                                                    .diagonalPorcentaje(1.3),
+                                                    .diagonalPorcentaje(1),
                                                 fontWeight: FontWeight.bold),
                                           ),
                                           textoConNombreDoctor(index,
@@ -326,7 +380,7 @@ class _Horarios extends State<Horarios> {
       int index, TextEditingController valor, Responsive responsive) {
     return Text(
       valor.text,
-      style: TextStyle(fontSize: responsive.diagonalPorcentaje(1.3)),
+      style: TextStyle(fontSize: responsive.diagonalPorcentaje(1.1)),
     );
   }
 
@@ -342,7 +396,7 @@ class _Horarios extends State<Horarios> {
       return Text(
         valor.text,
         style: TextStyle(
-            fontSize: responsive.diagonalPorcentaje(2.2),
+            fontSize: responsive.diagonalPorcentaje(1.6),
             fontWeight: FontWeight.bold),
       );
     }
@@ -352,7 +406,7 @@ class _Horarios extends State<Horarios> {
       int index, TextEditingController valor, Responsive responsive) {
     return Text(
       valor.text,
-      style: TextStyle(fontSize: responsive.diagonalPorcentaje(1.3)),
+      style: TextStyle(fontSize: responsive.diagonalPorcentaje(1.2)),
     );
   }
 
@@ -360,7 +414,7 @@ class _Horarios extends State<Horarios> {
       int index, TextEditingController valor, Responsive responsive) {
     return Text(
       valor.text,
-      style: TextStyle(fontSize: responsive.diagonalPorcentaje(1.3)),
+      style: TextStyle(fontSize: responsive.diagonalPorcentaje(1)),
     );
   }
 
@@ -395,8 +449,7 @@ class _Horarios extends State<Horarios> {
     return dateString;
   }
 
-  int cont = 0;
-  int val = 7; // hora en que inicia el calendario
+  // hora en que inicia el calendario
 
   String cargarHorasTabla(int index) {
     String enviarHoraFinal;
@@ -622,8 +675,8 @@ class _Horarios extends State<Horarios> {
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-              builder: (context) => Horarios(
-                    nombreQuirofano: 1,
+              builder: (context) => PrinciAdmi(
+                    numeroQuirofano: 1,
                   )));
     } else if (nombreQuirofano == 2) {
       // cargarCirujia();
@@ -631,8 +684,8 @@ class _Horarios extends State<Horarios> {
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-              builder: (context) => Horarios(
-                    nombreQuirofano: 2,
+              builder: (context) => PrinciAdmi(
+                    numeroQuirofano: 2,
                   )));
     } else if (nombreQuirofano == 3) {
       // cargarCirujia();
@@ -640,8 +693,8 @@ class _Horarios extends State<Horarios> {
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-              builder: (context) => Horarios(
-                    nombreQuirofano: 3,
+              builder: (context) => PrinciAdmi(
+                    numeroQuirofano: 3,
                   )));
     }
   }

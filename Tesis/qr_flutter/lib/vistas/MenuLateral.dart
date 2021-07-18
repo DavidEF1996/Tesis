@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:qr_flutter/admin/principalAdmi.dart';
 import 'package:qr_flutter/preferences/preferences.dart';
 import 'package:qr_flutter/src/login.dart';
 import 'package:qr_flutter/src/registro_cirujias.dart';
@@ -55,6 +56,21 @@ class MenuLateral extends StatelessWidget {
                       context,
                       new MaterialPageRoute(
                         builder: (context) => new PrincipalHorarios(),
+                      ),
+                    );
+                  },
+                ),
+              ),
+              Ink(
+                color: Colors.blue,
+                child: ListTile(
+                  title: Text("Administración"),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    Navigator.push(
+                      context,
+                      new MaterialPageRoute(
+                        builder: (context) => new PrinciAdmi(),
                       ),
                     );
                   },

@@ -3,11 +3,14 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/dao/cirujiaDao.dart';
 import 'package:qr_flutter/model/cirujiasPrincipal.dart';
-import 'package:qr_flutter/src/homebotones.dart';
+import 'package:qr_flutter/preferences/preferences.dart';
 import 'package:qr_flutter/src/login.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:qr_flutter/dao/doctor_dao.dart';
+import 'package:qr_flutter/utils/utils.dart';
 import 'package:qr_flutter/vistas/PrincipalTarjetasCirujia.dart';
+
+final CirujiaDAO serviciosCirujia = CirujiaDAO();
 
 class popupRegistroCirujias {
   Future<void> handleClickMe(BuildContext context, String mensaje) async {
@@ -205,16 +208,11 @@ class popupRegistroCirujias {
             ),
             CupertinoDialogAction(
               child: Text('Confirmar'),
-              onPressed: () async {
-                print("Nombres: " + r.paciente);
+              onPressed: () {
+                validarCirujia(context, r);
+                // print("Nombres: " + r.paciente);
                 // await RegistroCirujias.crearDoctor(jsonEncode(r.toJson()()));
                 // print("Usuario desde el popup: " + DoctorDao.d.user);
-                await CirujiaDAO.crearCirujia(jsonEncode(r.toJson()));
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (BuildContext context) =>
-                            PrincipalTarCirujias()));
 
                 //enviarDatos(context);
               },
@@ -235,5 +233,29 @@ class popupRegistroCirujias {
       );
     });
     Navigator.push(context, route);
+  }
+
+  Future validarCirujia(context, Cirujias cirujia) async {
+    print("llegamos al validar");
+    final servicio =
+        await serviciosCirujia.crearCirujia(jsonEncode(cirujia.toJson()));
+    print(servicio.toString());
+    if (servicio == 200) {
+      mostrarAlerta(context, "Se ha registrado con éxito la ciurjía.");
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (BuildContext context) => PrincipalTarCirujias()));
+    } else if (servicio == 100) {
+      mostrarAlerta(context,
+          "Error Hay un conflicto con el horario. Elija otro horario u otro quirófano ");
+    } else if (servicio == 250) {
+      mostrarAlerta(context,
+          "Ha ingresado una cirujía de emergencia \n Revise el nuevo calendario");
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (BuildContext context) => PrincipalTarCirujias()));
+    }
   }
 }

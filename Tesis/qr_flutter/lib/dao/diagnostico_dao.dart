@@ -16,11 +16,12 @@ class DiagnosticoDao {
         headers: {"Content-Type": "application/json"}).then((data) {
       if (data.statusCode == 200) {
         final jsonData = json.decode(data.body);
-        final doctorL = <Diagnostico>[];
+        final diagnosticoL = <Diagnostico>[];
         for (var item in jsonData) {
-          doctorL.add(Diagnostico.fromJson(item));
+          print(item);
+          diagnosticoL.add(Diagnostico.fromJson(item));
         }
-        return APIResponse<List<Diagnostico>>(data: doctorL);
+        return APIResponse<List<Diagnostico>>(data: diagnosticoL);
       }
       return APIResponse<List<Diagnostico>>(error: true, mensajeError: "Error");
     }).catchError((_) =>

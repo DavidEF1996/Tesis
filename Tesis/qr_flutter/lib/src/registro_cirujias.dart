@@ -312,9 +312,9 @@ class RegisterPageState extends State<RegisterPage> {
                     }
 
                     for (var i = 0; i < valor; i++) {
-                      String doctor;
-
-                      doctor = utf8.decode(
+                      String diagnostico;
+                      //print(_apiResponseDgn.data.elementAt(i).codigoCuatro);
+                      diagnostico = utf8.decode(
                           latin1.encode(
                               _apiResponseDgn.data.elementAt(i).codigoCuatro +
                                   " " +
@@ -323,7 +323,7 @@ class RegisterPageState extends State<RegisterPage> {
                                       .nombreCuatroCaracteres),
                           allowMalformed: true);
 
-                      datos.add(doctor);
+                      datos.add(diagnostico);
                     }
                     return datos;
                   },
@@ -692,7 +692,7 @@ class RegisterPageState extends State<RegisterPage> {
                 eleccionRadioButton = value;
                 ReglasDao rdao = ReglasDao();
                 HrsFechaReglas data = new HrsFechaReglas();
-                
+
                 rdao.reglaTipoCirujia(tipoCirujia);
               });
             },
@@ -867,8 +867,6 @@ class RegisterPageState extends State<RegisterPage> {
     int month2 = value.month;
     if (month2 > month1) {
       age--;
-      print("Mes de cumple mayor a mes actual");
-      print(meses);
       int diaActual = currentDate.day;
       int diaCumpleanos = value.day;
 
@@ -891,7 +889,6 @@ class RegisterPageState extends State<RegisterPage> {
         meses = (currentDate.month - value.month) - 1;
       }
     } else if (month1 == month2) {
-      print("meses iguales");
       int day1 = currentDate.day;
       int day2 = value.day;
       if (day2 >= day1) {

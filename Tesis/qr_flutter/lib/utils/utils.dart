@@ -6,7 +6,7 @@ void mostrarAlerta(BuildContext context, String mensaje) {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Erro de usuario'),
+          title: Text('Error'),
           content: Text(mensaje),
           actions: <Widget>[
             FlatButton(

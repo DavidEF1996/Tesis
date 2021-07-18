@@ -18,14 +18,13 @@ class CirujiaDAO {
 
   static const headers = {'Content-Type': 'application/json'};
 
-  static Future crearCirujia(json) async {
-    print(json);
+  Future crearCirujia(json) async {
     http.Response response = await http.post(Uri.parse(URL + servicio_crear),
         body: json, headers: headers, encoding: Encoding.getByName('utf-8'));
-    print(response.statusCode);
-    print(response.body);
 
-    return response;
+    //_preferences.codigoResponse =
+    final codigoResponse = int.parse(response.body);
+    return codigoResponse;
   }
 
   Future listarCirujias() async {
